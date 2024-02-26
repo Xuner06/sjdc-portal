@@ -9,11 +9,13 @@ if(isset($_POST['restore-teacher'])) {
 
   if($query) {
     $_SESSION['restore-teacher'] = "Successfully Restored Teacher";
-    echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_archive_teacher.php"</script>';
+    header("Location: ../admin/admin_archive_teacher.php");
+    exit();
   }
 }
 else {
-  echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_archive_teacher.php"</script>';
+  header("Location: ../admin/admin_archive_teacher.php");
+  exit();
 }
 
 

@@ -31,7 +31,8 @@ if(isset($_POST['login'])) {
     if(mysqli_num_rows($query) == 1) {
       $_SESSION['teacher'] = $row['teacher_id'];
       $_SESSION['login-teacher'] = "Signed in successfully";
-      echo '<script>window.location.href="http://localhost/sjdc-portal/teacher/teacher_dashboard.php"</script>';
+      header("Location: ../teacher/teacher_dashboard.php");
+      exit();
     }
     else {
       $_SESSION['login-failed'] = "Incorrect Email or Password";
@@ -57,5 +58,3 @@ if(isset($_POST['login'])) {
   //   echo '<script>window.location.href="http://localhost/thesis/login.php"</script>';
   // }
 }
-
-?>

@@ -199,10 +199,7 @@ $query = mysqli_query($conn, $sql);
                         <td><?php echo $row['email']; ?></td>
                         <td><?php echo $row['contact']; ?></td>
                         <td>
-                          <form action="admin_view_teacher.php" method="post">
-                            <input type="hidden" name="view-id" value="<?php echo $row['teacher_id']; ?>">
-                            <button type="submit" class="btn btn-primary btn-sm" name="view-teacher">View</button>
-                          </form>
+                          <a href="admin_view_teacher.php?id=<?php echo $row['teacher_id']; ?>" class="btn btn-primary btn-sm">View</a>
                         </td>
                         <td>
                           <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-teacher-<?php echo $row['teacher_id']; ?>">Edit</button>

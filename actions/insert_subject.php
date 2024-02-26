@@ -13,10 +13,12 @@ if(isset($_POST['add-subject'])) {
 
   if($query) {
     $_SESSION['add-subject'] = "Successfully Added Subject";
-    echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_subject.php"</script>';
+    header("Location: ../admin/admin_subject.php");
+    exit();
   }
   else {
-    echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_subject.php"</script>';
+    header("Location: ../admin/admin_subject.php");
+    exit();
   }
 }
 

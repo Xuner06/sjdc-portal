@@ -15,11 +15,12 @@ if(isset($_POST['update-class'])) {
 
   if($query) {
     $_SESSION['update-class'] = "Successfully Updated Class";
-    echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_class.php"</script>';
-
+    header("Location: ../admin/admin_class.php");
+    exit();
   }
   else {
-    echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_class.php"</script>';
+    header("Location: ../admin/admin_class.php");
+    exit();
   }
 }  
 

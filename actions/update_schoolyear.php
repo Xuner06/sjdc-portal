@@ -21,16 +21,14 @@ if(isset($_POST['update-schoolyear'])) {
 
     if($query) {
       $_SESSION['update-schoolyear'] = "Successfully Updated School Year";
-      echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_schoolyear.php"</script>';
+      header("Location: ../admin/admin_schoolyear.php");
+      exit();
   
     }
     else {
-      echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_schoolyear.php"</script>';
+      header("Location: ../admin/admin_schoolyear.php");
+      exit();
     }
-
   }
-  
 }  
-
-
 ?>

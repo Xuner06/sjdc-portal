@@ -3,13 +3,14 @@ include("../database/database.php");
 session_start();
 
 
-if (isset($_POST['view-student'])) {
-  $id = mysqli_escape_string($conn, $_POST['view-id']);
+if (isset($_GET['id'])) {
+  $id = mysqli_escape_string($conn, $_GET['id']);
   $sql = "SELECT * FROM student WHERE student_id = '$id'";
   $query = mysqli_query($conn, $sql);
   $row = mysqli_fetch_assoc($query);
 } else {
-  echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_student.php"</script>';
+  header("Location: ../admin/admin_student.php");
+  exit();
 }
 
 ?>

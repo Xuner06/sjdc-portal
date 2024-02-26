@@ -86,6 +86,7 @@ $id = $_SESSION['teacher'];
                             <button type="button" class="btn btn-success btn-sm">Edit</button>
                           </td>
                           <td>
+                            <a href="http://"></a>
                             <form action="teacher_encode_grade.php" method="post">
                               <input type="hidden" value="<?php echo $row['enroll_id']; ?>" name="id">
                               <button type="submit" class="btn btn-primary btn-sm" name="grade">Upload</button>

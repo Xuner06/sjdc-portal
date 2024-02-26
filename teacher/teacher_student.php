@@ -68,10 +68,6 @@ $id = $_SESSION['teacher'];
                           <td><?php echo $row['email']; ?></td>
                           <td><?php echo $row['contact']; ?></td>
                           <td>
-                            <!-- <form action="teacher_view_student.php" method="post">
-                              <input type="hidden" name="id" value="<?php echo $row['student_id']; ?>">
-                              <button type="submit" class="btn btn-primary btn-sm" name="view-student">View</button>
-                            </form> -->
                             <a href="teacher_view_student.php?id=<?php echo $row['student_id']; ?>" class="btn btn-primary btn-sm">View</a>
                           </td>
                         </tr>

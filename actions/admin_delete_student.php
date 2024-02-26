@@ -9,11 +9,13 @@ session_start();
 
     if($query) {
       $_SESSION['delete-student'] = "Successfully Deleted Student";
-      echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_student.php"</script>';
+      header("Location: ../admin/admin_student.php");
+      exit();
     }
   }
   else {
-    echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_student.php"</script>';
+    header("Location: ../admin/admin_student.php");
+    exit();
   }
 
 

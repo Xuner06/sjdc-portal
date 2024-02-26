@@ -226,10 +226,7 @@ session_start();
                         <td><?php echo $row['email']; ?></td>
                         <td><?php echo $row['contact']; ?></td>
                         <td>
-                          <form action="admin_view_student.php" method="post">
-                            <input type="hidden" name="view-id" value="<?php echo $row['student_id']; ?>">
-                            <button type="submit" class="btn btn-primary btn-sm" name="view-student">View</button>
-                          </form>
+                          <a href="admin_view_student.php?id=<?php echo $row['student_id']; ?>" class="btn btn-primary btn-sm">View</a>
                         </td>
                         <td>
                           <!-- Edit Student Button Click -->

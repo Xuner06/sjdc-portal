@@ -3,8 +3,8 @@ include("../database/database.php");
 session_start();
 
 
-if (isset($_POST['view-teacher'])) {
-  $id = mysqli_escape_string($conn, $_POST['view-id']);
+if (isset($_GET['id'])) {
+  $id = mysqli_escape_string($conn, $_GET['id']);
   $sql = "SELECT * FROM teacher WHERE teacher_id = '$id'";
   $query = mysqli_query($conn, $sql);
   $row = mysqli_fetch_assoc($query);

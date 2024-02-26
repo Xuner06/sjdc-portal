@@ -12,10 +12,12 @@ if(isset($_POST['update-strand'])) {
 
   if($query) {
     $_SESSION['update-strand'] = "Successfully Updated Strand";
-    echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_strand.php"</script>';
+    header("Location: ../admin/admin_strand.php");
+    exit();
   }
   else {
-    echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_strand.php"</script>';
+    header("Location: ../admin/admin_strand.php");
+    exit();
   }
 }  
 

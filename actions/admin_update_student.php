@@ -19,11 +19,12 @@ if(isset($_POST['update-student'])) {
 
   if($query) {
     $_SESSION['update-student'] = "Successfully Updated Student";
-    echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_student.php"</script>';
-
+    header("Location: ../admin/admin_student.php");
+    exit();
   }
   else {
-    echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_student.php"</script>';
+    header("Location: ../admin/admin_student.php");
+    exit();
   }
 }  
 

@@ -11,10 +11,12 @@ if(isset($_POST['add-strand'])) {
 
   if($query) {
     $_SESSION['add-strand'] = "Successfully Added Strand";
-    echo '<script>window.location.href="http://localhost/sjdc/admin/admin_strand.php"</script>';
+    header("Location: ../admin/admin_strand.php");
+    exit();
   }
   else {
-    echo '<script>window.location.href="http://localhost/sjdc/admin/admin_strand.php"</script>';
+    header("Location: ../admin/admin_strand.php");
+    exit();
   }
 }
 

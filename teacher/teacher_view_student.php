@@ -9,9 +9,6 @@ if (isset($_GET['id'])) {
   $row = mysqli_fetch_assoc($query);
 }
   
-
-
-
 ?>
 
 <!DOCTYPE html>

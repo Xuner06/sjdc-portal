@@ -7,7 +7,6 @@ if(isset($_POST['add-schoolyear'])) {
   $end_year = mysqli_escape_string($conn, $_POST['end_year']);
   $semester = mysqli_escape_string($conn, $_POST['semester']);
 
-
   $checkActive = "SELECT * FROM school_year WHERE status = 'Active'";
   $checkActiveQuery = mysqli_query($conn, $checkActive);
 
@@ -20,12 +19,12 @@ if(isset($_POST['add-schoolyear'])) {
 
     if($query) {
       $_SESSION['add-schoolyear'] = "Successfully Added School Year";
-      echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_schoolyear.php"</script>';
+      header("Location: ../admin/admin_schoolyear.php");
+      exit();
     }
     else {
-      echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_schoolyear.php"</script>';
+      header("Location: ../admin/admin_schoolyear.php");
+      exit();
     }
-
-
   }
 }

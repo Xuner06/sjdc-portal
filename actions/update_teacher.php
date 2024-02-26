@@ -23,7 +23,8 @@ if(isset($_POST['update-teacher'])) {
     $queryDuplicateEmail = mysqli_query($conn, $sqlDuplicateEmail);
     if(mysqli_num_rows($queryDuplicateEmail) > 0) {
       $_SESSION['duplicate'] = "This email is already registered";
-      echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_teacher.php"</script>';
+      header("Location: ../admin/admin_teacher.php");
+      exit();
     }
     else {
       $sql = "UPDATE teacher SET fname = '$fname', lname = '$lname', gender = '$gender', birthday = '$birthday', age = '$age', contact = '$contact', email = '$email',  address = '$address' WHERE teacher_id = '$id'";
@@ -31,8 +32,8 @@ if(isset($_POST['update-teacher'])) {
   
       if($query) {
         $_SESSION['update-teacher'] = "Successfully Updated Teacher";
-        echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_teacher.php"</script>';
-  
+        header("Location: ../admin/admin_teacher.php");
+        exit();
       }
     }
   }
@@ -42,8 +43,8 @@ if(isset($_POST['update-teacher'])) {
 
     if($query) {
       $_SESSION['update-teacher'] = "Successfully Updated Teacher";
-      echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_teacher.php"</script>';
-
+      header("Location: ../admin/admin_teacher.php");
+      exit();
     }
   }
 }
