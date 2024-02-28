@@ -1,12 +1,19 @@
 <?php
 include("../database/database.php");
-session_start();
+include("../actions/session.php");
+sessionTeacher();
 
-if (isset($_POST['grade'])) {
-  $id = mysqli_escape_string($conn, $_POST['id']);
+$idTeacher = $_SESSION['teacher'];
+$sql = "SELECT * FROM teacher WHERE teacher_id = '$idTeacher'";
+$query = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($query);
+
+if (isset($_GET['grade'])) {
+  $id = mysqli_escape_string($conn, $_GET['grade']);
 }
 else {
-  echo '<script>window.location.href="http://localhost/sjdc-portal/teacher/teacher_grade.php"</script>';
+  header("Location: teacher_grade.php");
+  exit();
 }
 
 ?>
@@ -74,7 +81,7 @@ else {
                           <td><?php echo $row['name']; ?></td>
                           <td>
                             <select class="form-control" name="grade[<?php echo $row['subject_id']; ?>]" required>
-                              <option class="text-center " value=""></option>
+                              <option class="text-center" value="">N/A</option>
                               <?php
                               for ($i = 70; $i <= 100; $i++) {
                                 echo '<option value="' . $i . '" class="text-center">' . $i . '</option>';

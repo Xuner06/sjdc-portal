@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+if(isset($_SESSION['teacher'])) {
+  header("Location: ./teacher/teacher_dashboard.php");
+  exit();
+}
+elseif (isset($_SESSION['student'])) {
+  header("Location: ./student/student_account.php");
+  exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -24,77 +24,6 @@ session_start();
   <?php include("../components/admin_navbar.php"); ?>
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <?php
-    if (isset($_SESSION['add-student'])) {
-    ?>
-      <script>
-        Swal.fire({
-          title: 'Success',
-          text: '<?php echo $_SESSION['add-student']; ?>',
-          icon: 'success',
-        })
-      </script>
-    <?php
-      unset($_SESSION['add-student']);
-    }
-    ?>
-    <?php
-    if (isset($_SESSION['update-student'])) {
-    ?>
-      <script>
-        Swal.fire({
-          title: 'Success',
-          text: '<?php echo $_SESSION['update-student']; ?>',
-          icon: 'success',
-        })
-      </script>
-    <?php
-      unset($_SESSION['update-student']);
-    }
-    ?>
-    <?php
-    if (isset($_SESSION['update-student'])) {
-    ?>
-      <script>
-        Swal.fire({
-          title: 'Success',
-          text: '<?php echo $_SESSION['update-student']; ?>',
-          icon: 'success',
-        })
-      </script>
-    <?php
-      unset($_SESSION['update-student']);
-    }
-    ?>
-
-    <?php
-    if (isset($_SESSION['delete-student'])) {
-    ?>
-      <script>
-        Swal.fire({
-          title: 'Success',
-          text: '<?php echo $_SESSION['delete-student']; ?>',
-          icon: 'success',
-        })
-      </script>
-    <?php
-      unset($_SESSION['delete-student']);
-    }
-    ?>
-    <?php
-    if (isset($_SESSION['no-schoolyear'])) {
-    ?>
-      <script>
-        Swal.fire({
-          title: 'Error',
-          text: '<?php echo $_SESSION['no-schoolyear']; ?>',
-          icon: 'error',
-        })
-      </script>
-    <?php
-      unset($_SESSION['no-schoolyear']);
-    }
-    ?>
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">Student List</h1>
@@ -135,10 +64,7 @@ session_start();
                         <td><?php echo $row['email']; ?></td>
                         <td><?php echo $row['contact']; ?></td>
                         <td>
-                          <form action="admin_student_enroll.php" method="post">
-                            <input type="hidden" name="id" value="<?php echo $row['student_id']; ?>">
-                            <button type="submit" class="btn btn-primary btn-sm" name="enroll">Enroll</button>
-                          </form>
+                          <a href="admin_student_enroll.php?id=<?php echo $row['student_id']; ?>" class="btn btn-primary btn-sm">Enroll</a>
                         </td>
                       </tr>
                     <?php

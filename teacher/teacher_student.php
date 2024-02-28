@@ -2,7 +2,10 @@
 include("../database/database.php");
 session_start();
 
-$id = $_SESSION['teacher'];
+$idTeacher = $_SESSION['teacher'];
+$sql = "SELECT * FROM teacher WHERE teacher_id = '$idTeacher'";
+$query = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($query);
 
 ?>
 <!DOCTYPE html>
@@ -57,7 +60,7 @@ $id = $_SESSION['teacher'];
                       $result = mysqli_fetch_assoc($querySy);
                       $sy = $result['sy_id'];
 
-                      $sql = "SELECT e.*, c.adviser, s.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN student s ON e.student_id = s.student_id WHERE c.adviser = '$id' AND e.sy = '$sy'";
+                      $sql = "SELECT e.*, c.adviser, s.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN student s ON e.student_id = s.student_id WHERE c.adviser = '$idTeacher' AND e.sy = '$sy'";
                       $query = mysqli_query($conn, $sql);
                       while ($row = mysqli_fetch_assoc($query)) {
                     ?>

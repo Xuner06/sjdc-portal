@@ -1,6 +1,8 @@
 <?php
 include("../database/database.php");
-session_start();
+include("../actions/session.php");
+sessionStudent();
+
 $id = $_SESSION['student'];
 $sql = "SELECT * FROM student WHERE student_id = '$id'";
 $query = mysqli_query($conn, $sql);

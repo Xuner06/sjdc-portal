@@ -26,6 +26,15 @@
           <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
       </ul>
+      <!-- Right navbar links -->
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <span class="nav-link text-dark disabled"><?php echo $row['fname'] . ' ' . $row['lname']; ?></span>
+        </li>
+        <li class="nav-item d-flex align-items-center">
+          <a href="../actions/process_logout.php" class="btn btn-sm btn-primary text-light"><i class="fas fa-power-off"></i> Logout</a>
+        </li>
+      </ul>
     </nav>
     <!-- /.navbar -->
 

@@ -2,6 +2,7 @@
 include("../database/database.php");
 session_start();
 
+
 if(isset($_POST['login'])) {
   $user = mysqli_escape_string($conn, $_POST['user']);
   $email = mysqli_escape_string($conn, $_POST['email']);
@@ -15,11 +16,13 @@ if(isset($_POST['login'])) {
     if(mysqli_num_rows($query) == 1) {
       $_SESSION['student'] = $row['student_id'];
       $_SESSION['login-student'] = "Signed in successfully";
-      echo '<script>window.location.href="http://localhost/sjdc-portal/student/student_account.php"</script>';
+      header("Location: ../student/student_account.php");
+      exit();
     }
     else {
       $_SESSION['login-failed'] = "Incorrect Email or Password";
-      echo '<script>window.location.href="http://localhost/sjdc-portal/login.php"</script>';
+      header("Location: ../login.php");
+      exit();
     }
 
   }
@@ -36,25 +39,11 @@ if(isset($_POST['login'])) {
     }
     else {
       $_SESSION['login-failed'] = "Incorrect Email or Password";
-      echo '<script>window.location.href="http://localhost/sjdc-portal/login.php"</script>';
+      header("Location: ../login.php");
+      exit();
     }
   }
   else if($user=="admin") {
     echo "Admin";
   }
-
-  // $sql = "SELECT * FROM teacher WHERE email = '$email' AND password = '$password'";
-  // $query = mysqli_query($conn, $sql);
-  // $row = mysqli_fetch_assoc($query);
-
-  // if(mysqli_num_rows($query) == 1) {
-  //   $_SESSION['status'] = "Valid";
-  //   $_SESSION['id'] = $row['teacher_id'];
-  //   // echo '<script>window.location.href="http://localhost/thesis/teacher_dashboard.php"</script>';
-  //   echo '<script>window.location.href="http://localhost/thesis/login.php"</script>';
-  // }
-  // else {
-  //   $_SESSION['status'] = "Invalid";
-  //   echo '<script>window.location.href="http://localhost/thesis/login.php"</script>';
-  // }
 }

@@ -52,20 +52,6 @@ session_start();
       unset($_SESSION['update-subject']);
     }
     ?>
-    <?php
-    if (isset($_SESSION['delete-subject'])) {
-    ?>
-      <script>
-        Swal.fire({
-          title: 'Success',
-          text: '<?php echo $_SESSION['delete-subject']; ?>',
-          icon: 'success',
-        })
-      </script>
-    <?php
-      unset($_SESSION['delete-subject']);
-    }
-    ?>
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">Subject List</h1>
@@ -87,7 +73,6 @@ session_start();
                       <th>Strand</th>
                       <th>Semester</th>
                       <th>Edit</th>
-                      <th>Delete</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -159,12 +144,6 @@ session_start();
                             </div>
                           </div>
                         </td>
-                        <td>
-                          <button type="button" class="btn btn-danger btn-sm" onclick="deleteSubject('<?php echo $row['subject_id']; ?>')">Delete</button>
-                          <form id="deleteForm-<?php echo $row['subject_id']; ?>" action="../actions/delete_subject.php" method="post">
-                            <input type="hidden" name="delete-id" value="<?php echo $row['subject_id']; ?>">
-                          </form>
-                        </td>
                       </tr>
                     <?php
                     }
@@ -208,10 +187,14 @@ session_start();
               <select class="form-control" name="strand" id="strand" required>
                 <option value=""></option>
                 <?php
-                $sqlStrand = "SELECT * FROM strand";
-                $queryStrand = mysqli_query($conn, $sqlStrand);
-                while ($row = mysqli_fetch_assoc($queryStrand)) {
-                  echo '<option value="' . $row['strand_id'] . '">' . $row['strand'] . '</option>';
+                $sqlInsertStrand = "SELECT * FROM strand";
+                $queryInsertStrand = mysqli_query($conn, $sqlInsertStrand);
+                if (mysqli_num_rows($queryInsertStrand) > 0) {
+                  while ($strand = mysqli_fetch_assoc($queryInsertStrand)) {
+                    echo '<option value="' . $strand['strand_id'] . '">' . $strand['strand'] . '</option>';
+                  }
+                } else {
+                  echo '<option value="" disabled>No Strand Available (Please Add Strand)</option>';
                 }
                 ?>
               </select>
@@ -230,23 +213,6 @@ session_start();
       </div>
     </div>
   </div>
-  <script>
-    function deleteSubject(subjectId) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          document.getElementById("deleteForm-" + subjectId).submit();
-        }
-      });
-    }
-  </script>
 
   <!-- DataTables  & Plugins -->
   <script src="../plugins/datatables/jquery.dataTables.min.js"></script>

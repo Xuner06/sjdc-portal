@@ -19,7 +19,8 @@ if(isset($_POST['add-teacher'])) {
 
   if(mysqli_num_rows($queryDuplicateEmail) > 0) {
     $_SESSION['duplicate'] = "This email is already registered";
-    echo '<script>window.location.href="http://localhost/sjdc/admin/admin_teacher.php"</script>';
+    header("Location: ../admin/admin_teacher.php");
+    exit();
   }
   else {
     $sql = "INSERT INTO teacher VALUES('', '$fname', '$lname', '$gender', '$birthday', '$age', '$contact', '$email', '$address', '$password', '$status', now())";
@@ -27,9 +28,9 @@ if(isset($_POST['add-teacher'])) {
   
     if($query) {
       $_SESSION['add-teacher'] = "Successfully Added Teacher";
-      echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_teacher.php"</script>';
+      header("Location: ../admin/admin_teacher.php");
+      exit();
     }
-
   }
 }
 ?>

@@ -2,12 +2,15 @@
 include("../database/database.php");
 session_start();
 
-if (isset($_POST['enroll'])) {
-  $id = mysqli_escape_string($conn, $_POST['id']);
+if (isset($_GET['id'])) {
+  $id = mysqli_escape_string($conn, $_GET['id']);
   $sql = "SELECT * FROM student WHERE student_id = '$id'";
   $query = mysqli_query($conn, $sql);
   $result = mysqli_fetch_assoc($query);
-} 
+} else {
+  header("Location: ../admin/admin_student_list.php");
+  exit();
+}
 
 
 ?>
@@ -25,21 +28,33 @@ if (isset($_POST['enroll'])) {
   <!-- Sweetalert -->
   <link rel="stylesheet" href="../plugins/sweetalert2/sweetalert2.min.css">
   <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
-  <title>SJDC | Student</title>
+  <title>SJDC | Student Enroll</title>
 </head>
 
 <body>
   <?php include("../components/admin_navbar.php"); ?>
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-
+    <?php
+    if (isset($_SESSION['success-enroll'])) {
+    ?>
+      <script>
+        Swal.fire({
+          title: 'Success',
+          text: '<?php echo $_SESSION['success-enroll']; ?>',
+          icon: 'success',
+        })
+      </script>
+    <?php
+      unset($_SESSION['success-enroll']);
+    }
+    ?>
     <div class="content-header">
       <div class="container-fluid">
-        <h1 class="m-0">Student List</h1>
+        <h1 class="m-0">Student Enroll</h1>
       </div><!-- /.container-fluid -->
     </div>
-    <!-- /.content-header -->
-    <!-- Main content -->
+
     <div class="content">
       <div class="container-fluid">
         <div class="row">

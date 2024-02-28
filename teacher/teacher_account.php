@@ -1,9 +1,10 @@
 <?php
 include("../database/database.php");
-session_start();
+include("../actions/session.php");
+sessionTeacher();
 
-$id = $_SESSION['teacher'];
-$sql = "SELECT * FROM teacher WHERE teacher_id = '$id'";
+$idTeacher = $_SESSION['teacher'];
+$sql = "SELECT * FROM teacher WHERE teacher_id = '$idTeacher'";
 $query = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($query);
 

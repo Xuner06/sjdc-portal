@@ -1,6 +1,7 @@
 <?php
 include("../database/database.php");
-session_start();
+include("../actions/session.php");
+sessionStudent();
 
 $id = $_SESSION['student'];
 

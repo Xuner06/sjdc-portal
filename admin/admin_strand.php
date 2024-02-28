@@ -19,7 +19,7 @@ session_start();
   <!-- Sweetalert -->
   <link rel="stylesheet" href="../plugins/sweetalert2/sweetalert2.min.css">
   <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
-  <title>SJDC | Class</title>
+  <title>SJDC | Strand</title>
 </head>
 
 <body>
@@ -90,7 +90,6 @@ session_start();
                       <th>Strand</th>
                       <th>Description</th>
                       <th>Edit</th>
-                      <th>Delete</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -133,10 +132,6 @@ session_start();
                               </div>
                             </div>
                           </div>
-                        </td>
-                        <td>
-                          <button type="button" class="btn btn-danger btn-sm">Delete</button>
-
                         </td>
                       </tr>
                     <?php
@@ -181,24 +176,6 @@ session_start();
       </div>
     </div>
   </div>
-  <script>
-    function deleteClass(classId) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          document.getElementById("deleteForm-" + classId).submit();
-        }
-      });
-    }
-  </script>
-
 
   <!-- DataTables  & Plugins -->
   <script src="../plugins/datatables/jquery.dataTables.min.js"></script>

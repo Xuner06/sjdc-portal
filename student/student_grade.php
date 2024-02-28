@@ -1,6 +1,8 @@
 <?php
 include("../database/database.php");
-session_start();
+include("../actions/session.php");
+sessionStudent();
+
 $id = $_SESSION['student'];
 
 $sql = "SELECT e.sy, sy.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id WHERE e.student_id = '$id'";

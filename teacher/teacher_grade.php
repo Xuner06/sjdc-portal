@@ -1,7 +1,13 @@
 <?php
 include("../database/database.php");
-session_start();
-$id = $_SESSION['teacher'];
+include("../actions/session.php");
+sessionTeacher();
+
+$idTeacher = $_SESSION['teacher'];
+$sql = "SELECT * FROM teacher WHERE teacher_id = '$idTeacher'";
+$query = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($query);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,7 +76,7 @@ $id = $_SESSION['teacher'];
                       $result = mysqli_fetch_assoc($querySy);
                       $sy = $result['sy_id'];
 
-                      $sql = "SELECT e.*, c.adviser, s.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN student s ON e.student_id = s.student_id WHERE c.adviser = '$id' AND e.sy = '$sy'";
+                      $sql = "SELECT e.*, c.adviser, s.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN student s ON e.student_id = s.student_id WHERE c.adviser = '$idTeacher' AND e.sy = '$sy'";
                       $query = mysqli_query($conn, $sql);
                       while ($row = mysqli_fetch_assoc($query)) {
                     ?>
@@ -86,11 +92,11 @@ $id = $_SESSION['teacher'];
                             <button type="button" class="btn btn-success btn-sm">Edit</button>
                           </td>
                           <td>
-                            <a href="http://"></a>
-                            <form action="teacher_encode_grade.php" method="post">
+                            <a href="teacher_encode_grade.php?grade=<?php echo $row['enroll_id']; ?>" class="btn btn-primary btn-sm">Upload</a>
+                            <!-- <form action="teacher_encode_grade.php" method="post">
                               <input type="hidden" value="<?php echo $row['enroll_id']; ?>" name="id">
                               <button type="submit" class="btn btn-primary btn-sm" name="grade">Upload</button>
-                            </form>
+                            </form> -->
                           </td>
                         </tr>
                     <?php

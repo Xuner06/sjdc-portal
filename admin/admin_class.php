@@ -236,8 +236,12 @@ session_start();
                 <?php
                 $sqlInsertStrand = "SELECT * FROM strand";
                 $queryInsertStrand = mysqli_query($conn, $sqlInsertStrand);
-                while ($strand = mysqli_fetch_assoc($queryInsertStrand)) {
-                  echo '<option value="' . $strand['strand_id'] . '">' . $strand['strand'] . '</option>';
+                if (mysqli_num_rows($queryInsertStrand) > 0) {
+                  while ($strand = mysqli_fetch_assoc($queryInsertStrand)) {
+                    echo '<option value="' . $strand['strand_id'] . '">' . $strand['strand'] . '</option>';
+                  }
+                } else {
+                  echo '<option value="" disabled>No Strand Available (Please Add Strand)</option>';
                 }
                 ?>
               </select>
@@ -253,8 +257,13 @@ session_start();
                 <?php
                 $sqlSy = "SELECT * FROM school_year WHERE status = 'Active'";
                 $querySy = mysqli_query($conn, $sqlSy);
-                while ($sy = mysqli_fetch_assoc($querySy)) {
-                  echo '<option value="' . $sy['sy_id'] . '">' . $sy['start_year'] . '-' . $sy['end_year'] . ' ' . $sy['semester'] . '</option>';
+                if (mysqli_num_rows($querySy) > 0) {
+                  while ($sy = mysqli_fetch_assoc($querySy)) {
+                    echo '<option value="' . $sy['sy_id'] . '">' . $sy['start_year'] . '-' . $sy['end_year'] . ' ' . $sy['semester'] . '</option>';
+                  }
+                } 
+                else {
+                  echo '<option value="" disabled>No Active School Year (Please Set School Year)</option>';
                 }
                 ?>
               </select>
@@ -264,7 +273,11 @@ session_start();
               <select class="form-control" name="adviser" id="adviser" required>
                 <option value=""></option>
                 <?php
-                $sqlInsertTeacher = "SELECT * FROM teacher WHERE status = 0";
+                $sqlGetSy = "SELECT * FROM school_year WHERE status = 'Active'";
+                $queryGetSy = mysqli_query($conn, $sqlGetSy);
+                $result = mysqli_fetch_assoc($queryGetSy);
+                $currentSy = $result['sy_id'];
+                $sqlInsertTeacher = "SELECT * FROM teacher WHERE status = 0 AND teacher_id NOT IN (SELECT adviser FROM class WHERE sy = '$currentSy')";
                 $queryInsertTeacher = mysqli_query($conn, $sqlInsertTeacher);
                 while ($teacher = mysqli_fetch_assoc($queryInsertTeacher)) {
                   echo '<option value="' . $teacher['teacher_id'] . '">' . $teacher['lname'] . ', ' . $teacher['fname'] . '</option>';

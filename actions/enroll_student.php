@@ -11,11 +11,13 @@ if(isset($_POST['enroll-student'])) {
   $query = mysqli_query($conn, $sql);
 
   if($query) {
-
-    echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_student_enroll.php"</script>';
+    $_SESSION['success-enroll'] = "Successfully Enroll Student";
+    header("Location: ../admin/admin_student_enroll.php?id=$enroll_id");
+    exit();
   }
   else {
-    echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_student_enroll.php"</script>';
+    header("Location: ../admin/admin_student_enroll.php?id=$enroll_id");
+    exit();
   }
 }
 
