@@ -29,21 +29,6 @@ $row = mysqli_fetch_assoc($query);
 <body>
   <?php include("../components/teacher_navbar.php"); ?>
   <div class="content-wrapper">
-    <?php
-    if (isset($_SESSION['success-upload'])) {
-    ?>
-      <script>
-        Swal.fire({
-          title: 'Success',
-          text: '<?php echo $_SESSION['success-upload']; ?>',
-          icon: 'success',
-        })
-      </script>
-    <?php
-      unset($_SESSION['success-upload']);
-    }
-    ?>
-
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">Student Grade</h1>
@@ -86,17 +71,13 @@ $row = mysqli_fetch_assoc($query);
                           <td>test</td>
                           <td>test</td>
                           <td>
-                            <button type="button" class="btn btn-primary btn-sm">View</button>
+                            <a href="teacher_view_grade.php?view=<?php echo $row['enroll_id']; ?>" class="btn btn-primary btn-sm">View</a>
                           </td>
                           <td>
-                            <button type="button" class="btn btn-success btn-sm">Edit</button>
+                            <a href="teacher_edit_grade.php?edit=<?php echo $row['enroll_id']; ?>" class="btn btn-success btn-sm">Edit</a>
                           </td>
                           <td>
                             <a href="teacher_encode_grade.php?grade=<?php echo $row['enroll_id']; ?>" class="btn btn-primary btn-sm">Upload</a>
-                            <!-- <form action="teacher_encode_grade.php" method="post">
-                              <input type="hidden" value="<?php echo $row['enroll_id']; ?>" name="id">
-                              <button type="submit" class="btn btn-primary btn-sm" name="grade">Upload</button>
-                            </form> -->
                           </td>
                         </tr>
                     <?php
@@ -156,17 +137,8 @@ $row = mysqli_fetch_assoc($query);
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        "buttons": ["copy", "csv", "excel", "pdf", "print"],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
     });
   </script>
 </body>

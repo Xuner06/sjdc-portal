@@ -8,24 +8,22 @@ $sql = "SELECT * FROM teacher WHERE teacher_id = '$idTeacher'";
 $query = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($query);
 
-if (isset($_GET['grade'])) {
-  $id = mysqli_escape_string($conn, $_GET['grade']);
+if (isset($_GET['view'])) {
+  $id = mysqli_escape_string($conn, $_GET['view']);
 
   $sql = "SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = '$id' AND c.adviser = '$idTeacher'";
   $query = mysqli_query($conn, $sql);
   $result = mysqli_fetch_assoc($query);
 
-  if(!$result) {
+  if (!$result) {
     header("Location: ../unauthorize.php");
     exit();
   }
+  $studentId = $result['student_id'];
+  $sy = $result['sy'];
 
-  $semester = $result['semester'];
-  $level = $result['level'];
-  $strand = $result['strand'];
-
-  $sqlSubject = "SELECT * FROM subject WHERE level = '$level' AND strand = '$strand' AND semester = '$semester'";
-  $querySubject = mysqli_query($conn, $sqlSubject);
+  $sqlGrade = "SELECT * FROM grade g JOIN subject s ON g.subject = s.subject_id WHERE g.student = '$studentId' AND g.sy = '$sy'";
+  $queryGrade = mysqli_query($conn, $sqlGrade);
 } else {
   header("Location: teacher_grade.php");
   exit();
@@ -46,39 +44,25 @@ if (isset($_GET['grade'])) {
   <!-- Sweetalert -->
   <link rel="stylesheet" href="../plugins/sweetalert2/sweetalert2.min.css">
   <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
-  <title>SJDC | Student</title>
+  <title>SJDC | Grade</title>
 </head>
 
 <body>
   <?php include("../components/teacher_navbar.php"); ?>
   <div class="content-wrapper">
-    <?php
-    if (isset($_SESSION['success-upload'])) {
-    ?>
-      <script>
-        Swal.fire({
-          title: 'Success',
-          text: '<?php echo $_SESSION['success-upload']; ?>',
-          icon: 'success',
-        })
-      </script>
-    <?php
-      unset($_SESSION['success-upload']);
-    }
-    ?>
 
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="m-0">Student Grade</h1>
-          </div><!-- /.col -->
+          </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <a href="teacher_grade.php" class="btn btn-primary btn-sm">Back</a>
             </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
+          </div>
+        </div>
       </div>
     </div>
 
@@ -88,58 +72,44 @@ if (isset($_GET['grade'])) {
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
-                <form action="../actions/teacher_insert_grade.php" method="post">
-                  <input type="hidden" value="<?php echo $result['student_id']; ?>" name="student-id">
-                  <input type="hidden" value="<?php echo $result['enroll_id']; ?>" name="enroll-id">
-                  <input type="hidden" value="<?php echo $result['sy']; ?>" name="sy">
-                  <table id="example1" class="table table-bordered table-striped">
-                    <thead>
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Subject Code</th>
+                      <th>Subject Name</th>
+                      <th>Grade</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    $sqlSum = "SELECT ROUND((SUM(g.grade) / COUNT(g.grade))) AS total FROM grade g WHERE g.student = '$studentId' AND g.sy = '$sy'";
+                    $querySum = mysqli_query($conn, $sqlSum);
+                    $result = mysqli_fetch_assoc($querySum);
+                    $total = $result['total'];
+
+                    while ($row = mysqli_fetch_assoc($queryGrade)) {
+                    ?>
                       <tr>
-                        <th>Subject Code</th>
-                        <th>Subject Name</th>
-                        <th>Grade</th>
+                        <td><?php echo $row['subject']; ?></td>
+                        <td><?php echo $row['name']; ?></td>
+                        <td><?php echo $row['grade']; ?></td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      <?php
-                      while ($row = mysqli_fetch_assoc($querySubject)) {
-                      ?>
-                        <tr>
-                          <td><?php echo $row['subject_id']; ?></td>
-                          <td><?php echo $row['name']; ?></td>
-                          <td>
-                            <select class="form-control" name="grade[<?php echo $row['subject_id']; ?>]" required>
-                              <option class="text-center" value="N/A">N/A</option>
-                              <?php
-                              for ($i = 70; $i <= 100; $i++) {
-                                echo '<option value="' . $i . '" class="text-center">' . $i . '</option>';
-                              }
-                              ?>
-                            </select>
-                          </td>
-                        </tr>
-                      <?php
-                      }
-                      ?>
-                    </tbody>
-                  </table>
-                  <?php
-                  if (mysqli_num_rows($querySubject) > 0) {
-                  ?>
-                    <div class="d-flex justify-content-center">
-                      <button type="submit" class="btn btn-primary btn-sm" name="upload-grade">Upload Grade</button>
-                    </div>
-                  <?php
-                  }
-                  ?>
-                </form>
+                    <?php
+                    }
+                    ?>
+                    <tr>
+                      <td colspan="2">Total</td>
+                      <td class="d-none"></td>
+                      <td><?php echo $total; ?></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 
   <!-- DataTables  & Plugins -->
@@ -162,14 +132,12 @@ if (isset($_GET['grade'])) {
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
-        "searching": false,
         "info": false,
         "paging": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
   </script>
-
-
 </body>
 
 </html>

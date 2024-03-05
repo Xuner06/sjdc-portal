@@ -49,6 +49,34 @@ if (isset($_GET['id'])) {
       unset($_SESSION['success-enroll']);
     }
     ?>
+    <?php
+    if (isset($_SESSION['delete-enroll'])) {
+    ?>
+      <script>
+        Swal.fire({
+          title: 'Success',
+          text: '<?php echo $_SESSION['delete-enroll']; ?>',
+          icon: 'success',
+        })
+      </script>
+    <?php
+      unset($_SESSION['delete-enroll']);
+    }
+    ?>
+    <?php
+    if (isset($_SESSION['error-enroll'])) {
+    ?>
+      <script>
+        Swal.fire({
+          title: 'Failed',
+          text: '<?php echo $_SESSION['error-enroll']; ?>',
+          icon: 'error',
+        })
+      </script>
+    <?php
+      unset($_SESSION['error-enroll']);
+    }
+    ?>
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">Student Enroll</h1>
@@ -83,9 +111,10 @@ if (isset($_GET['id'])) {
                         <td><?php echo $row['semester']; ?></td>
                         <td><?php echo $row['enroll_date']; ?></td>
                         <td>
-                          <form action="../actions/delete_enroll.php" method="post">
+                          <button type="button" class="btn btn-danger btn-sm" onclick="deleteEnroll('<?php echo $row['enroll_id']; ?>')">Delete</button>
+                          <form id="deleteForm-<?php echo $row['enroll_id']; ?>" action="../actions/delete_enroll.php" method="post">
                             <input type="hidden" name="delete-id" value="<?php echo $row['enroll_id']; ?>">
-                            <button type="submit" class="btn btn-danger btn-sm" name="delete-enroll">Delete</button>
+                            <input type="hidden" name="id" value="<?php echo $id; ?>">
                           </form>
                         </td>
                       </tr>
@@ -105,6 +134,25 @@ if (isset($_GET['id'])) {
     </div>
     <!-- /.content -->
   </div>
+
+  <script>
+    function deleteEnroll(enrollId) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById("deleteForm-" + enrollId).submit();
+        }
+      });
+    }
+  </script>
+
   <!-- Insert Student Modal -->
   <div class="modal fade" id="add-student">
     <div class="modal-dialog">

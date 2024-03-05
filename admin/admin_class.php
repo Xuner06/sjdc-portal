@@ -172,7 +172,7 @@ session_start();
                                         <select class="form-control" name="edit-adviser" id="edit-adviser" required>
                                           <option value=""></option>
                                           <?php
-                                          $editSqlTeacher = "SELECT * FROM teacher";
+                                          $editSqlTeacher = "SELECT * FROM teacher ";
                                           $editQueryTeacher = mysqli_query($conn, $editSqlTeacher);
                                           while ($rowTeacher = mysqli_fetch_assoc($editQueryTeacher)) {
                                             $selected = ($rowTeacher['teacher_id'] == $row['adviser']) ? "selected" : "";
@@ -261,8 +261,7 @@ session_start();
                   while ($sy = mysqli_fetch_assoc($querySy)) {
                     echo '<option value="' . $sy['sy_id'] . '">' . $sy['start_year'] . '-' . $sy['end_year'] . ' ' . $sy['semester'] . '</option>';
                   }
-                } 
-                else {
+                } else {
                   echo '<option value="" disabled>No Active School Year (Please Set School Year)</option>';
                 }
                 ?>

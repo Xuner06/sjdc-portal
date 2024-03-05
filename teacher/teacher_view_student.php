@@ -8,14 +8,22 @@ $query = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($query);
 
 if (isset($_GET['id'])) {
-  // $sql = "SELECT e.*, c.adviser, s.* FROM enroll_student e 
-  // JOIN class c ON e.class = c.class_id 
-  // JOIN student s ON e.student_id = s.student_id 
-  // WHERE e.student_id = '$id' AND c.adviser = '$idTeacher'";
   $id = mysqli_escape_string($conn, $_GET['id']);
-  $sql = "SELECT * FROM student WHERE student_id = '$id'";
+  $sql = "SELECT e.*, c.adviser, s.* FROM enroll_student e 
+  JOIN class c ON e.class = c.class_id 
+  JOIN student s ON e.student_id = s.student_id 
+  WHERE e.student_id = '$id' AND c.adviser = '$idTeacher'";
   $query = mysqli_query($conn, $sql);
   $rowStudent = mysqli_fetch_assoc($query);
+
+  if(!$rowStudent) {
+    header("Location: ../unauthorize.php");
+    exit();
+  }
+}
+else {
+  header("Location: teacher_student.php");
+  exit();
 }
   
 ?>

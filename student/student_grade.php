@@ -4,6 +4,9 @@ include("../actions/session.php");
 sessionStudent();
 
 $id = $_SESSION['student'];
+$sql = "SELECT * FROM student WHERE student_id = '$id'";
+$query = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($query);
 
 $sql = "SELECT e.sy, sy.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id WHERE e.student_id = '$id'";
 $query = mysqli_query($conn, $sql);
@@ -47,14 +50,14 @@ $query = mysqli_query($conn, $sql);
                   </thead>
                   <tbody>
                     <?php
-                    while ($row = mysqli_fetch_assoc($query)) {
+                    while ($rowStudent = mysqli_fetch_assoc($query)) {
                     ?>
                       <tr>
-                        <td><?php echo $row['start_year'] . "-" . $row['end_year']; ?></td>
-                        <td><?php echo $row['semester']; ?></td>
+                        <td><?php echo $rowStudent['start_year'] . "-" . $rowStudent['end_year']; ?></td>
+                        <td><?php echo $rowStudent['semester']; ?></td>
                         <td>
                           <form action="student_view_grade.php" method="post">
-                            <input type="hidden" value="<?php echo $row['sy']; ?>" name="sy">
+                            <input type="hidden" value="<?php echo $rowStudent['sy']; ?>" name="sy">
                             <button type="submit" class="btn btn-primary btn-sm" name="view-grade">View</button>
                           </form>
                         </td>

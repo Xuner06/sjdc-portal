@@ -4,6 +4,9 @@ include("../actions/session.php");
 sessionStudent();
 
 $id = $_SESSION['student'];
+$sql = "SELECT * FROM student WHERE student_id = '$id'";
+$query = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($query);
 
 if (isset($_POST['view-grade'])) {
   $sy = mysqli_escape_string($conn, $_POST['sy']);
@@ -104,17 +107,10 @@ if (isset($_POST['view-grade'])) {
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        "info": false,
+        "paging": false,
+        "buttons": ["csv", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
     });
   </script>
 </body>
