@@ -4,10 +4,11 @@ include("../actions/session.php");
 sessionStudent();
 
 $id = $_SESSION['student'];
-$sql = "SELECT * FROM student WHERE student_id = '$id'";
-$query = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($query);
-
+$stmtStudent = $conn->prepare("SELECT * FROM student WHERE student_id = ?");
+$stmtStudent->bind_param("i", $id);
+$stmtStudent->execute();
+$stmtResult = $stmtStudent->get_result();
+$row = $stmtResult->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -56,11 +57,9 @@ $row = mysqli_fetch_assoc($query);
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">Account</h1>
-      </div><!-- /.container-fluid -->
+      </div>
     </div>
-    <!-- /.content-header -->
 
-    <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
         <div class="row">
@@ -81,15 +80,10 @@ $row = mysqli_fetch_assoc($query);
               </div>
             </div>
           </div>
-          <!-- /.col-md-6 -->
         </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
+      </div>
     </div>
-    <!-- /.content -->
   </div>
-
-
 </body>
 
 </html>
