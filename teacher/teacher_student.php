@@ -2,10 +2,12 @@
 include("../database/database.php");
 session_start();
 
-$idTeacher = $_SESSION['teacher'];
-$sql = "SELECT * FROM teacher WHERE teacher_id = '$idTeacher'";
-$query = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($query);
+$id = $_SESSION['teacher'];
+$stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE teacher_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
 
 ?>
 <!DOCTYPE html>
@@ -54,31 +56,61 @@ $row = mysqli_fetch_assoc($query);
                   </thead>
                   <tbody>
                     <?php
-                    $sqlSy = "SELECT * FROM school_year WHERE status = 'Active'";
-                    $querySy = mysqli_query($conn, $sqlSy);
-                    if ($querySy && mysqli_num_rows($querySy) > 0) {
-                      $result = mysqli_fetch_assoc($querySy);
-                      $sy = $result['sy_id'];
+                    $status = "Active";
+                    $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                    $stmtSy->bind_param("s", $status);
+                    $stmtSy->execute();
+                    $stmtResultSy = $stmtSy->get_result();
 
-                      $sql = "SELECT e.*, c.adviser, s.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN student s ON e.student_id = s.student_id WHERE c.adviser = '$idTeacher' AND e.sy = '$sy'";
-                      $query = mysqli_query($conn, $sql);
-                      while ($row = mysqli_fetch_assoc($query)) {
+                    if (mysqli_num_rows($stmtResultSy) > 0) {
+                      $result = $stmtResultSy->fetch_assoc();
+                      $sy = $result['sy_id'];
+                      $stmtEnroll = $conn->prepare("SELECT e.*, c.adviser, s.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN student s ON e.student_id = s.student_id WHERE c.adviser = ? AND e.sy = ?");
+                      $stmtEnroll->bind_param("ii", $id, $sy);
+                      $stmtEnroll->execute();
+                      $stmtResultEnroll = $stmtEnroll->get_result();
+                      if (mysqli_num_rows($stmtResultEnroll) > 0) {
+                        while ($row = $stmtResultEnroll->fetch_assoc()) {
+                    ?>
+                          <tr>
+                            <td><?php echo $row['lrn_number']; ?></td>
+                            <td><?php echo $row['lname'] . ", " . $row['fname']; ?></td>
+                            <td><?php echo $row['gender']; ?></td>
+                            <td><?php echo $row['email']; ?></td>
+                            <td><?php echo $row['contact']; ?></td>
+                            <td>
+                              <a href="teacher_view_student.php?id=<?php echo $row['student_id']; ?>" class="btn btn-primary btn-sm">View</a>
+                            </td>
+                          </tr>
+                        <?php
+                        }
+                      } 
+                      else {
                     ?>
                         <tr>
-                          <td><?php echo $row['lrn_number']; ?></td>
-                          <td><?php echo $row['lname'] . ", " . $row['fname']; ?></td>
-                          <td><?php echo $row['gender']; ?></td>
-                          <td><?php echo $row['email']; ?></td>
-                          <td><?php echo $row['contact']; ?></td>
-                          <td>
-                            <a href="teacher_view_student.php?id=<?php echo $row['student_id']; ?>" class="btn btn-primary btn-sm">View</a>
-                          </td>
+                          <td colspan="6" class="text-center">No Assign Student</td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
                         </tr>
                     <?php
                       }
+                    } 
+                    else {
+                    ?>
+                      <tr>
+                        <td colspan="6" class="text-center">No Active School Year</td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                      </tr>
+                    <?php
                     }
                     ?>
-
                   </tbody>
                 </table>
               </div>

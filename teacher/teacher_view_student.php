@@ -2,24 +2,26 @@
 include("../database/database.php");
 session_start();
 
-$idTeacher = $_SESSION['teacher'];
-$sql = "SELECT * FROM teacher WHERE teacher_id = '$idTeacher'";
-$query = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($query);
+$id = $_SESSION['teacher'];
+$stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE teacher_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
 
 if (isset($_GET['id'])) {
-  $id = mysqli_escape_string($conn, $_GET['id']);
-  $sql = "SELECT e.*, c.adviser, s.* FROM enroll_student e 
-  JOIN class c ON e.class = c.class_id 
-  JOIN student s ON e.student_id = s.student_id 
-  WHERE e.student_id = '$id' AND c.adviser = '$idTeacher'";
-  $query = mysqli_query($conn, $sql);
-  $rowStudent = mysqli_fetch_assoc($query);
+  $studentId = $_GET['id'];
+  $stmtEnroll = $conn->prepare("SELECT e.*, c.adviser, s.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN student s ON e.student_id = s.student_id WHERE e.student_id = ? AND c.adviser = ?");
+  $stmtEnroll->bind_param("ii", $studentId, $id);
+  $stmtEnroll->execute();
+  $stmtResult = $stmtEnroll->get_result();
+  $rowStudent = $stmtResult->fetch_assoc();
 
-  if(!$rowStudent) {
-    header("Location: ../unauthorize.php");
+  if(mysqli_num_rows($stmtResult) == 0) {
+    header("Location: teacher_student.php");
     exit();
   }
+
 }
 else {
   header("Location: teacher_student.php");
@@ -53,19 +55,16 @@ else {
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="m-0">Student Details</h1>
-          </div><!-- /.col -->
+          </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <a href="teacher_student.php" class="btn btn-primary btn-sm">Back</a>
             </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-
-      </div><!-- /.container-fluid -->
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- /.content-header -->
 
-    <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
         <div class="row">
@@ -86,15 +85,10 @@ else {
               </div>
             </div>
           </div>
-          <!-- /.col-md-6 -->
         </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
+      </div>
     </div>
-    <!-- /.content -->
   </div>
-
-
 </body>
 
 </html>

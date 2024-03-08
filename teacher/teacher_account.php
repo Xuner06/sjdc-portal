@@ -3,10 +3,12 @@ include("../database/database.php");
 include("../actions/session.php");
 sessionTeacher();
 
-$idTeacher = $_SESSION['teacher'];
-$sql = "SELECT * FROM teacher WHERE teacher_id = '$idTeacher'";
-$query = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($query);
+$id = $_SESSION['teacher'];
+$stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE teacher_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
 
 ?>
 
