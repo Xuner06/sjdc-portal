@@ -4,12 +4,22 @@ include("../actions/session.php");
 sessionStudent();
 
 $id = $_SESSION['student'];
-$sql = "SELECT * FROM student WHERE student_id = '$id'";
-$query = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($query);
+$stmtStudent = $conn->prepare("SELECT * FROM student WHERE student_id = ?");
+$stmtStudent->bind_param("i", $id);
+$stmtStudent->execute();
+$stmtResult = $stmtStudent->get_result();
+$row = $stmtResult->fetch_assoc();
 
-if (isset($_POST['view-grade'])) {
-  $sy = mysqli_escape_string($conn, $_POST['sy']);
+if (isset($_GET['view'])) {
+  $sy = $_GET['view'];
+  $stmtGrade = $conn->prepare("SELECT g.*, s.* FROM grade g JOIN subject s ON g.subject = s.subject_id WHERE g.student = ? AND g.sy = ?");
+  $stmtGrade->bind_param("ii", $id, $sy);
+  $stmtGrade->execute();
+  $stmtResultGrade = $stmtGrade->get_result();
+} 
+else {
+  header("Location: student_grade.php");
+  exit();
 }
 
 ?>
@@ -55,6 +65,7 @@ if (isset($_POST['view-grade'])) {
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
+                <h1 class="text-center">Student Grade</h1>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -65,14 +76,23 @@ if (isset($_POST['view-grade'])) {
                   </thead>
                   <tbody>
                     <?php
-                    $sql = "SELECT g.*, s.* FROM grade g JOIN subject s ON g.subject = s.subject_id WHERE g.student = '$id' AND g.sy= '$sy'";
-                    $query = mysqli_query($conn, $sql);
-                    while ($row = mysqli_fetch_assoc($query)) {
+                    if (mysqli_num_rows($stmtResultGrade) > 0) {
+                      while ($rowResult = $stmtResultGrade->fetch_assoc()) {
+                    ?>
+                        <tr>
+                          <td><?php echo $rowResult['subject']; ?></td>
+                          <td><?php echo $rowResult['name']; ?></td>
+                          <td><?php echo $rowResult['grade']; ?></td>
+                        </tr>
+                    <?php
+                      }
+                    } 
+                    else {
                     ?>
                       <tr>
-                        <td><?php echo $row['subject']; ?></td>
-                        <td><?php echo $row['name']; ?></td>
-                        <td><?php echo $row['grade']; ?></td>
+                        <td colspan="3" class="text-center">No Grade Yet For This School Year</td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
                       </tr>
                     <?php
                     }

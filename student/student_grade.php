@@ -4,12 +4,12 @@ include("../actions/session.php");
 sessionStudent();
 
 $id = $_SESSION['student'];
-$sql = "SELECT * FROM student WHERE student_id = '$id'";
-$query = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($query);
+$stmtStudent = $conn->prepare("SELECT * FROM student WHERE student_id = ?");
+$stmtStudent->bind_param("i", $id);
+$stmtStudent->execute();
+$stmtResult = $stmtStudent->get_result();
+$row = $stmtResult->fetch_assoc();
 
-$sql = "SELECT e.sy, sy.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id WHERE e.student_id = '$id'";
-$query = mysqli_query($conn, $sql);
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +32,7 @@ $query = mysqli_query($conn, $sql);
         <h1 class="m-0">Grade</h1>
       </div>
     </div>
-  
+
     <div class="content">
       <div class="container-fluid">
         <div class="row">
@@ -50,17 +50,29 @@ $query = mysqli_query($conn, $sql);
                   </thead>
                   <tbody>
                     <?php
-                    while ($rowStudent = mysqli_fetch_assoc($query)) {
+                    $stmtEnroll = $conn->prepare("SELECT e.sy, sy.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id WHERE e.student_id = ?");
+                    $stmtEnroll->bind_param("i", $id);
+                    $stmtEnroll->execute();
+                    $stmtResult = $stmtEnroll->get_result();
+                    if (mysqli_num_rows($stmtResult) > 0) {           
+                      while ($resultSy = $stmtResult->fetch_assoc()) {
+                      ?>
+                        <tr>
+                          <td><?php echo $resultSy['start_year'] . "-" . $resultSy['end_year']; ?></td>
+                          <td><?php echo $resultSy['semester']; ?></td>
+                          <td>
+                            <a href="student_view_grade.php?view=<?php echo $resultSy['sy']; ?>" class="btn btn-primary btn-sm">View</a>
+                          </td>
+                        </tr>
+                      <?php
+                      }
+                    } 
+                    else {
                     ?>
                       <tr>
-                        <td><?php echo $rowStudent['start_year'] . "-" . $rowStudent['end_year']; ?></td>
-                        <td><?php echo $rowStudent['semester']; ?></td>
-                        <td>
-                          <form action="student_view_grade.php" method="post">
-                            <input type="hidden" value="<?php echo $rowStudent['sy']; ?>" name="sy">
-                            <button type="submit" class="btn btn-primary btn-sm" name="view-grade">View</button>
-                          </form>
-                        </td>
+                        <td colspan="3" class="text-center">Not Enrolled In Any School Year</td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
                       </tr>
                     <?php
                     }
