@@ -52,9 +52,12 @@ session_start();
                   </thead>
                   <tbody>
                     <?php
-                    $sql = "SELECT * FROM student";
-                    $query = mysqli_query($conn, $sql);
-                    while ($row = mysqli_fetch_assoc($query)) {
+                    $status = 0;
+                    $stmtStudent = $conn->prepare("SELECT * FROM student WHERE status = ?");
+                    $stmtStudent->bind_param("i", $status);
+                    $stmtStudent->execute();
+                    $stmtResult = $stmtStudent->get_result();
+                    while ($row = $stmtResult->fetch_assoc()) {
                     ?>
                       <tr>
                         <td><?php echo $row['lrn_number']; ?></td>
@@ -70,21 +73,15 @@ session_start();
                     <?php
                     }
                     ?>
-
                   </tbody>
                 </table>
-
               </div>
             </div>
           </div>
-          <!-- /.col-md-6 -->
         </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
+      </div>
     </div>
-    <!-- /.content -->
   </div>
-
 
   <!-- DataTables  & Plugins -->
   <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
@@ -107,15 +104,6 @@ session_start();
         "lengthChange": false,
         "autoWidth": false,
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
     });
   </script>
 </body>

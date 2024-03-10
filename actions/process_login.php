@@ -2,19 +2,21 @@
 include("../database/database.php");
 session_start();
 
-
 if(isset($_POST['login'])) {
-  $user = mysqli_escape_string($conn, $_POST['user']);
-  $email = mysqli_escape_string($conn, $_POST['email']);
-  $password = mysqli_escape_string($conn, $_POST['password']);
+  $user = $_POST['user'];
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  $status = 0;
 
   if($user=="student") {
-    $sql = "SELECT * FROM student WHERE email = '$email' AND password = '$password'";
-    $query = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($query);
+    $stmtStudent = $conn->prepare("SELECT * FROM student WHERE email = ? AND password = ?");
+    $stmtStudent->bind_param("ss", $email, $password);
+    $stmtStudent->execute();
+    $stmtResult = $stmtStudent->get_result();
   
-    if(mysqli_num_rows($query) == 1) {
-      $_SESSION['student'] = $row['student_id'];
+    if(mysqli_num_rows($stmtResult) == 1) {
+      $result = $stmtResult->fetch_assoc();
+      $_SESSION['student'] = $result['student_id'];
       $_SESSION['login-student'] = "Signed in successfully";
       header("Location: ../student/student_account.php");
       exit();
@@ -24,15 +26,16 @@ if(isset($_POST['login'])) {
       header("Location: ../login.php");
       exit();
     }
-
   }
   else if($user=="teacher") {
-    $sql = "SELECT * FROM teacher WHERE email = '$email' AND password = '$password' AND status = 0";
-    $query = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($query);
-  
-    if(mysqli_num_rows($query) == 1) {
-      $_SESSION['teacher'] = $row['teacher_id'];
+    $stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE email = ? AND password = ? AND status = ?");
+    $stmtTeacher->bind_param("ssi", $email, $password, $status);
+    $stmtTeacher->execute();
+    $stmtResult = $stmtTeacher->get_result();
+
+    if(mysqli_num_rows($stmtResult) == 1) {
+      $result = $stmtResult->fetch_assoc();
+      $_SESSION['teacher'] = $result['teacher_id'];
       $_SESSION['login-teacher'] = "Signed in successfully";
       header("Location: ../teacher/teacher_dashboard.php");
       exit();

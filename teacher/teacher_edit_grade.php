@@ -3,29 +3,25 @@ include("../database/database.php");
 include("../actions/session.php");
 sessionTeacher();
 
-$idTeacher = $_SESSION['teacher'];
-$sql = "SELECT * FROM teacher WHERE teacher_id = '$idTeacher'";
-$query = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($query);
+$id = $_SESSION['teacher'];
+$stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE teacher_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
 
-if (isset($_GET['grade'])) {
-  $id = mysqli_escape_string($conn, $_GET['grade']);
+if (isset($_GET['edit'])) {
+  $enrollId = $_GET['edit'];
+  $stmtEnroll = $conn->prepare("SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = ? AND c.adviser = ?");
+  $stmtEnroll->bind_param("ii", $enrollId, $id);
+  $stmtEnroll->execute();
+  $stmtResultEnroll = $stmtEnroll->get_result();
+  $result = $stmtResultEnroll->fetch_assoc();
 
-  $sql = "SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = '$id' AND c.adviser = '$idTeacher'";
-  $query = mysqli_query($conn, $sql);
-  $result = mysqli_fetch_assoc($query);
-
-  if(!$result) {
-    header("Location: ../unauthorize.php");
+  if (mysqli_num_rows($stmtResultEnroll) == 0) {
+    header("Location: teacher_grade.php");
     exit();
   }
-
-  $semester = $result['semester'];
-  $level = $result['level'];
-  $strand = $result['strand'];
-
-  $sqlSubject = "SELECT * FROM subject WHERE level = '$level' AND strand = '$strand' AND semester = '$semester'";
-  $querySubject = mysqli_query($conn, $sqlSubject);
 } else {
   header("Location: teacher_grade.php");
   exit();
@@ -88,6 +84,7 @@ if (isset($_GET['grade'])) {
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
+                <h1 class="text-center">Student Edit Grade</h1>
                 <form action="../actions/teacher_insert_grade.php" method="post">
                   <input type="hidden" value="<?php echo $result['student_id']; ?>" name="student-id">
                   <input type="hidden" value="<?php echo $result['enroll_id']; ?>" name="enroll-id">
@@ -102,36 +99,43 @@ if (isset($_GET['grade'])) {
                     </thead>
                     <tbody>
                       <?php
-                      while ($row = mysqli_fetch_assoc($querySubject)) {
+                      $studentId = $result['student_id'];
+                      $sy = $result['sy'];
+                      $stmtGrade = $conn->prepare("SELECT * FROM grade g WHERE g.student = ? AND g.sy = ?");
+                      $stmtGrade->bind_param("ii", $studentId, $sy);
+                      $stmtGrade->execute();
+                      $stmtResultGrade = $stmtGrade->get_result();
+
+                      if (mysqli_num_rows($stmtResultGrade) > 0) {
+                        while ($row = $stmtResultGrade->fetch_assoc()) {
                       ?>
+                          <tr>
+                            <td><?php echo $row['subject']; ?></td>
+                            <td><?php echo $row['name']; ?></td>
+                            <td>
+                              <select class="form-control" name="grade[<?php echo $row['subject_id']; ?>]" required>
+                                <option class="text-center" value="N/A">N/A</option>
+                                <?php
+                                for ($i = 70; $i <= 100; $i++) {
+                                  echo '<option value="' . $i . '" class="text-center">' . $i . '</option>';
+                                }
+                                ?>
+                              </select>
+                            </td>
+                          </tr>
+                        <?php
+                        }
+                      } 
+                      else {
+                        ?>
                         <tr>
-                          <td><?php echo $row['subject_id']; ?></td>
-                          <td><?php echo $row['name']; ?></td>
-                          <td>
-                            <select class="form-control" name="grade[<?php echo $row['subject_id']; ?>]" required>
-                              <option class="text-center" value="N/A">N/A</option>
-                              <?php
-                              for ($i = 70; $i <= 100; $i++) {
-                                echo '<option value="' . $i . '" class="text-center">' . $i . '</option>';
-                              }
-                              ?>
-                            </select>
-                          </td>
+                          <td colspan="3" class="text-center">No Grade Yet</td>
                         </tr>
                       <?php
                       }
                       ?>
                     </tbody>
                   </table>
-                  <?php
-                  if (mysqli_num_rows($querySubject) > 0) {
-                  ?>
-                    <div class="d-flex justify-content-center">
-                      <button type="submit" class="btn btn-primary btn-sm" name="upload-grade">Upload Grade</button>
-                    </div>
-                  <?php
-                  }
-                  ?>
                 </form>
               </div>
             </div>

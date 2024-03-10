@@ -3,15 +3,13 @@ include("../database/database.php");
 session_start();
 
 if(isset($_POST['add-strand'])) {
-  $strand = mysqli_escape_string($conn, $_POST['strand']);
-  $description = mysqli_escape_string($conn, $_POST['description']);
-  $date_created = date("Y-m-d");
+  $strand = $_POST['strand'];
+  $description = $_POST['description'];
 
-  //prepare and bind
-  $stmtStrand = $conn->prepare("INSERT INTO strand (strand, description, date_created) VALUES (?, ?, ?)");
-  $stmtStrand->bind_param("sss", $strand, $description, $date_created);
+  $stmtInsertStrand = $conn->prepare("INSERT INTO strand (strand, description, date_created) VALUES (?, ?, NOW())");
+  $stmtInsertStrand->bind_param("ss", $strand, $description);
 
-  if(mysqli_stmt_execute($stmtStrand)) {
+  if(mysqli_stmt_execute($stmtInsertStrand)) {
     $_SESSION['add-strand'] = "Successfully Added Strand";
     header("Location: ../admin/admin_strand.php");
     exit();

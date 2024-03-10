@@ -3,21 +3,27 @@ include("../database/database.php");
 session_start();
 
 if(isset($_POST['add-schoolyear'])) {
-  $start_year = mysqli_escape_string($conn, $_POST['start_year']);
-  $end_year = mysqli_escape_string($conn, $_POST['end_year']);
-  $semester = mysqli_escape_string($conn, $_POST['semester']);
+  $start_year = $_POST['start_year'];
+  $end_year = $_POST['end_year'];
+  $semester = $_POST['semester'];
+  $date_created = date("Y-m-d");
+  $statusActive = "Active";
 
-  $checkActive = "SELECT * FROM school_year WHERE status = 'Active'";
-  $checkActiveQuery = mysqli_query($conn, $checkActive);
+  $stmtCheckActive = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+  $stmtCheckActive->bind_param("s", $statusActive);
+  $stmtCheckActive->execute();
+  $stmtResult = $stmtCheckActive->get_result();
 
-  if(mysqli_num_rows($checkActiveQuery) >= 0)  {
-    $sqlUpdateStatus = "UPDATE school_year SET status = 'Inactive'";
-    $queryUpdateStatus = mysqli_query($conn, $sqlUpdateStatus);
-    
-    $sql = "INSERT INTO school_year (start_year, end_year, semester, created_at) VALUES('$start_year', '$end_year', '$semester', now())";
-    $query = mysqli_query($conn, $sql);
+  if(mysqli_num_rows($stmtResult) >= 0) {
+    $statusInactive = "Inactive";
+    $stmtUpdateActive = $conn->prepare( "UPDATE school_year SET status = ?");
+    $stmtUpdateActive->bind_param("s", $statusInactive);
+    $stmtUpdateActive->execute();
 
-    if($query) {
+    $stmtInsertSy = $conn->prepare("INSERT INTO school_year (start_year, end_year, semester, created_at) VALUES (?, ?, ?, ?)");
+    $stmtInsertSy->bind_param("ssss", $start_year, $end_year, $semester, $date_created);
+
+    if(mysqli_stmt_execute($stmtInsertSy)) {
       $_SESSION['add-schoolyear'] = "Successfully Added School Year";
       header("Location: ../admin/admin_schoolyear.php");
       exit();
@@ -28,3 +34,4 @@ if(isset($_POST['add-schoolyear'])) {
     }
   }
 }
+?>

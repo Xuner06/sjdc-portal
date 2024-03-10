@@ -1,8 +1,7 @@
 <?php
 include("../database/database.php");
 session_start();
-$sql = "SELECT * FROM teacher WHERE status = 0";
-$query = mysqli_query($conn, $sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -109,7 +108,12 @@ $query = mysqli_query($conn, $sql);
                   </thead>
                   <tbody>
                     <?php
-                    while ($row = mysqli_fetch_assoc($query)) {
+                    $status = 0;
+                    $stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE status = ?");
+                    $stmtTeacher->bind_param("i", $status);
+                    $stmtTeacher->execute();
+                    $stmtResult = $stmtTeacher->get_result();
+                    while ($row = $stmtResult->fetch_assoc()) {
                     ?>
                       <!-- Edit Teacher Modal -->
                       <div class="modal fade" id="edit-teacher-<?php echo $row['teacher_id']; ?>">
@@ -347,15 +351,6 @@ $query = mysqli_query($conn, $sql);
           }
         }, "copy", "csv", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
     });
   </script>
 </body>

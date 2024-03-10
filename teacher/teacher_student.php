@@ -43,6 +43,7 @@ $row = $stmtResult->fetch_assoc();
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
+                <h1 class="text-center">Student List</h1>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -158,8 +159,6 @@ $row = $stmtResult->fetch_assoc();
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
-        "info": false,
-        "paging": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print"],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });

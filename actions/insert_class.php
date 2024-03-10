@@ -3,16 +3,16 @@ include("../database/database.php");
 session_start();
 
 if(isset($_POST['add-class'])) {
-  $level = mysqli_escape_string($conn, $_POST['level']);
-  $strand = mysqli_escape_string($conn, $_POST['strand']);
-  $section = mysqli_escape_string($conn, $_POST['section']);
-  $sy = mysqli_escape_string($conn, $_POST['sy']);
-  $adviser = mysqli_escape_string($conn, $_POST['adviser']);
+  $level = $_POST['level'];
+  $strand = $_POST['strand'];
+  $section = $_POST['section'];
+  $sy = $_POST['sy'];
+  $adviser = $_POST['adviser'];
 
-  $sql = "INSERT INTO class VALUES('', '$level', '$strand', '$section', '$sy', '$adviser', now())";
-  $query = mysqli_query($conn, $sql);
+  $stmtInsertClass = $conn->prepare("INSERT INTO class (level, strand, section, sy, adviser, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
+  $stmtInsertClass->bind_param("sssss", $level, $strand, $section, $sy, $adviser);
 
-  if($query) {
+  if(mysqli_stmt_execute($stmtInsertClass)) {
     $_SESSION['add-class'] = "Successfully Added Class";
     header("Location: ../admin/admin_class.php");
     exit();
@@ -22,5 +22,4 @@ if(isset($_POST['add-class'])) {
     exit();
   }
 }
-
 ?>

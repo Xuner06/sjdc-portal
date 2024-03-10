@@ -4,19 +4,19 @@ session_start();
 
 if(isset($_POST['restore-teacher'])) {
   $id = mysqli_escape_string($conn, $_POST['restore-id']);
-  $sql = "UPDATE teacher SET status = 0 WHERE teacher_id = '$id'";
-  $query = mysqli_query($conn, $sql);
+  $status = 0;
 
-  if($query) {
+  $stmtRestoreTeacher = $conn->prepare("UPDATE teacher set status = ? WHERE teacher_id = ?");
+  $stmtRestoreTeacher->bind_param("ii", $status, $id);
+
+  if(mysqli_stmt_execute($stmtRestoreTeacher)) {
     $_SESSION['restore-teacher'] = "Successfully Restored Teacher";
     header("Location: ../admin/admin_archive_teacher.php");
     exit();
   }
+  else {
+    header("Location: ../admin/admin_archive_teacher.php");
+    exit();
+  }
 }
-else {
-  header("Location: ../admin/admin_archive_teacher.php");
-  exit();
-}
-
-
 ?>

@@ -1,8 +1,7 @@
 <?php
 include("../database/database.php");
 session_start();
-$sql = "SELECT * FROM school_year";
-$query = mysqli_query($conn, $sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -95,6 +94,8 @@ $query = mysqli_query($conn, $sql);
                   </thead>
                   <tbody>
                     <?php
+                    $sql = "SELECT * FROM school_year";
+                    $query = mysqli_query($conn, $sql);
                     while ($row = mysqli_fetch_assoc($query)) {
                     ?>
                       <!-- Edit School Year Modal -->
@@ -228,15 +229,6 @@ $query = mysqli_query($conn, $sql);
           }
         }, ]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
     });
   </script>
 

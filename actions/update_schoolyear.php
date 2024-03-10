@@ -4,26 +4,30 @@ session_start();
 
 if(isset($_POST['update-schoolyear'])) {
   $id = $_POST['edit-id'];
-  $status = mysqli_escape_string($conn, $_POST['edit-status']);
-  $startYear = mysqli_escape_string($conn, $_POST['edit-startYear']);
-  $endYear = mysqli_escape_string($conn, $_POST['edit-endYear']);
-  $semester = mysqli_escape_string($conn, $_POST['edit-semester']);
+  $status = $_POST['edit-status'];
+  $startYear = $_POST['edit-startYear'];
+  $endYear = $_POST['edit-endYear'];
+  $semester = $_POST['edit-semester'];
+  $statusActive = "Active";
 
-  $checkActive = "SELECT * FROM school_year WHERE status = 'Active'";
-  $checkActiveQuery = mysqli_query($conn, $checkActive);
+  $stmtCheckActive = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+  $stmtCheckActive->bind_param("s", $statusActive);
+  $stmtCheckActive->execute();
+  $stmtResult = $stmtCheckActive->get_result();
 
-  if(mysqli_num_rows($checkActiveQuery) >= 0) {
-    $sqlUpdateStatus = "UPDATE school_year SET status = 'Inactive' WHERE status = 'Active'";
-    $queryUpdateStatus = mysqli_query($conn, $sqlUpdateStatus);
+  if(mysqli_num_rows($stmtResult) >= 0) {
+    $statusInactive = "Inactive";
+    $stmtUpdateStatus = $conn->prepare("UPDATE school_year SET status = ? WHERE status = ?");
+    $stmtUpdateStatus->bind_param("ss", $statusInactive, $statusActive);
+    $stmtUpdateStatus->execute();
 
-    $sql = "UPDATE school_year SET status = '$status', start_year = '$startYear', end_year = '$endYear', semester = '$semester' WHERE sy_id = '$id'";
-    $query = mysqli_query($conn, $sql);
+    $stmtUpdateSy = $conn->prepare("UPDATE school_year SET status = ?, start_year = ?, end_year = ?, semester = ? WHERE sy_id = ?");
+    $stmtUpdateSy->bind_param("ssssi", $status, $startYear, $endYear, $semester, $id);
 
-    if($query) {
+    if(mysqli_stmt_execute($stmtUpdateSy)) {
       $_SESSION['update-schoolyear'] = "Successfully Updated School Year";
       header("Location: ../admin/admin_schoolyear.php");
       exit();
-  
     }
     else {
       header("Location: ../admin/admin_schoolyear.php");

@@ -3,14 +3,14 @@ include("../database/database.php");
 session_start();
 
 if(isset($_POST['update-strand'])) {
-  $id = mysqli_escape_string($conn, $_POST['edit-id']);
-  $strand = mysqli_escape_string($conn, $_POST['edit-strand']);
-  $description = mysqli_escape_string($conn, $_POST['edit-description']);
+  $id = $_POST['edit-id'];
+  $strand = $_POST['edit-strand'];
+  $description = $_POST['edit-description'];
 
-  $sql = "UPDATE strand SET strand = '$strand', description = '$description' WHERE strand_id = '$id'";
-  $query = mysqli_query($conn, $sql);
+  $stmtUpdateStrand = $conn->prepare("UPDATE strand SET strand = ?, description = ? WHERE strand_id = ?");
+  $stmtUpdateStrand->bind_param("ssi", $strand, $description, $id);
 
-  if($query) {
+  if(mysqli_stmt_execute($stmtUpdateStrand)) {
     $_SESSION['update-strand'] = "Successfully Updated Strand";
     header("Location: ../admin/admin_strand.php");
     exit();
@@ -20,6 +20,4 @@ if(isset($_POST['update-strand'])) {
     exit();
   }
 }  
-
-
 ?>

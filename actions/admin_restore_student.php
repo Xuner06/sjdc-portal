@@ -3,20 +3,20 @@ include("../database/database.php");
 session_start();
 
 if(isset($_POST['restore-student'])) {
-  $id = mysqli_escape_string($conn, $_POST['restore-id']);
-  $sql = "UPDATE student SET status = 0 WHERE student_id = '$id'";
-  $query = mysqli_query($conn, $sql);
+  $id = $_POST['restore-id'];
+  $status = 0;
 
-  if($query) {
+  $stmtRestoreStudent = $conn->prepare("UPDATE student SET status = ? WHERE student_id = ?");
+  $stmtRestoreStudent->bind_param("ii", $status, $id);
+
+  if(mysqli_stmt_execute($stmtRestoreStudent)) {
     $_SESSION['restore-student'] = "Successfully Restored Student";
     header("Location: ../admin/admin_archive_student.php");
     exit();
   }
+  else {
+    header("Location: ../admin/admin_archive_student.php");
+    exit();
+  }
 }
-else {
-  header("Location: ../admin/admin_archive_student.php");
-  exit();
-}
-
-
 ?>

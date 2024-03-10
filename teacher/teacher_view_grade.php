@@ -3,28 +3,35 @@ include("../database/database.php");
 include("../actions/session.php");
 sessionTeacher();
 
-$idTeacher = $_SESSION['teacher'];
-$sql = "SELECT * FROM teacher WHERE teacher_id = '$idTeacher'";
-$query = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($query);
+$id = $_SESSION['teacher'];
+$stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE teacher_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
 
 if (isset($_GET['view'])) {
-  $id = mysqli_escape_string($conn, $_GET['view']);
+  $enrollId = $_GET['view'];
+  $status = "Active";
+  $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+  $stmtSy->bind_param("s", $status);
+  $stmtSy->execute();
+  $stmtResultSy = $stmtSy->get_result();
+  $result = $stmtResultSy->fetch_assoc();
+  $sy = $result['sy_id'];
 
-  $sql = "SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = '$id' AND c.adviser = '$idTeacher'";
-  $query = mysqli_query($conn, $sql);
-  $result = mysqli_fetch_assoc($query);
+  $stmtEnroll = $conn->prepare("SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = ? AND c.adviser = ? AND e.sy = ?");
+  $stmtEnroll->bind_param("iii", $enrollId, $id, $sy);
+  $stmtEnroll->execute();
+  $stmtResultEnroll = $stmtEnroll->get_result();
+  $result = $stmtResultEnroll->fetch_assoc();
 
-  if (!$result) {
-    header("Location: ../unauthorize.php");
+  if(mysqli_num_rows($stmtResultEnroll) == 0) {
+    header("Location: teacher_grade.php");
     exit();
   }
-  $studentId = $result['student_id'];
-  $sy = $result['sy'];
-
-  $sqlGrade = "SELECT * FROM grade g JOIN subject s ON g.subject = s.subject_id WHERE g.student = '$studentId' AND g.sy = '$sy'";
-  $queryGrade = mysqli_query($conn, $sqlGrade);
-} else {
+} 
+else {
   header("Location: teacher_grade.php");
   exit();
 }
@@ -82,17 +89,26 @@ if (isset($_GET['view'])) {
                   </thead>
                   <tbody>
                     <?php
-                    $sqlSum = "SELECT ROUND((SUM(g.grade) / COUNT(g.grade))) AS total FROM grade g WHERE g.student = '$studentId' AND g.sy = '$sy'";
-                    $querySum = mysqli_query($conn, $sqlSum);
-                    $result = mysqli_fetch_assoc($querySum);
-                    $total = $result['total'];
+                    $studentId = $result['student_id'];
+                    $sy = $result['sy'];
 
-                    while ($row = mysqli_fetch_assoc($queryGrade)) {
+                    $stmtGrade = $conn->prepare("SELECT * FROM grade g JOIN subject s ON g.subject = s.subject_id WHERE g.student = ? AND g.sy = ?");
+                    $stmtGrade->bind_param("ii", $studentId, $sy);
+                    $stmtGrade->execute();
+                    $stmtResultGrade = $stmtGrade->get_result();
+      
+  
+                    // $sqlSum = "SELECT ROUND((SUM(g.grade) / COUNT(g.grade))) AS total FROM grade g WHERE g.student = '$studentId' AND g.sy = '$sy'";
+              
+        
+                    // $total = $result['total'];
+
+                    while ($grade = $stmtResultGrade->fetch_assoc()) {
                     ?>
                       <tr>
-                        <td><?php echo $row['subject']; ?></td>
-                        <td><?php echo $row['name']; ?></td>
-                        <td><?php echo $row['grade']; ?></td>
+                        <td><?php echo $grade['subject']; ?></td>
+                        <td><?php echo $grade['name']; ?></td>
+                        <td><?php echo $grade['grade']; ?></td>
                       </tr>
                     <?php
                     }
@@ -100,7 +116,7 @@ if (isset($_GET['view'])) {
                     <tr>
                       <td colspan="2">Total</td>
                       <td class="d-none"></td>
-                      <td><?php echo $total; ?></td>
+                      <td>test</td>
                     </tr>
                   </tbody>
                 </table>
