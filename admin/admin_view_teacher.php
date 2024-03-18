@@ -1,15 +1,31 @@
 <?php
 include("../database/database.php");
-session_start();
+include("../actions/session.php");
+sessionAdmin();
 
+$id = $_SESSION['admin'];
+$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
 
 if (isset($_GET['id'])) {
-  $id = mysqli_escape_string($conn, $_GET['id']);
-  $sql = "SELECT * FROM teacher WHERE teacher_id = '$id'";
-  $query = mysqli_query($conn, $sql);
-  $row = mysqli_fetch_assoc($query);
-} else {
-  echo '<script>window.location.href="http://localhost/sjdc-portal/admin/admin_teacher.php"</script>';
+  $teacherId = $_GET['id'];
+  $stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE teacher_id = ?");
+  $stmtTeacher->bind_param("i", $teacherId);
+  $stmtTeacher->execute();
+  $stmtResultTeacher = $stmtTeacher->get_result();
+  $rowTeacher = $stmtResultTeacher->fetch_assoc();
+
+  if(mysqli_num_rows($stmtResultTeacher) == 0) {
+    header("Location: admin_teacher.php");
+    exit();
+  }
+} 
+else {
+  header("Location: admin_teacher.php");
+  exit();
 }
 
 ?>
@@ -51,15 +67,15 @@ if (isset($_GET['id'])) {
             <div class="card">
               <div class="card-body">
                 <h1 class="text-center">Teacher Account Information</h1>
-                <p><strong>First Name:</strong> <?php echo $row['fname']; ?></p>
-                <p><strong>Last Name:</strong> <?php echo $row['lname']; ?></p>
-                <p><strong>Gender:</strong> <?php echo $row['gender']; ?></p>
-                <p><strong>Age:</strong> <?php echo $row['age']; ?></p>
-                <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($row['birthday'])); ?></p>
-                <p><strong>Contact:</strong> <?php echo $row['contact']; ?></p>
-                <p><strong>Email:</strong> <?php echo $row['email']; ?></p>
-                <p><strong>Address:</strong> <?php echo $row['address']; ?></p>
-                <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($row['reg_date'])); ?></p>
+                <p><strong>First Name:</strong> <?php echo $rowTeacher['fname']; ?></p>
+                <p><strong>Last Name:</strong> <?php echo $rowTeacher['lname']; ?></p>
+                <p><strong>Gender:</strong> <?php echo $rowTeacher['gender']; ?></p>
+                <p><strong>Age:</strong> <?php echo $rowTeacher['age']; ?></p>
+                <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($rowTeacher['birthday'])); ?></p>
+                <p><strong>Contact:</strong> <?php echo $rowTeacher['contact']; ?></p>
+                <p><strong>Email:</strong> <?php echo $rowTeacher['email']; ?></p>
+                <p><strong>Address:</strong> <?php echo $rowTeacher['address']; ?></p>
+                <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($rowTeacher['reg_date'])); ?></p>
               </div>
             </div>
           </div>

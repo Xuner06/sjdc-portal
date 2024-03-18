@@ -47,6 +47,22 @@ if(isset($_POST['login'])) {
     }
   }
   else if($user=="admin") {
-    echo "Admin";
+    $stmtAdmin = $conn->prepare("SELECT * FROM admin WHERE email = ? AND password = ?");
+    $stmtAdmin->bind_param("ss", $email, $password);
+    $stmtAdmin->execute();
+    $stmtResult = $stmtAdmin->get_result();
+
+    if(mysqli_num_rows($stmtResult) == 1) {
+      $result = $stmtResult->fetch_assoc();
+      $_SESSION['admin'] = $result['admin_id'];
+      $_SESSION['login-admin'] = "Signed in successfully";
+      header("Location: ../admin/admin_dashboard.php");
+      exit();
+    }
+    else {
+      $_SESSION['login-failed'] = "Incorrect Email or Password";
+      header("Location: ../login.php");
+      exit();
+    }
   }
 }

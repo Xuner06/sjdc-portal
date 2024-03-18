@@ -20,7 +20,7 @@ if(isset($_POST['add-teacher'])) {
   $stmtResult = $stmtCheckEmail->get_result();
 
   if(mysqli_num_rows($stmtResult) > 0) {
-    $_SESSION['duplicate'] = "This email is already registered";
+    $_SESSION['duplicate-email'] = "This Email Is Already Registered";
     header("Location: ../admin/admin_teacher.php");
     exit();
   }

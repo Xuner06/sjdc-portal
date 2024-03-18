@@ -74,12 +74,44 @@ $row = $stmtResult->fetch_assoc();
                       $stmtResultEnroll = $stmtEnroll->get_result();
                       if (mysqli_num_rows($stmtResultEnroll) > 0) {
                         while ($rowStudent = $stmtResultEnroll->fetch_assoc()) {
+                          $stmtGrade = $conn->prepare("SELECT * FROM grade g JOIN subject s ON g.subject = s.subject_id WHERE g.student = ? AND g.sy = ?");
+                          $stmtGrade->bind_param("ii", $rowStudent['student_id'], $rowStudent['sy']);
+                          $stmtGrade->execute();
+                          $stmtResultGrade = $stmtGrade->get_result();
                     ?>
                           <tr>
                             <td><?php echo $rowStudent['lrn_number']; ?></td>
-                            <td><?php echo $rowStudent['lname'] . ", " . $row['fname']; ?></td>
-                            <td>test</td>
-                            <td>test</td>
+                            <td><?php echo $rowStudent['lname'] . ", " . $rowStudent['fname']; ?></td>
+                            <td>
+                              <?php
+                              if (mysqli_num_rows($stmtResultGrade) > 0) {
+                                $stmtAverage = $conn->prepare("SELECT ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.student = ? AND g.sy = ?");
+                                $stmtAverage->bind_param("ii", $rowStudent['student_id'], $rowStudent['sy']);
+                                $stmtAverage->execute();
+                                $stmtResultAverage = $stmtAverage->get_result();
+                                $average = $stmtResultAverage->fetch_assoc();
+                                $total = $average['average'];
+                                echo $total;
+                              } else {
+                                echo "N/A";
+                              }
+
+                              ?>
+                            </td>
+                            <td>
+                              <?php
+                              if (mysqli_num_rows($stmtResultGrade) > 0) {
+                                if ($total >= 75) {
+                                  echo "Passed";
+                                } else {
+                                  echo "Failed";
+                                }
+                              }
+                              else {
+                                echo "N/A";
+                              }
+                              ?>
+                            </td>
                             <td>
                               <a href="teacher_view_grade.php?view=<?php echo $rowStudent['enroll_id']; ?>" class="btn btn-primary btn-sm">View</a>
                             </td>
@@ -92,9 +124,8 @@ $row = $stmtResult->fetch_assoc();
                           </tr>
                         <?php
                         }
-                      } 
-                      else {
-                    ?>
+                      } else {
+                        ?>
                         <tr>
                           <td colspan="7" class="text-center">No Assign Student</td>
                           <td class="d-none"></td>
@@ -106,9 +137,8 @@ $row = $stmtResult->fetch_assoc();
                         </tr>
                       <?php
                       }
-                    } 
-                    else {
-                    ?>
+                    } else {
+                      ?>
                       <tr>
                         <td colspan="7" class="text-center">No Active School Year</td>
                         <td class="d-none"></td>

@@ -26,12 +26,11 @@ if (isset($_GET['view'])) {
   $stmtResultEnroll = $stmtEnroll->get_result();
   $result = $stmtResultEnroll->fetch_assoc();
 
-  if(mysqli_num_rows($stmtResultEnroll) == 0) {
+  if (mysqli_num_rows($stmtResultEnroll) == 0) {
     header("Location: teacher_grade.php");
     exit();
   }
-} 
-else {
+} else {
   header("Location: teacher_grade.php");
   exit();
 }
@@ -52,6 +51,7 @@ else {
   <link rel="stylesheet" href="../plugins/sweetalert2/sweetalert2.min.css">
   <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
   <title>SJDC | Grade</title>
+
 </head>
 
 <body>
@@ -79,6 +79,7 @@ else {
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
+                <h1 class="text-center">Student Grade</h1>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -96,28 +97,41 @@ else {
                     $stmtGrade->bind_param("ii", $studentId, $sy);
                     $stmtGrade->execute();
                     $stmtResultGrade = $stmtGrade->get_result();
-      
-  
-                    // $sqlSum = "SELECT ROUND((SUM(g.grade) / COUNT(g.grade))) AS total FROM grade g WHERE g.student = '$studentId' AND g.sy = '$sy'";
-              
-        
-                    // $total = $result['total'];
 
-                    while ($grade = $stmtResultGrade->fetch_assoc()) {
+                    $stmtAverage = $conn->prepare("SELECT ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.student = ? AND g.sy = ?");
+                    $stmtAverage->bind_param("ii", $studentId, $sy);
+                    $stmtAverage->execute();
+                    $stmtResultAverage = $stmtAverage->get_result();
+                    $average = $stmtResultAverage->fetch_assoc();
+                    $total = $average['average'];
+
+                    if (mysqli_num_rows($stmtResultGrade) > 0) {
+                      while ($grade = $stmtResultGrade->fetch_assoc()) {
+                    ?>
+                        <tr>
+                          <td><?php echo $grade['subject']; ?></td>
+                          <td><?php echo $grade['name']; ?></td>
+                          <td><?php echo $grade['grade']; ?></td>
+                        </tr>
+                      <?php
+                      }
+                      ?>
+                      <tr>
+                        <td colspan="2">Total</td>
+                        <td class="d-none">wew</td>
+                        <td><?php echo $total; ?></td>
+                      </tr>
+                    <?php
+                    } else {
                     ?>
                       <tr>
-                        <td><?php echo $grade['subject']; ?></td>
-                        <td><?php echo $grade['name']; ?></td>
-                        <td><?php echo $grade['grade']; ?></td>
+                        <td colspan="3" class="text-center">Not Graded Yet</td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
                       </tr>
                     <?php
                     }
                     ?>
-                    <tr>
-                      <td colspan="2">Total</td>
-                      <td class="d-none"></td>
-                      <td>test</td>
-                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -150,8 +164,9 @@ else {
         "autoWidth": false,
         "info": false,
         "paging": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+        "buttons": ["copy", "csv", "excel", "pdf", "print"],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
     });
   </script>
 </body>

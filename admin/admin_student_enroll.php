@@ -1,12 +1,27 @@
 <?php
 include("../database/database.php");
-session_start();
+include("../actions/session.php");
+sessionAdmin();
+
+$id = $_SESSION['admin'];
+$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
 
 if (isset($_GET['id'])) {
-  $id = mysqli_escape_string($conn, $_GET['id']);
-  $sql = "SELECT * FROM student WHERE student_id = '$id'";
-  $query = mysqli_query($conn, $sql);
-  $result = mysqli_fetch_assoc($query);
+  $studentId = $_GET['id'];
+  $stmtStudent = $conn->prepare("SELECT * FROM student WHERE student_id = ?");
+  $stmtStudent->bind_param("i", $studentId);
+  $stmtStudent->execute();
+  $stmtResultStudent = $stmtStudent->get_result();
+  $resultStudent = $stmtResultStudent->fetch_assoc();
+
+  if (mysqli_num_rows($stmtResultStudent) == 0) {
+    header("Location: ../admin/admin_student_list.php");
+    exit();
+  }
 } else {
   header("Location: ../admin/admin_student_list.php");
   exit();
@@ -79,7 +94,16 @@ if (isset($_GET['id'])) {
     ?>
     <div class="content-header">
       <div class="container-fluid">
-        <h1 class="m-0">Student Enroll</h1>
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Student Enroll</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <a href="admin_student_list.php" class="btn btn-primary btn-sm">Back</a>
+            </ol>
+          </div>
+        </div>
       </div><!-- /.container-fluid -->
     </div>
 
@@ -101,22 +125,37 @@ if (isset($_GET['id'])) {
                   </thead>
                   <tbody>
                     <?php
-                    $sqlEnroll = "SELECT CONCAT(c.level, '-', s.strand,'-', c.section) AS class, sy.*, e.enroll_date, e.enroll_id FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN school_year sy ON sy.sy_id = e.sy JOIN strand s ON c.strand = s.strand_id WHERE student_id = '$id'";
-                    $queryEnroll = mysqli_query($conn, $sqlEnroll);
-                    while ($row = mysqli_fetch_assoc($queryEnroll)) {
+                    $stmtEnroll = $conn->prepare("SELECT e.*, c.*, s.*, sy.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN strand s ON c.strand = s.strand_id JOIN school_year sy ON e.sy = sy.sy_id WHERE e.student_id = ?");
+                    $stmtEnroll->bind_param("i", $studentId);
+                    $stmtEnroll->execute();
+                    $stmtResultEnroll = $stmtEnroll->get_result();
+
+                    if (mysqli_num_rows($stmtResultEnroll) > 0) {
+                      while ($row = $stmtResultEnroll->fetch_assoc()) {
                     ?>
+                        <tr>
+                          <td><?php echo $row['level'] . '-', $row['strand'] . '-' . $row['section']; ?></td>
+                          <td><?php echo $row['start_year'] . '-' . $row['end_year']; ?></td>
+                          <td><?php echo $row['semester']; ?></td>
+                          <td><?php echo $row['enroll_date']; ?></td>
+                          <td>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteEnroll('<?php echo $row['enroll_id']; ?>')">Delete</button>
+                            <form id="deleteForm-<?php echo $row['enroll_id']; ?>" action="../actions/delete_enroll.php" method="post">
+                              <input type="hidden" name="delete-id" value="<?php echo $row['enroll_id']; ?>">
+                              <input type="hidden" name="student-id" value="<?php echo $row['student_id']; ?>">
+                            </form>
+                          </td>
+                        </tr>
+                      <?php
+                      }
+                    } else {
+                      ?>
                       <tr>
-                        <td><?php echo $row['class']; ?></td>
-                        <td><?php echo $row['start_year'] . '-' . $row['end_year']; ?></td>
-                        <td><?php echo $row['semester']; ?></td>
-                        <td><?php echo $row['enroll_date']; ?></td>
-                        <td>
-                          <button type="button" class="btn btn-danger btn-sm" onclick="deleteEnroll('<?php echo $row['enroll_id']; ?>')">Delete</button>
-                          <form id="deleteForm-<?php echo $row['enroll_id']; ?>" action="../actions/delete_enroll.php" method="post">
-                            <input type="hidden" name="delete-id" value="<?php echo $row['enroll_id']; ?>">
-                            <input type="hidden" name="id" value="<?php echo $id; ?>">
-                          </form>
-                        </td>
+                        <td colspan="5" class="text-center">Not Enrolled In Any School Year</td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
                       </tr>
                     <?php
                     }
@@ -165,32 +204,43 @@ if (isset($_GET['id'])) {
         </div>
         <div class="modal-body">
           <form action="../actions/enroll_student.php" method="post">
-            <input type="hidden" name="enroll-id" value="<?php echo $result['student_id']; ?>">
+            <input type="hidden" name="student-id" value="<?php echo $resultStudent['student_id']; ?>">
             <div class="form-group">
               <label class="form-label">LRN Number</label>
-              <input type="number" class="form-control" value="<?php echo $result['lrn_number']; ?>" disabled>
+              <input type="number" class="form-control" value="<?php echo $resultStudent['lrn_number']; ?>" disabled>
             </div>
             <div class="form-group">
               <label class="form-label">Name</label>
-              <input type="text" class="form-control" value="<?php echo $result['lname'] . ', ' . $result['fname']; ?>" disabled>
+              <input type="text" class="form-control" value="<?php echo $resultStudent['lname'] . ', ' . $resultStudent['fname']; ?>" disabled>
             </div>
             <div class="form-group">
               <label for="class" class="form-label">Class</label>
               <select class="form-control" id="class" name="class" required>
                 <option value=""></option>
                 <?php
-                $sqlSelectSy = "SELECT * FROM school_year WHERE status = 'Active'";
-                $querySelectSy = mysqli_query($conn, $sqlSelectSy);
-                if ($querySelectSy && mysqli_num_rows($querySelectSy) > 0) {
-                  $result = mysqli_fetch_assoc($querySelectSy);
+                $statusSy = "Active";
+                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $stmtSy->bind_param("s", $statusSy);
+                $stmtSy->execute();
+                $stmtResultSy = $stmtSy->get_result();
+
+                if (mysqli_num_rows($stmtResultSy) > 0) {
+                  $result = $stmtResultSy->fetch_assoc();
                   $sy = $result['sy_id'];
+                  $stmtClass = $conn->prepare("SELECT c.*, s.* FROM class c JOIN strand s ON c.strand = s.strand_id WHERE sy = ?");
+                  $stmtClass->bind_param("i", $sy);
+                  $stmtClass->execute();
+                  $stmtResultClass = $stmtClass->get_result();
 
-                  $sqlClass = "SELECT c.*, s.strand AS STRAND FROM class c JOIN strand s ON c.strand = s.strand_id WHERE sy = '$sy'";
-                  $queryClass = mysqli_query($conn, $sqlClass);
-
-                  while ($class = mysqli_fetch_assoc($queryClass)) {
-                    echo '<option value="' . $class['class_id'] . '">' . $class['level'] . '-' . $class['STRAND'] . '-' . $class['section'] . '</option>';
+                  if (mysqli_num_rows($stmtResultClass) > 0) {
+                    while ($class = $stmtResultClass->fetch_assoc()) {
+                      echo '<option value="' . $class['class_id'] . '">' . $class['level'] . '-' . $class['strand'] . '-' . $class['section'] . '</option>';
+                    }
+                  } else {
+                    echo '<option value="" disabled>No Class Available (Please Add Class)</option>';
                   }
+                } else {
+                  echo '<option value="" disabled>No Active School Year (Please Set School Year)</option>';
                 }
                 ?>
               </select>
@@ -200,12 +250,18 @@ if (isset($_GET['id'])) {
               <select class="form-control" id="schoolyear" name="schoolyear" required>
                 <option value=""></option>
                 <?php
-                $sqlSchoolyear = "SELECT * FROM school_year WHERE status = 'Active'";
-                $querySchoolyear = mysqli_query($conn, $sqlSchoolyear);
-                if ($querySchoolyear && mysqli_num_rows($querySchoolyear) > 0) {
-                  while ($schoolyear = mysqli_fetch_assoc($querySchoolyear)) {
+                $statusSy = "Active";
+                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $stmtSy->bind_param("s", $statusSy);
+                $stmtSy->execute();
+                $stmtResultSy = $stmtSy->get_result();
+
+                if (mysqli_num_rows($stmtResultSy) > 0) {
+                  while ($schoolyear = $stmtResultSy->fetch_assoc()) {
                     echo '<option value="' . $schoolyear['sy_id'] . '">' . $schoolyear['start_year'] . '-' . $schoolyear['end_year'] . '-' . $schoolyear['semester'] . '</option>';
                   }
+                } else {
+                  echo '<option value="" disabled>No Active School Year (Please Set School Year)</option>';
                 }
                 ?>
               </select>
@@ -245,15 +301,6 @@ if (isset($_GET['id'])) {
           }
         }, ]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
     });
   </script>
 </body>

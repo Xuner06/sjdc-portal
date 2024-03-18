@@ -1,8 +1,15 @@
 <?php
 include("../database/database.php");
-session_start();
-$sql = "SELECT * FROM teacher WHERE status = 1";
-$query = mysqli_query($conn, $sql);
+include("../actions/session.php");
+sessionAdmin();
+
+$id = $_SESSION['admin'];
+$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
+
 ?>
 
 <!DOCTYPE html>
@@ -66,20 +73,40 @@ $query = mysqli_query($conn, $sql);
                   </thead>
                   <tbody>
                     <?php
-                    while ($row = mysqli_fetch_assoc($query)) {
+                    $status = 1;
+                    $stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE status = ?");
+                    $stmtTeacher->bind_param("i", $status);
+                    $stmtTeacher->execute();
+                    $stmtResultTeacher = $stmtTeacher->get_result();
+
+                    if (mysqli_num_rows($stmtResultTeacher) > 0) {
+                      while ($rowTeacher = $stmtResultTeacher->fetch_assoc()) {
+                    ?>
+                        <tr>
+                          <td><?php echo $rowTeacher['teacher_id']; ?></td>
+                          <td><?php echo $rowTeacher['fname'] . ' ' . $rowTeacher['lname']; ?></td>
+                          <td><?php echo $rowTeacher['gender']; ?></td>
+                          <td><?php echo $rowTeacher['email']; ?></td>
+                          <td><?php echo $rowTeacher['contact']; ?></td>
+                          <td>
+                            <form action="../actions/admin_restore_teacher.php" method="post">
+                              <input type="hidden" name="restore-id" value="<?php echo $rowTeacher['teacher_id']; ?>">
+                              <button type="submit" class="btn btn-primary btn-sm" name="restore-teacher">Restore</button>
+                            </form>
+                          </td>
+                        </tr>
+                      <?php
+                      }
+                    } 
+                    else {
                     ?>
                       <tr>
-                        <td><?php echo $row['teacher_id']; ?></td>
-                        <td><?php echo $row['fname'] . ' ' . $row['lname']; ?></td>
-                        <td><?php echo $row['gender']; ?></td>
-                        <td><?php echo $row['email']; ?></td>
-                        <td><?php echo $row['contact']; ?></td>
-                        <td>
-                          <form action="../actions/admin_restore_teacher.php" method="post">
-                            <input type="hidden" name="restore-id" value="<?php echo $row['teacher_id']; ?>">
-                            <button type="submit" class="btn btn-primary btn-sm" name="restore-teacher">Restore</button>
-                          </form>
-                        </td>
+                        <td colspan="6" class="text-center">Empty Teacher Archive</td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
                       </tr>
                     <?php
                     }
@@ -117,15 +144,6 @@ $query = mysqli_query($conn, $sql);
         "lengthChange": false,
         "autoWidth": false,
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
     });
   </script>
 </body>

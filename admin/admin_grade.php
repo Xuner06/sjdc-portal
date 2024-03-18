@@ -1,6 +1,15 @@
 <?php
 include("../database/database.php");
-session_start();
+include("../actions/session.php");
+sessionAdmin();
+
+$id = $_SESSION['admin'];
+$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,32 +46,76 @@ session_start();
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
+                <h1 class="text-center">Student Grade</h1>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th>LRN Number</th>
                       <th>Name</th>
                       <th>Class</th>
-                      <th>Action</th>
+                      <th>View</th>
+                      <th>Edit</th>
+                      <th>Upload</th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php
-                    $sql = "SELECT e.*, CONCAT(c.level,'-', st.strand, '-', c.section) AS CLASS, s.* FROM enroll_student e JOIN student s ON e.student_id = s.student_id JOIN class c ON e.class = c.class_id JOIN strand st ON c.strand = st.strand_id";
-                    $query = mysqli_query($conn, $sql);
-                    while ($row = mysqli_fetch_assoc($query)) {
-                    ?>
-                      <tr>
-                        <td><?php echo $row['lrn_number']; ?></td>
-                        <td><?php echo $row['lname'] . ", " . $row['fname']; ?></td>
-                        <td><?php echo $row['CLASS']; ?></td>
+                    $status = "Active";
+                    $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                    $stmtSy->bind_param("s", $status);
+                    $stmtSy->execute();
+                    $stmtResultSy = $stmtSy->get_result();
 
-                        <td>
-                          <form action="admin_student_grade.php" method="post">
-                            <input type="hidden" name="enroll-id" value="<?php echo $row['enroll_id']; ?>">
-                            <button class="btn btn-primary btn-sm" type="submit" name="grade">Grade</button>
-                          </form>
-                        </td>
+                    if (mysqli_num_rows($stmtResultSy) > 0) {
+                      $result = $stmtResultSy->fetch_assoc();
+                      $sy = $result['sy_id'];
+                      $statusStudent = 0;
+                      $stmtEnroll = $conn->prepare("SELECT e.*, c.*, st.*, s.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN strand st ON c.strand = st.strand_id JOIN student s ON e.student_id = s.student_id WHERE e.sy = ? AND s.status = ?");
+                      $stmtEnroll->bind_param("ii", $sy, $statusStudent);
+                      $stmtEnroll->execute();
+                      $stmtResultEnroll = $stmtEnroll->get_result();
+                      if (mysqli_num_rows($stmtResultEnroll) > 0) {
+                        while ($row = $stmtResultEnroll->fetch_assoc()) {
+                    ?>
+                          <tr>
+                            <td><?php echo $row['lrn_number']; ?></td>
+                            <td><?php echo $row['lname'] . ", " . $row['fname']; ?></td>
+                            <td><?php echo $row['level'] . '-' . $row['strand'] . '-' . $row['section']; ?></td>
+                            <td>
+                              <a href="admin_view_grade.php?view=<?php echo $row['enroll_id']; ?>" class="btn btn-primary btn-sm">View</a>
+                            </td>
+                            <td>
+                              <a href="admin_edit_grade.php?edit=<?php echo $row['enroll_id']; ?>" class="btn btn-success btn-sm">Edit</a>
+                            </td>
+                            <td>
+                              <a href="admin_encode_grade.php?grade=<?php echo $row['enroll_id']; ?>" class="btn btn-primary btn-sm">Upload</a>
+                            </td>
+                          </tr>
+                        <?php
+                        }
+                      } else {
+                        ?>
+                        <tr>
+                          <td colspan="7" class="text-center">No Enrolled Students</td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
+                        </tr>
+                      <?php
+                      }
+                    } else {
+                      ?>
+                      <tr>
+                        <td colspan="7" class="text-center">No Active School Year</td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
                       </tr>
                     <?php
                     }
@@ -104,15 +157,6 @@ session_start();
         "lengthChange": false,
         "autoWidth": false,
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
     });
   </script>
 </body>

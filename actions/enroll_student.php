@@ -3,30 +3,33 @@ include("../database/database.php");
 session_start();
 
 if (isset($_POST['enroll-student'])) {
-  $enroll_id = mysqli_escape_string($conn, $_POST['enroll-id']);
-  $class = mysqli_escape_string($conn, $_POST['class']);
-  $schoolyear = mysqli_escape_string($conn, $_POST['schoolyear']);
+  $studentId = $_POST['student-id'];
+  $class = $_POST['class'];
+  $schoolyear = $_POST['schoolyear'];
 
-  $check_sql = "SELECT * FROM enroll_student WHERE student_id = '$enroll_id' AND sy = '$schoolyear'";
-  $check_query = mysqli_query($conn, $check_sql);
+  $stmtEnroll = $conn->prepare("SELECT * FROM enroll_student WHERE student_id = ? AND sy = ?");
+  $stmtEnroll->bind_param("ii", $studentId, $schoolyear);
+  $stmtEnroll->execute();
+  $stmtResultEnroll = $stmtEnroll->get_result();
 
-  if (mysqli_num_rows($check_query) > 0) {
+  if (mysqli_num_rows($stmtResultEnroll) > 0) {
     $_SESSION['error-enroll'] = "Student Already Enrolled In This School Year";
-    header("Location: ../admin/admin_student_enroll.php?id=$enroll_id");
+    header("Location: ../admin/admin_student_enroll.php?id=$studentId");
     exit();
   } 
   else {
-    $sql = "INSERT INTO enroll_student VALUES('', '$enroll_id', '$class', '$schoolyear', now())";
-    $query = mysqli_query($conn, $sql);
+    $stmtInsertEnroll = $conn->prepare("INSERT INTO enroll_student (student_id, class, sy, enroll_date) VALUES (?, ?, ?, now())");
+    $stmtInsertEnroll->bind_param("iii", $studentId, $class, $schoolyear);
 
-    if ($query) {
+    if (mysqli_stmt_execute($stmtInsertEnroll)) {
       $_SESSION['success-enroll'] = "Successfully Enroll Student";
-      header("Location: ../admin/admin_student_enroll.php?id=$enroll_id");
+      header("Location: ../admin/admin_student_enroll.php?id=$studentId");
       exit();
     } 
     else {
-      header("Location: ../admin/admin_student_enroll.php?id=$enroll_id");
+      header("Location: ../admin/admin_student_enroll.php?id=$studentId");
       exit();
     }
   }
 }
+?>

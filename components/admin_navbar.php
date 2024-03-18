@@ -19,30 +19,30 @@
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
     <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <nav class="main-header navbar navbar-expand navbar-green navbar-light">
       <!-- Left navbar links -->
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+          <a class="nav-link text-white" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
       </ul>
       <!-- Right navbar links -->
-      <!-- <ul class="navbar-nav ml-auto">
+      <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <span class="nav-link text-dark disabled"><?php echo $row['fname'] . ' ' . $row['lname']; ?></span>
+          <span class="nav-link text-white disabled"><?php echo $row['fname'] . ' ' . $row['lname']; ?></span>
         </li>
         <li class="nav-item d-flex align-items-center">
-          <a href="#" class="btn btn-sm btn-primary text-light "><i class="fas fa-sign-out-alt"></i> Logout</a>
+          <a href="../actions/process_logout.php" class="btn btn-sm btn-warning text-light"><i class="fas fa-power-off"></i> Logout</a>
         </li>
-      </ul> -->
+      </ul>
     </nav>
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <aside class="main-sidebar sidebar-light-green elevation-4">
       <!-- Brand Logo -->
       <a href="index3.html" class="brand-link">
-        <img src="../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="../assests/bg1.png" alt="SJDC Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">SJDC</span>
       </a>
 
@@ -67,8 +67,8 @@
                 </p>
               </a>
             </li>
-            <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_student.php' || basename($_SERVER['PHP_SELF']) == 'admin_student_list.php') ? 'menu-open' : ''; ?>">
-              <a href="#" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_student.php' || basename($_SERVER['PHP_SELF']) == 'admin_student_list.php') ? 'active' : ''; ?>">
+            <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_student.php' || basename($_SERVER['PHP_SELF']) == 'admin_student_list.php' || basename($_SERVER['PHP_SELF']) == 'admin_view_student.php' || basename($_SERVER['PHP_SELF']) == 'admin_student_enroll.php') ? 'menu-open' : ''; ?>">
+              <a href="#" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_student.php' || basename($_SERVER['PHP_SELF']) == 'admin_student_list.php' || basename($_SERVER['PHP_SELF']) == 'admin_view_student.php' || basename($_SERVER['PHP_SELF']) == 'admin_student_enroll.php') ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-user"></i>
                 <p>
                   Students
@@ -77,21 +77,22 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="../admin/admin_student.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_student.php') ? 'active' : ''; ?>">
+                  <a href="../admin/admin_student.php" class="nav-link text-dark <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_student.php' || basename($_SERVER['PHP_SELF']) == 'admin_view_student.php') ? 'active' : ''; ?>">
                     <i class="nav-icon fas fa-clipboard-list"></i>
                     <p>Student List</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="../admin/admin_student_list.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_student_list.php') ? 'active' : ''; ?>">
+                  <a href="../admin/admin_student_list.php" class="nav-link text-dark <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_student_list.php' || basename($_SERVER['PHP_SELF']) == 'admin_student_enroll.php') ? 'active' : ''; ?>">
                     <i class="nav-icon fas fa-file-signature"></i>
                     <p>Student Enroll</p>
                   </a>
                 </li>
+                
               </ul>
             </li>
             <li class="nav-item">
-              <a href="../admin/admin_grade.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_grade.php') ? 'active' : ''; ?>">
+              <a href="../admin/admin_grade.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_grade.php' || basename($_SERVER['PHP_SELF']) == 'admin_view_grade.php' || basename($_SERVER['PHP_SELF']) == 'admin_edit_grade.php' || basename($_SERVER['PHP_SELF']) == 'admin_encode_grade.php') ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-award"></i>
                 <p>
                   Grades
@@ -116,13 +117,13 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="../admin/admin_class.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_class.php') ? 'active' : ''; ?>">
+                  <a href="../admin/admin_class.php" class="nav-link text-dark <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_class.php') ? 'active' : ''; ?>">
                     <i class="nav-icon fas fa-chalkboard-teacher"></i>
                     <p>Class List</p>
                   </a>
                 </li>
                 <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_class.php' || basename($_SERVER['PHP_SELF']) == 'admin_strand.php') ? 'menu-open' : ''; ?>">
-                  <a href="../admin/admin_strand.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_strand.php') ? 'active' : ''; ?>">
+                  <a href="../admin/admin_strand.php" class="nav-link text-dark <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_strand.php') ? 'active' : ''; ?>">
                     <i class="nav-icon fas fa-lightbulb"></i>
                     <p>Strand</p>
                   </a>
@@ -147,13 +148,13 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="../admin/admin_archive_student.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_archive_student.php') ? 'active' : ''; ?>">
+                  <a href="../admin/admin_archive_student.php" class="nav-link text-dark <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_archive_student.php') ? 'active' : ''; ?>">
                     <i class="nav-icon fas fa-user"></i>
                     <p>Students</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="../admin/admin_archive_teacher.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_archive_teacher.php') ? 'active' : ''; ?>">
+                  <a href="../admin/admin_archive_teacher.php" class="nav-link text-dark <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_archive_teacher.php') ? 'active' : ''; ?>">
                     <i class="nav-icon fas fa-users"></i>
                     <p>Teachers</p>
                   </a>

@@ -1,6 +1,14 @@
 <?php
 include("../database/database.php");
-session_start();
+include("../actions/session.php");
+sessionAdmin();
+
+$id = $_SESSION['admin'];
+$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
 
 ?>
 
@@ -55,20 +63,6 @@ session_start();
       unset($_SESSION['update-strand']);
     }
     ?>
-    <?php
-    if (isset($_SESSION['delete-strand'])) {
-    ?>
-      <script>
-        Swal.fire({
-          title: 'Success',
-          text: '<?php echo $_SESSION['delete-class']; ?>',
-          icon: 'success',
-        })
-      </script>
-    <?php
-      unset($_SESSION['delete-class']);
-    }
-    ?>
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">Strand List</h1>
@@ -83,6 +77,7 @@ session_start();
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
+                <h1 class="text-center">Strand List</h1>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -94,45 +89,58 @@ session_start();
                   </thead>
                   <tbody>
                     <?php
-                    $sql = "SELECT * FROM strand";
-                    $query = mysqli_query($conn, $sql);
-                    while ($row = mysqli_fetch_assoc($query)) {
+                    $sqlStrand = "SELECT * FROM strand";
+                    $queryStrand = mysqli_query($conn, $sqlStrand);
+
+                    if (mysqli_num_rows($queryStrand) > 0) {
+                      while ($row = mysqli_fetch_assoc($queryStrand)) {
                     ?>
-                      <tr>
-                        <td><?php echo $row['strand_id']; ?></td>
-                        <td><?php echo $row['strand']; ?></td>
-                        <td><?php echo $row['description']; ?></td>
-                        <td>
-                          <!-- Edit Strand Button Click -->
-                          <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-strand-<?php echo $row['strand_id']; ?>">Edit</button>
-                          <!-- Edit Strand Modal -->
-                          <div class="modal fade" id="edit-strand-<?php echo $row['strand_id']; ?>">
-                            <div class="modal-dialog">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h4 class="modal-title">Edit Strand</h4>
-                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                  </button>
-                                </div>
-                                <div class="modal-body">
-                                  <form action="../actions/update_strand.php" method="post">
-                                    <input type="hidden" name="edit-id" value="<?php echo $row['strand_id']; ?>">
-                                    <div class="form-group">
-                                      <label for="edit-strand" class="form-label">Strand</label>
-                                      <input type="text" class="form-control" name="edit-strand" id="edit-strand" value="<?php echo $row['strand']; ?>" required>
-                                    </div>
-                                    <div class="form-group">
-                                      <label for="edit-description" class="form-label">Description</label>
-                                      <input type="text" class="form-control" name="edit-description" id="edit-description" value="<?php echo $row['description']; ?>" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-sm btn-success w-100" name="update-strand">Update Strand</button>
-                                  </form>
+                        <tr>
+                          <td><?php echo $row['strand_id']; ?></td>
+                          <td><?php echo $row['strand']; ?></td>
+                          <td><?php echo $row['description']; ?></td>
+                          <td>
+                            <!-- Edit Strand Button Click -->
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-strand-<?php echo $row['strand_id']; ?>">Edit</button>
+                            <!-- Edit Strand Modal -->
+                            <div class="modal fade" id="edit-strand-<?php echo $row['strand_id']; ?>">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h4 class="modal-title">Edit Strand</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form action="../actions/update_strand.php" method="post">
+                                      <input type="hidden" name="edit-id" value="<?php echo $row['strand_id']; ?>">
+                                      <div class="form-group">
+                                        <label for="edit-strand" class="form-label">Strand</label>
+                                        <input type="text" class="form-control" name="edit-strand" id="edit-strand" value="<?php echo $row['strand']; ?>" required>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="edit-description" class="form-label">Description</label>
+                                        <input type="text" class="form-control" name="edit-description" id="edit-description" value="<?php echo $row['description']; ?>" required>
+                                      </div>
+                                      <button type="submit" class="btn btn-sm btn-success w-100" name="update-strand">Update Strand</button>
+                                    </form>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </td>
+                          </td>
+                        </tr>
+                      <?php
+                      }
+                    } 
+                    else {
+                    ?>
+                      <tr>
+                        <td colspan="4" class="text-center">No Strand Please Add Strand</td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
                       </tr>
                     <?php
                     }

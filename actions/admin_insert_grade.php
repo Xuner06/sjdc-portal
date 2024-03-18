@@ -1,11 +1,35 @@
 <?php
 include("../database/database.php");
-if(isset($_POST['upload-grade'])) {
+session_start();
+
+if (isset($_POST['upload-grade'])) {
   $student = $_POST['student-id'];
+  $enroll = $_POST['enroll-id'];
+  $sy = $_POST['sy'];
   foreach ($_POST['grade'] as $subjectId => $grade) {
-    // Insert the grade into your database table (replace 'grades' with your actual table name)
-    $query = "INSERT INTO grade (student, subject, grade) VALUES ('$student', '$subjectId', '$grade')";
-    mysqli_query($conn, $query);
-  }  
+    // Check if the grade is not "N/A"
+    if ($grade != "N/A") {
+      // Check if a record already exists for the student and subject combination
+      $stmtCheckRecord = $conn->prepare("SELECT * FROM grade WHERE student = ? AND subject = ?");
+      $stmtCheckRecord->bind_param("ii", $student, $subjectId);
+      $stmtCheckRecord->execute();
+      $stmtResult = $stmtCheckRecord->get_result();
+
+      if(mysqli_num_rows($stmtResult) > 0) {
+        // If a record exists, update the grade
+        $stmtUpdateGrade = $conn->prepare("UPDATE grade SET grade = ? WHERE student = ? AND subject = ?");
+        $stmtUpdateGrade->bind_param("iii", $grade, $student, $subjectId);
+        $stmtUpdateGrade->execute();
+      }
+      else {
+        // If no record exists, insert a new grade
+        $stmtInsertGrade = $conn->prepare("INSERT INTO grade (student, subject, grade, sy) VALUES (?, ?, ?, ?)");
+        $stmtInsertGrade->bind_param("iiii", $student, $subjectId, $grade, $sy);
+        $stmtInsertGrade->execute();
+      }
+    }
+  }
+  $_SESSION['success-upload'] = "Successfully Uploaded Grade";
+  header("Location: ../admin/admin_encode_grade.php?grade=$enroll");
+  exit();
 }
-?>

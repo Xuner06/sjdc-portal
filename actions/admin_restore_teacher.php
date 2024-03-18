@@ -3,7 +3,7 @@ include("../database/database.php");
 session_start();
 
 if(isset($_POST['restore-teacher'])) {
-  $id = mysqli_escape_string($conn, $_POST['restore-id']);
+  $id = $_POST['restore-id'];
   $status = 0;
 
   $stmtRestoreTeacher = $conn->prepare("UPDATE teacher set status = ? WHERE teacher_id = ?");

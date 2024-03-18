@@ -1,12 +1,14 @@
 <?php
 session_start();
 
-if(isset($_SESSION['teacher'])) {
+if (isset($_SESSION['teacher'])) {
   header("Location: ./teacher/teacher_dashboard.php");
   exit();
-}
-elseif (isset($_SESSION['student'])) {
+} elseif (isset($_SESSION['student'])) {
   header("Location: ./student/student_account.php");
+  exit();
+} elseif (isset($_SESSION['admin'])) {
+  header("Location: ./admin/admin_dashboard.php");
   exit();
 }
 
@@ -20,16 +22,38 @@ elseif (isset($_SESSION['student'])) {
   <title>SJDC | Login</title>
   <link rel="stylesheet" href="./font/font.css">
   <link rel="stylesheet" href="./dist/css/adminlte.min.css">
-   <!-- Sweetalert -->
-   <link rel="stylesheet" href="./plugins/sweetalert2/sweetalert2.min.css">
+  <!-- Sweetalert -->
+  <link rel="stylesheet" href="./plugins/sweetalert2/sweetalert2.min.css">
   <script src="./plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
+  <style>
+    body {
+      background-image: url('./assests/sjdc.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    img {
+      height: 100px;
+      width: 100px;
+      display: block;
+      /* Ensures the image is treated as a block element */
+      margin: auto;
+      /* Centers the image horizontally */
+    }
+
+    .transparent-card {
+      background-color: rgba(255, 255, 255, 0.7);
+      /* Adjust the alpha value for transparency */
+    }
+  </style>
 </head>
 
 <body>
   <div class="container">
     <div class="row d-flex justify-content-center">
       <div class="col-lg-6 col-md-8 col-sm-10">
-        <div class="card mt-5">
+        <div class="card mt-5 transparent-card">
           <div class="card-body">
             <?php
             if (isset($_SESSION['login-failed'])) {
@@ -46,7 +70,7 @@ elseif (isset($_SESSION['student'])) {
               unset($_SESSION['login-failed']);
             }
             ?>
-            <h1 class="text-center">LOGO</h1>
+            <img src="./assests/bg1.png" alt="">
             <form action="./actions/process_login.php" method="post" autocomplete="off">
               <div class="mb-3">
                 <label for="user" class="form-label">User</label>
@@ -69,7 +93,7 @@ elseif (isset($_SESSION['student'])) {
                 <input type="checkbox" class="form-check-input" id="cpassword" onclick="showPassword()">
                 <label class="form-check-label" for="cpassword">Check Password</label>
               </div>
-              <button type="submit" class="btn btn-primary" name="login">Login</button>
+              <button type="submit" class="btn btn-success w-100" name="login">Login</button>
             </form>
           </div>
         </div>

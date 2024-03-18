@@ -1,6 +1,14 @@
 <?php
 include("../database/database.php");
-session_start();
+include("../actions/session.php");
+sessionAdmin();
+
+$id = $_SESSION['admin'];
+$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
 
 ?>
 
@@ -55,19 +63,6 @@ session_start();
       unset($_SESSION['update-schoolyear']);
     }
     ?>
-    <?php
-    if (isset($_SESSION['delete-schoolyear'])) {
-    ?>
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <?php
-        echo $_SESSION['delete-schoolyear'];
-        unset($_SESSION['delete-schoolyear']);
-        ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    <?php
-    }
-    ?>
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">School Year</h1>
@@ -82,6 +77,7 @@ session_start();
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
+                <h1 class="text-center">School Year List</h1>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -94,60 +90,73 @@ session_start();
                   </thead>
                   <tbody>
                     <?php
-                    $sql = "SELECT * FROM school_year";
-                    $query = mysqli_query($conn, $sql);
-                    while ($row = mysqli_fetch_assoc($query)) {
+                    $sqlSchoolyear = "SELECT * FROM school_year";
+                    $querySchoolyear = mysqli_query($conn, $sqlSchoolyear);
+
+                    if (mysqli_num_rows($querySchoolyear) > 0) {
+                      while ($row = mysqli_fetch_assoc($querySchoolyear)) {
                     ?>
-                      <!-- Edit School Year Modal -->
-                      <div class="modal fade" id="edit-schoolyear-<?php echo $row['sy_id']; ?>">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h4 class="modal-title">Edit School Year</h4>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                              <form action="../actions/update_schoolyear.php" method="post">
-                                <input type="hidden" name="edit-id" value="<?php echo $row['sy_id']; ?>">
-                                <div class="form-group">
-                                  <label for="edit-status" class="form-label">Status</label>
-                                  <select class="form-control" name="edit-status" id="edit-status" value="<?php echo $row['status']; ?>" required>
-                                    <option value=""></option>
-                                    <option value="Active" <?php echo ($row['status'] == "Active") ? "selected" : "" ?>>Active</option>
-                                    <option value="Inactive" <?php echo ($row['status'] == "Inactive") ? "selected" : "" ?>>Inactive</option>
-                                  </select>
-                                </div>
-                                <div class="form-group">
-                                  <label for="edit-startYear" class="form-label">Start Year</label>
-                                  <input type="number" class="form-control" name="edit-startYear" id="edit-startYear" value="<?php echo $row['start_year']; ?>" required>
-                                </div>
-                                <div class="form-group">
-                                  <label for="edit-endYear" class="form-label">End Year</label>
-                                  <input type="number" class="form-control" name="edit-endYear" id="edit-endYear" value="<?php echo $row['end_year']; ?>" required>
-                                </div>
-                                <div class="form-group">
-                                  <label for="edit-semester" class="form-label">Semester</label>
-                                  <select class="form-control" name="edit-semester" id="edit-semester" required>
-                                    <option value=""></option>
-                                    <option value="First Semester" <?php echo ($row['semester'] == "First Semester") ? "selected" : "" ?>>First Semester</option>
-                                    <option value="Second Semester" <?php echo ($row['semester'] == "Second Semester") ? "selected" : "" ?>>Second Semester</option>
-                                  </select>
-                                </div>
-                                <button type="submit" class="btn btn-sm btn-success w-100" name="update-schoolyear">Update School Year</button>
-                              </form>
+                        <!-- Edit School Year Modal -->
+                        <div class="modal fade" id="edit-schoolyear-<?php echo $row['sy_id']; ?>">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h4 class="modal-title">Edit School Year</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form action="../actions/update_schoolyear.php" method="post">
+                                  <input type="hidden" name="edit-id" value="<?php echo $row['sy_id']; ?>">
+                                  <div class="form-group">
+                                    <label for="edit-status" class="form-label">Status</label>
+                                    <select class="form-control" name="edit-status" id="edit-status" value="<?php echo $row['status']; ?>" required>
+                                      <option value=""></option>
+                                      <option value="Active" <?php echo ($row['status'] == "Active") ? "selected" : "" ?>>Active</option>
+                                      <option value="Inactive" <?php echo ($row['status'] == "Inactive") ? "selected" : "" ?>>Inactive</option>
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="edit-startYear" class="form-label">Start Year</label>
+                                    <input type="number" class="form-control" name="edit-startYear" id="edit-startYear" value="<?php echo $row['start_year']; ?>" required>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="edit-endYear" class="form-label">End Year</label>
+                                    <input type="number" class="form-control" name="edit-endYear" id="edit-endYear" value="<?php echo $row['end_year']; ?>" required>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="edit-semester" class="form-label">Semester</label>
+                                    <select class="form-control" name="edit-semester" id="edit-semester" required>
+                                      <option value=""></option>
+                                      <option value="First Semester" <?php echo ($row['semester'] == "First Semester") ? "selected" : "" ?>>First Semester</option>
+                                      <option value="Second Semester" <?php echo ($row['semester'] == "Second Semester") ? "selected" : "" ?>>Second Semester</option>
+                                    </select>
+                                  </div>
+                                  <button type="submit" class="btn btn-sm btn-success w-100" name="update-schoolyear">Update School Year</button>
+                                </form>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
+                        <tr>
+                          <td><?php echo $row['sy_id']; ?></td>
+                          <td><?php echo $row['start_year'] . "-" . $row['end_year']; ?></td>
+                          <td><?php echo $row['semester']; ?></td>
+                          <td><?php echo $row['status']; ?></td>
+                          <td>
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-schoolyear-<?php echo $row['sy_id']; ?>">Edit</button>
+                        </tr>
+                      <?php
+                      }
+                    } else {
+                      ?>
                       <tr>
-                        <td><?php echo $row['sy_id']; ?></td>
-                        <td><?php echo $row['start_year'] . "-" . $row['end_year']; ?></td>
-                        <td><?php echo $row['semester']; ?></td>
-                        <td><?php echo $row['status']; ?></td>
-                        <td>
-                          <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-schoolyear-<?php echo $row['sy_id']; ?>">Edit</button>
+                        <td colspan="5" class="text-center">No School Year Please Add School Year</td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
                       </tr>
                     <?php
                     }
@@ -157,12 +166,9 @@ session_start();
               </div>
             </div>
           </div>
-          <!-- /.col-md-6 -->
         </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
+      </div>
     </div>
-    <!-- /.content -->
   </div>
 
   <!-- Insert School Year Modal -->

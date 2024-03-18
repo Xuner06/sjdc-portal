@@ -66,8 +66,9 @@ $row = $stmtResult->fetch_assoc();
                     if (mysqli_num_rows($stmtResultSy) > 0) {
                       $result = $stmtResultSy->fetch_assoc();
                       $sy = $result['sy_id'];
-                      $stmtEnroll = $conn->prepare("SELECT e.*, c.adviser, s.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN student s ON e.student_id = s.student_id WHERE c.adviser = ? AND e.sy = ?");
-                      $stmtEnroll->bind_param("ii", $id, $sy);
+                      $studentStatus = 0;
+                      $stmtEnroll = $conn->prepare("SELECT e.*, c.adviser, s.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN student s ON e.student_id = s.student_id WHERE c.adviser = ? AND e.sy = ? AND s.status = ?");
+                      $stmtEnroll->bind_param("iii", $id, $sy, $studentStatus);
                       $stmtEnroll->execute();
                       $stmtResultEnroll = $stmtEnroll->get_result();
                       if (mysqli_num_rows($stmtResultEnroll) > 0) {
@@ -85,9 +86,8 @@ $row = $stmtResult->fetch_assoc();
                           </tr>
                         <?php
                         }
-                      } 
-                      else {
-                    ?>
+                      } else {
+                        ?>
                         <tr>
                           <td colspan="6" class="text-center">No Assign Student</td>
                           <td class="d-none"></td>
@@ -96,11 +96,10 @@ $row = $stmtResult->fetch_assoc();
                           <td class="d-none"></td>
                           <td class="d-none"></td>
                         </tr>
-                    <?php
+                      <?php
                       }
-                    } 
-                    else {
-                    ?>
+                    } else {
+                      ?>
                       <tr>
                         <td colspan="6" class="text-center">No Active School Year</td>
                         <td class="d-none"></td>
@@ -159,7 +158,32 @@ $row = $stmtResult->fetch_assoc();
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print"],
+        "buttons": [{
+          extend: 'copy',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4]
+          }
+        }, {
+          extend: 'csv',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4]
+          }
+        }, {
+          extend: 'excel',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4]
+          }
+        }, {
+          extend: 'pdf',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4]
+          }
+        }, {
+          extend: 'print',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4]
+          }
+        }],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
   </script>

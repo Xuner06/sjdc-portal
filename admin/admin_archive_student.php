@@ -1,8 +1,15 @@
 <?php
 include("../database/database.php");
-session_start();
-$sql = "SELECT * FROM student WHERE status = 1";
-$query = mysqli_query($conn, $sql);
+include("../actions/session.php");
+sessionAdmin();
+
+$id = $_SESSION['admin'];
+$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
+
 ?>
 
 <!DOCTYPE html>
@@ -66,21 +73,41 @@ $query = mysqli_query($conn, $sql);
                   </thead>
                   <tbody>
                     <?php
-                    while ($row = mysqli_fetch_assoc($query)) {
+                    $status = 1;
+                    $stmtStudent = $conn->prepare("SELECT * FROM student WHERE status = ?");
+                    $stmtStudent->bind_param("i", $status);
+                    $stmtStudent->execute();
+                    $stmtResultStudent = $stmtStudent->get_result();
+                    if (mysqli_num_rows($stmtResultStudent) > 0) {
+                      while ($rowStudent = $stmtResultStudent->fetch_assoc()) {
+                    ?>
+                        <tr>
+                          <td><?php echo $rowStudent['lrn_number']; ?></td>
+                          <td><?php echo $rowStudent['fname'] . " " . $rowStudent['lname']; ?></td>
+                          <td><?php echo $rowStudent['gender']; ?></td>
+                          <td><?php echo $rowStudent['age']; ?></td>
+                          <td><?php echo $rowStudent['email']; ?></td>
+                          <td><?php echo $rowStudent['contact']; ?></td>
+                          <td>
+                            <form action="../actions/admin_restore_student.php" method="post">
+                              <input type="hidden" name="restore-id" value="<?php echo $rowStudent['student_id']; ?>">
+                              <button type="submit" class="btn btn-primary btn-sm" name="restore-student">Restore</button>
+                            </form>
+                          </td>
+                        </tr>
+                      <?php
+                      }
+                    } 
+                    else {
                     ?>
                       <tr>
-                        <td><?php echo $row['lrn_number']; ?></td>
-                        <td><?php echo $row['fname'] . " " . $row['lname']; ?></td>
-                        <td><?php echo $row['gender']; ?></td>
-                        <td><?php echo $row['age']; ?></td>
-                        <td><?php echo $row['email']; ?></td>
-                        <td><?php echo $row['contact']; ?></td>
-                        <td>
-                          <form action="../actions/admin_restore_student.php" method="post">
-                            <input type="hidden" name="restore-id" value="<?php echo $row['student_id']; ?>">
-                            <button type="submit" class="btn btn-primary btn-sm" name="restore-student">Restore</button>
-                          </form>
-                        </td>
+                        <td colspan="7" class="text-center">Empty Student Archive</td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
                       </tr>
                     <?php
                     }

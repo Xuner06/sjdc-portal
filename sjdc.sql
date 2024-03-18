@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 24, 2024 at 03:08 PM
+-- Generation Time: Mar 18, 2024 at 04:23 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -31,9 +31,22 @@ CREATE TABLE `admin` (
   `admin_id` int(11) NOT NULL,
   `fname` varchar(50) NOT NULL,
   `lname` varchar(50) NOT NULL,
+  `gender` varchar(10) NOT NULL,
+  `birthday` date NOT NULL,
+  `age` int(11) NOT NULL,
+  `contact` varchar(11) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL
+  `address` varchar(150) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `date_created` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`admin_id`, `fname`, `lname`, `gender`, `birthday`, `age`, `contact`, `email`, `address`, `password`, `date_created`) VALUES
+(1, 'Super', 'Admin', 'Male', '1999-03-03', 24, '09284310661', 'admin@gmail.com', 'Tanza, Cavite', 'superadmin', '2024-03-14');
 
 -- --------------------------------------------------------
 
@@ -48,7 +61,7 @@ CREATE TABLE `class` (
   `section` varchar(10) NOT NULL,
   `sy` int(11) NOT NULL,
   `adviser` int(11) NOT NULL,
-  `created_at` datetime NOT NULL
+  `created_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -56,10 +69,7 @@ CREATE TABLE `class` (
 --
 
 INSERT INTO `class` (`class_id`, `level`, `strand`, `section`, `sy`, `adviser`, `created_at`) VALUES
-(68, 'Grade 11', 3, 'A', 61, 33, '2024-02-21 02:39:47'),
-(69, 'Grade 11', 3, 'A', 62, 33, '2024-02-21 03:12:57'),
-(70, 'Grade 12', 3, 'A', 63, 33, '2024-02-21 03:15:12'),
-(71, 'Grade 11', 3, 'A', 64, 33, '2024-02-24 21:50:49');
+(100, 'Grade 11', 21, 'A', 70, 59, '2024-03-18');
 
 -- --------------------------------------------------------
 
@@ -75,15 +85,6 @@ CREATE TABLE `enroll_student` (
   `enroll_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `enroll_student`
---
-
-INSERT INTO `enroll_student` (`enroll_id`, `student_id`, `class`, `sy`, `enroll_date`) VALUES
-(37, 1, 68, 61, '2024-02-24'),
-(38, 2, 68, 61, '2024-02-24'),
-(39, 1, 69, 62, '2024-02-24');
-
 -- --------------------------------------------------------
 
 --
@@ -97,18 +98,6 @@ CREATE TABLE `grade` (
   `subject` int(11) NOT NULL,
   `grade` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `grade`
---
-
-INSERT INTO `grade` (`id`, `student`, `sy`, `subject`, `grade`) VALUES
-(38, 1, 61, 1000, 78),
-(39, 1, 61, 1001, 78),
-(40, 1, 61, 1002, 90),
-(41, 1, 61, 1005, 85),
-(42, 1, 62, 1003, 93),
-(43, 1, 62, 1004, 93);
 
 -- --------------------------------------------------------
 
@@ -130,10 +119,8 @@ CREATE TABLE `school_year` (
 --
 
 INSERT INTO `school_year` (`sy_id`, `start_year`, `end_year`, `semester`, `status`, `created_at`) VALUES
-(61, 2024, 2025, 'First Semester', 'Inactive', '2024-02-11 00:48:24'),
-(62, 2024, 2025, 'Second Semester', 'Active', '2024-02-11 16:54:07'),
-(63, 2025, 2026, 'First Semester', 'Inactive', '2024-02-21 03:14:22'),
-(64, 2020, 2021, 'First Semester', 'Inactive', '2024-02-24 21:50:12');
+(70, 2024, 2025, 'First Semester', 'Active', '2024-03-13 00:00:00'),
+(71, 2024, 2025, 'Second Semester', 'Inactive', '2024-03-16 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -153,10 +140,12 @@ CREATE TABLE `strand` (
 --
 
 INSERT INTO `strand` (`strand_id`, `strand`, `description`, `date_created`) VALUES
-(2, 'GAS', 'General Academic Strand', '2024-02-06'),
-(3, 'ICT', 'Information and Communication Technology', '2024-02-06'),
-(4, 'STEM', 'Science, Technology, Engineering, and Mathematics', '2024-02-07'),
-(5, 'HE', 'Home Economics', '2024-02-07');
+(16, 'HE', 'Home Economics Strand', '2024-03-14'),
+(17, 'GAS', 'General Academic Strand', '2024-03-14'),
+(18, 'ABM', 'Accountancy, Business and Management Strand', '2024-03-18'),
+(19, 'STEM', 'Science, Technology, Engineering, and Mathematics Strand', '2024-03-18'),
+(20, 'HUMMS', 'Humanities and Social Science Strand', '2024-03-18'),
+(21, 'ICT', 'Information and Communication Technology', '2024-03-18');
 
 -- --------------------------------------------------------
 
@@ -185,26 +174,16 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`student_id`, `lrn_number`, `fname`, `lname`, `gender`, `birthday`, `age`, `contact`, `email`, `address`, `password`, `status`, `reg_date`) VALUES
-(1, '201915079', 'Roi', 'Badayos', 'Male', '1999-12-06', 24, '09605718250', 'roibadayos@gmail.com', '6911 Duke Lane', 'roibadayos', 0, '2023-02-26'),
-(2, '201915080', 'Reagen', 'Charlon', 'Male', '2014-01-07', 10, '09407786167', 'reagencharlon@gmail.com', '107 Jackson Avenue', 'reagencharlon', 0, '2023-12-01'),
-(3, '201915081', 'Stillmann', 'Bowhey', 'Male', '2010-04-21', 14, '09154127932', 'stillmannbowhey@gmail.com', '41 Twin Pines Circle', 'stillmannbowhey', 0, '2024-01-03'),
-(4, '201915082', 'Daune', 'Elflain', 'Female', '1999-09-23', 25, '09959648352', 'dauneelflain@gmail.com', '6 Ilene Crossing', 'dauneelflain', 0, '2023-07-23'),
-(5, '201915083', 'Armando', 'Kleuer', 'Male', '2013-10-10', 11, '09134543264', 'armandokleuer@gmail.com', '07199 Mcbride Trail', 'armandokleuer', 0, '2023-12-17'),
-(6, '201915084', 'Elysia', 'O\' Faherty', 'Female', '2012-08-15', 12, '09586763931', 'elysiao\' faherty@gmail.com', '213 Sheridan Trail', 'elysiao\' faherty', 0, '2023-11-15'),
-(7, '201915085', 'Noe', 'Zienkiewicz', 'Male', '2006-10-24', 18, '09328155851', 'noezienkiewicz@gmail.com', '9 Norway Maple Crossing', 'noezienkiewicz', 0, '2023-09-24'),
-(8, '201915086', 'Joe', 'Layne', 'Male', '2021-01-22', 3, '09173716139', 'joelayne@gmail.com', '283 Tomscot Circle', 'joelayne', 0, '2023-07-08'),
-(9, '201915087', 'Pearle', 'Yeardsley', 'Female', '2003-11-18', 21, '09001997408', 'pearleyeardsley@gmail.com', '3 Warner Trail', 'pearleyeardsley', 0, '2023-04-06'),
-(10, '201915088', 'Sunny', 'Cleere', 'Female', '2008-06-17', 16, '09139344384', 'sunnycleere@gmail.com', '8 Blue Bill Park Center', 'sunnycleere', 0, '2023-05-09'),
-(11, '201915089', 'Eveleen', 'Crickmore', 'Female', '2013-04-24', 11, '09069287816', 'eveleencrickmore@gmail.com', '76753 6th Trail', 'eveleencrickmore', 0, '2023-08-06'),
-(12, '201915090', 'Helenelizabeth', 'Tramel', 'Female', '2020-01-04', 4, '09726187811', 'helenelizabethtramel@gmail.com', '51 Ramsey Drive', 'helenelizabethtramel', 0, '2024-02-17'),
-(13, '201915091', 'Anthia', 'Kightly', 'Female', '1999-09-02', 25, '09014636864', 'anthiakightly@gmail.com', '00425 Eastlawn Parkway', 'anthiakightly', 0, '2023-03-31'),
-(14, '201915092', 'Nessi', 'Blakeston', 'Female', '2005-11-25', 19, '09845458769', 'nessiblakeston@gmail.com', '2 School Alley', 'nessiblakeston', 0, '2024-01-03'),
-(15, '201915093', 'Andonis', 'Rein', 'Male', '2013-09-22', 11, '09251566797', 'andonisrein@gmail.com', '036 Lakeland Trail', 'andonisrein', 0, '2023-09-09'),
-(16, '201915094', 'Rorke', 'Bouttell', 'Male', '2010-10-26', 14, '09449859109', 'rorkebouttell@gmail.com', '3606 Sauthoff Terrace', 'rorkebouttell', 0, '2023-07-12'),
-(17, '201915095', 'Findlay', 'Vynehall', 'Male', '2018-04-15', 6, '09559823061', 'findlayvynehall@gmail.com', '576 Bluestem Point', 'findlayvynehall', 0, '2023-12-22'),
-(18, '201915096', 'Armando', 'Risely', 'Male', '2022-05-22', 2, '09085981416', 'armandorisely@gmail.com', '62886 Sycamore Avenue', 'armandorisely', 0, '2023-09-14'),
-(19, '201915097', 'Brenn', 'Clementel', 'Female', '2003-10-13', 21, '09736895520', 'brennclementel@gmail.com', '52 Sage Court', 'brennclementel', 0, '2023-06-16'),
-(20, '201915098', 'Abie', 'Noddings', 'Male', '2001-10-01', 23, '09104262076', 'abienoddings@gmail.com', '88657 Jay Road', 'abienoddings', 0, '2023-10-28');
+(49, '201915079', 'Roi', 'Badayos', 'Male', '2007-01-15', 24, '09364218046', 'roibadayos@gmail.com', '499 Surrey Pass', 'roibadayos', 0, '2023-07-31'),
+(50, '201915080', 'Hubert', 'Geertje', 'Male', '2001-07-04', 23, '09800036715', 'hubertgeertje@gmail.com', '73898 Continental Place', 'hubertgeertje', 0, '2023-10-23'),
+(51, '201915081', 'Bamby', 'Melburg', 'Female', '2017-01-16', 7, '09342079186', 'bambymelburg@gmail.com', '094 Sunbrook Plaza', 'bambymelburg', 0, '2023-12-03'),
+(52, '201915082', 'Tony', 'Hannis', 'Female', '2008-09-13', 16, '09650990623', 'tonyhannis@gmail.com', '3 Carey Court', 'tonyhannis', 0, '2023-06-27'),
+(53, '201915083', 'Andrew', 'Braiden', 'Male', '2023-12-19', 1, '09672252063', 'andrewbraiden@gmail.com', '77201 Ruskin Way', 'andrewbraiden', 0, '2024-01-11'),
+(54, '201915084', 'Lilllie', 'Crisp', 'Female', '2021-03-09', 3, '09321572428', 'lillliecrisp@gmail.com', '26952 Sloan Parkway', 'lillliecrisp', 0, '2024-02-07'),
+(55, '201915085', 'Mona', 'Wardhaugh', 'Female', '2013-08-12', 11, '09510888792', 'monawardhaugh@gmail.com', '682 Hoffman Circle', 'monawardhaugh', 0, '2023-04-01'),
+(56, '201915086', 'Karlyn', 'Lisciandri', 'Female', '2023-03-14', 1, '09731272370', 'karlynlisciandri@gmail.com', '004 Hazelcrest Junction', 'karlynlisciandri', 0, '2023-04-16'),
+(57, '201915087', 'Deedee', 'Paulich', 'Female', '2010-11-30', 14, '09367316449', 'deedeepaulich@gmail.com', '6 West Place', 'deedeepaulich', 0, '2023-07-22'),
+(58, '201915088', 'Giacomo', 'Wheble', 'Male', '2018-03-01', 6, '09630471187', 'giacomowheble@gmail.com', '400 Menomonie Crossing', 'giacomowheble', 0, '2023-07-26');
 
 -- --------------------------------------------------------
 
@@ -226,12 +205,11 @@ CREATE TABLE `subject` (
 --
 
 INSERT INTO `subject` (`subject_id`, `name`, `level`, `strand`, `semester`, `created_at`) VALUES
-(1000, 'Oral Communictaion', 'Grade 11', 3, 'First Semester', '2024-02-10 17:04:35'),
-(1001, 'Reading and Writing', 'Grade 11', 3, 'First Semester', '2024-02-10 17:04:47'),
-(1002, 'English', 'Grade 11', 3, 'First Semester', '2024-02-10 23:55:54'),
-(1003, 'Amazing', 'Grade 11', 3, 'Second Semester', '2024-02-13 03:20:19'),
-(1004, 'Awesome', 'Grade 11', 3, 'Second Semester', '2024-02-19 00:20:32'),
-(1005, 'Math', 'Grade 11', 3, 'First Semester', '2024-02-24 21:53:01');
+(1018, 'General Mathematics', 'Grade 11', 18, 'First Semester', '0000-00-00 00:00:00'),
+(1019, 'English', 'Grade 11', 16, 'First Semester', '0000-00-00 00:00:00'),
+(1020, 'Oral Communication', 'Grade 11', 21, 'First Semester', '0000-00-00 00:00:00'),
+(1021, 'Reading and Writing', 'Grade 11', 21, 'First Semester', '0000-00-00 00:00:00'),
+(1022, 'Earth and Life Science', 'Grade 11', 18, 'First Semester', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -259,26 +237,16 @@ CREATE TABLE `teacher` (
 --
 
 INSERT INTO `teacher` (`teacher_id`, `fname`, `lname`, `gender`, `birthday`, `age`, `contact`, `email`, `address`, `password`, `status`, `reg_date`) VALUES
-(33, 'Roi', 'Badayos', 'Male', '2022-06-22', 2, '09317191988', 'roibadayos@gmail.com', '3399 Kropf Court', 'roibadayos', 0, '2023-03-31'),
-(34, 'Lharens', 'Indus', 'Male', '2014-08-04', 10, '09277475502', 'lharensindus@gmail.com', '971 Golf Course Trail', 'josselynkuhnert', 0, '2023-11-03'),
-(35, 'Kevon', 'Koene', 'Male', '2003-04-22', 21, '09801768574', 'kevonkoene@gmail.com', '08336 Comanche Trail', 'kevonkoene', 0, '2023-07-12'),
-(36, 'Baird', 'Sawford', 'Male', '2018-02-27', 6, '09724012221', 'bairdsawford@gmail.com', '669 Beilfuss Park', 'bairdsawford', 0, '2023-09-09'),
-(37, 'Abbe', 'Pocke', 'Female', '2014-08-04', 10, '09523780419', 'abbepocke@gmail.com', '49 Pine View Way', 'abbepocke', 0, '2023-12-10'),
-(38, 'Eilis', 'Boyes', 'Female', '2003-01-21', 21, '09029030379', 'eilisboyes@gmail.com', '880 Rusk Court', 'eilisboyes', 0, '2023-05-20'),
-(39, 'Amitie', 'Shrimplin', 'Female', '2018-08-23', 6, '09330168834', 'amitieshrimplin@gmail.com', '9087 Nevada Hill', 'amitieshrimplin', 0, '2024-01-29'),
-(40, 'Effie', 'Barhem', 'Female', '2000-11-06', 24, '09507960986', 'effiebarhem@gmail.com', '05574 Garrison Hill', 'effiebarhem', 0, '2023-07-13'),
-(41, 'Davon', 'Wylam', 'Male', '2013-06-23', 11, '09594823592', 'davonwylam@gmail.com', '507 Lighthouse Bay Point', 'davonwylam', 0, '2023-08-25'),
-(42, 'Hirsch', 'Featherstonhaugh', 'Male', '2021-01-06', 3, '09960999496', 'hirschfeatherstonhaugh@gmail.com', '97008 Pierstorff Hill', 'hirschfeatherstonhaugh', 0, '2023-11-15'),
-(43, 'Aviva', 'Myers', 'Female', '2014-06-12', 10, '09626672248', 'avivamyers@gmail.com', '19 Maple Wood Way', 'avivamyers', 0, '2023-07-10'),
-(44, 'Moore', 'Watson-Brown', 'Male', '1999-03-08', 25, '09110069291', 'moorewatson-brown@gmail.com', '28 Melvin Parkway', 'moorewatson-brown', 0, '2023-12-13'),
-(45, 'Ibby', 'Casale', 'Female', '2023-07-09', 1, '09928895721', 'ibbycasale@gmail.com', '1005 Forster Junction', 'ibbycasale', 0, '2024-01-17'),
-(46, 'Weston', 'Dollimore', 'Male', '2001-06-16', 23, '09346915060', 'westondollimore@gmail.com', '5615 Superior Point', 'westondollimore', 0, '2023-07-29'),
-(47, 'Luci', 'Cater', 'Female', '2001-04-26', 23, '09626913583', 'lucicater@gmail.com', '6636 Clyde Gallagher Court', 'lucicater', 0, '2023-04-06'),
-(48, 'Maressa', 'Howgego', 'Female', '2003-11-28', 21, '09026781144', 'maressahowgego@gmail.com', '2826 Hooker Point', 'maressahowgego', 0, '2023-07-17'),
-(49, 'Cristian', 'Churn', 'Male', '2021-11-28', 3, '09904413073', 'cristianchurn@gmail.com', '1 Monterey Road', 'cristianchurn', 0, '2023-11-01'),
-(50, 'Chico', 'Wilshin', 'Male', '2021-04-24', 3, '09784604829', 'chicowilshin@gmail.com', '4228 Mallory Plaza', 'chicowilshin', 0, '2023-05-14'),
-(51, 'Thorn', 'Koeppe', 'Male', '2012-04-12', 12, '09407196342', 'thornkoeppe@gmail.com', '264 Burning Wood Road', 'thornkoeppe', 0, '2023-11-27'),
-(52, 'Patton', 'Renols', 'Male', '2020-01-15', 4, '09141363124', 'pattonrenols@gmail.com', '3 Arapahoe Center', 'pattonrenols', 0, '2023-12-27');
+(59, 'Lharens', 'Indus', 'Male', '2023-04-04', 1, '09159684468', 'lharensindus@gmail.com', '98437 Morning Junction', 'lharensindus', 0, '2023-11-07'),
+(60, 'Roldan', 'Godmar', 'Male', '2014-02-23', 10, '09703476841', 'roldangodmar@gmail.com', '6 Mallory Pass', 'roldangodmar', 0, '2023-11-12'),
+(61, 'Keane', 'Garvie', 'Male', '2017-10-03', 7, '09989117648', 'keanegarvie@gmail.com', '3669 Pankratz Point', 'keanegarvie', 0, '2023-03-19'),
+(62, 'Mame', 'Trillo', 'Female', '1999-05-14', 25, '09679497694', 'mametrillo@gmail.com', '617 Washington Terrace', 'mametrillo', 0, '2023-10-15'),
+(63, 'Loreen', 'Creagh', 'Female', '2009-12-24', 15, '09524133854', 'loreencreagh@gmail.com', '1 Milwaukee Trail', 'loreencreagh', 0, '2023-08-02'),
+(64, 'Kariotta', 'Streetley', 'Female', '2016-04-01', 8, '09841650139', 'kariottastreetley@gmail.com', '73013 Steensland Terrace', 'kariottastreetley', 0, '2024-01-15'),
+(65, 'Jacob', 'Wagner', 'Male', '2004-02-01', 20, '09275789585', 'jacobwagner@gmail.com', '70 Delaware Center', 'jacobwagner', 0, '2023-10-22'),
+(66, 'Carleen', 'Kolodziejski', 'Female', '2023-08-26', 1, '09434420243', 'carleenkolodziejski@gmail.com', '4 Sunfield Park', 'carleenkolodziejski', 0, '2023-03-12'),
+(67, 'Thomasina', 'Hantusch', 'Female', '2002-01-02', 22, '09966189634', 'thomasinahantusch@gmail.com', '489 Kingsford Terrace', 'thomasinahantusch', 0, '2023-04-29'),
+(68, 'Cleavland', 'Papaccio', 'Male', '2015-09-15', 9, '09996885926', 'cleavlandpapaccio@gmail.com', '870 Laurel Crossing', 'cleavlandpapaccio', 0, '2023-07-03');
 
 --
 -- Indexes for dumped tables
@@ -356,55 +324,55 @@ ALTER TABLE `teacher`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `class`
 --
 ALTER TABLE `class`
-  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- AUTO_INCREMENT for table `enroll_student`
 --
 ALTER TABLE `enroll_student`
-  MODIFY `enroll_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `enroll_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT for table `grade`
 --
 ALTER TABLE `grade`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
 
 --
 -- AUTO_INCREMENT for table `school_year`
 --
 ALTER TABLE `school_year`
-  MODIFY `sy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `sy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `strand`
 --
 ALTER TABLE `strand`
-  MODIFY `strand_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `strand_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `subject`
 --
 ALTER TABLE `subject`
-  MODIFY `subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1006;
+  MODIFY `subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1023;
 
 --
 -- AUTO_INCREMENT for table `teacher`
 --
 ALTER TABLE `teacher`
-  MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- Constraints for dumped tables
@@ -431,7 +399,7 @@ ALTER TABLE `enroll_student`
 --
 ALTER TABLE `grade`
   ADD CONSTRAINT `grade_ibfk_1` FOREIGN KEY (`student`) REFERENCES `student` (`student_id`),
-  ADD CONSTRAINT `grade_ibfk_2` FOREIGN KEY (`subject`) REFERENCES `subject` (`subject_id`),
+  ADD CONSTRAINT `grade_ibfk_2` FOREIGN KEY (`subject`) REFERENCES `subject` (`subject_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `grade_ibfk_3` FOREIGN KEY (`sy`) REFERENCES `school_year` (`sy_id`);
 
 --

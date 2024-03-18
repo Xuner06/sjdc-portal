@@ -50,7 +50,7 @@ $row = $stmtResult->fetch_assoc();
                   </thead>
                   <tbody>
                     <?php
-                    $stmtEnroll = $conn->prepare("SELECT e.sy, sy.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id WHERE e.student_id = ?");
+                    $stmtEnroll = $conn->prepare("SELECT e.*, sy.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id WHERE e.student_id = ?");
                     $stmtEnroll->bind_param("i", $id);
                     $stmtEnroll->execute();
                     $stmtResult = $stmtEnroll->get_result();
@@ -61,7 +61,7 @@ $row = $stmtResult->fetch_assoc();
                           <td><?php echo $resultSy['start_year'] . "-" . $resultSy['end_year']; ?></td>
                           <td><?php echo $resultSy['semester']; ?></td>
                           <td>
-                            <a href="student_view_grade.php?view=<?php echo $resultSy['sy']; ?>" class="btn btn-primary btn-sm">View</a>
+                            <a href="student_view_grade.php?view=<?php echo $resultSy['enroll_id']; ?>" class="btn btn-primary btn-sm">View</a>
                           </td>
                         </tr>
                       <?php

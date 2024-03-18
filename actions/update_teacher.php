@@ -23,9 +23,11 @@ if(isset($_POST['update-teacher'])) {
   if($email != $originalEmail) {
     $stmtDuplicateEmail = $conn->prepare("SELECT * FROM teacher WHERE email = ?");
     $stmtDuplicateEmail->bind_param("s", $email);
+    $stmtDuplicateEmail->execute();
+    $stmtResultDuplicateEmail = $stmtDuplicateEmail->get_result();
 
-    if(mysqli_stmt_execute($stmtDuplicateEmail) > 0) {
-      $_SESSION['duplicate'] = "This email is already registered";
+    if(mysqli_num_rows($stmtResultDuplicateEmail) > 0) {
+      $_SESSION['duplicate-email'] = "This Email Is Already Registered";
       header("Location: ../admin/admin_teacher.php");
       exit();
     }

@@ -10,12 +10,6 @@ $stmtTeacher->execute();
 $stmtResult = $stmtTeacher->get_result();
 $row = $stmtResult->fetch_assoc();
 
-$status = "Active";
-$stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
-$stmtSy->bind_param("s", $status);
-$stmtSy->execute();
-$stmtResultSy = $stmtSy->get_result();
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,17 +64,22 @@ $stmtResultSy = $stmtSy->get_result();
             <div class="small-box bg-info">
               <div class="inner">
                 <?php
-                if(mysqli_num_rows($stmtResultSy) > 0) {
+                $status = "Active";
+                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $stmtSy->bind_param("s", $status);
+                $stmtSy->execute();
+                $stmtResultSy = $stmtSy->get_result();
+
+                if (mysqli_num_rows($stmtResultSy) > 0) {
                   $result = $stmtResultSy->fetch_assoc();
                   $sy = $result['sy_id'];
 
-                  $stmtEnroll = $conn->prepare( "SELECT e.*, c.* FROM enroll_student e JOIN class c ON e.class = c.class_id WHERE c.adviser = ? AND e.sy = ?");
+                  $stmtEnroll = $conn->prepare("SELECT e.*, c.* FROM enroll_student e JOIN class c ON e.class = c.class_id WHERE c.adviser = ? AND e.sy = ?");
                   $stmtEnroll->bind_param("ii", $id, $sy);
                   $stmtEnroll->execute();
                   $stmtResultEnroll = $stmtEnroll->get_result();
-                  echo '<h3>'.mysqli_num_rows($stmtResultEnroll).'</h3>';
-                }
-                else {
+                  echo '<h3>' . mysqli_num_rows($stmtResultEnroll) . '</h3>';
+                } else {
                   echo '<h3>No Active SY</h3>';
                 }
                 ?>
@@ -95,8 +94,24 @@ $stmtResultSy = $stmtSy->get_result();
           <div class="col-lg-3 col-12">
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>0</h3>
-
+                <?php
+                $status = "Active";
+                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $stmtSy->bind_param("s", $status);
+                $stmtSy->execute();
+                $stmtResultSy = $stmtSy->get_result();
+                if (mysqli_num_rows($stmtResultSy) > 0) {
+                  $result = $stmtResultSy->fetch_assoc();
+                  $sy = $result['sy_id'];
+                  $stmtGrade = $conn->prepare("SELECT g.student, ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.sy = ? GROUP BY g.student HAVING average >= 75");
+                  $stmtGrade->bind_param("i", $sy);
+                  $stmtGrade->execute();
+                  $stmtResultGrade = $stmtGrade->get_result();
+                  echo '<h3>' . mysqli_num_rows($stmtResultGrade) . '</h3>';
+                } else {
+                  echo '<h3>No Active SY</h3>';
+                }
+                ?>
                 <p>Total Passed</p>
               </div>
               <div class="icon">
@@ -108,7 +123,25 @@ $stmtResultSy = $stmtSy->get_result();
           <div class="col-lg-3 col-12">
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>0</h3>
+                <?php
+                $status = "Active";
+                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $stmtSy->bind_param("s", $status);
+                $stmtSy->execute();
+                $stmtResultSy = $stmtSy->get_result();
+                if (mysqli_num_rows($stmtResultSy) > 0) {
+                  $result = $stmtResultSy->fetch_assoc();
+                  $sy = $result['sy_id'];
+                  $stmtGrade = $conn->prepare("SELECT g.student, ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.sy = ? GROUP BY g.student HAVING average < 75");
+                  $stmtGrade->bind_param("i", $sy);
+                  $stmtGrade->execute();
+                  $stmtResultGrade = $stmtGrade->get_result();
+                  echo '<h3>' . mysqli_num_rows($stmtResultGrade) . '</h3>';
+                } else {
+                  echo '<h3>No Active SY</h3>';
+                }
+                ?>
+
 
                 <p>Total Failed</p>
               </div>
@@ -117,21 +150,6 @@ $stmtResultSy = $stmtSy->get_result();
               </div>
             </div>
           </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-12">
-            <!-- small box -->
-            <div class="small-box bg-danger">
-              <div class="inner">
-                <h3>0</h3>
-
-                <p>Total Teachers</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-            </div>
-          </div>
-          <!-- ./col -->
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->

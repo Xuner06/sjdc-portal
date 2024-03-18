@@ -1,6 +1,14 @@
 <?php
 include("../database/database.php");
-session_start();
+include("../actions/session.php");
+sessionAdmin();
+
+$id = $_SESSION['admin'];
+$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
 
 ?>
 <!DOCTYPE html>
@@ -38,6 +46,7 @@ session_start();
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
+                <h1 class="text-center">Student List</h1>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -56,19 +65,35 @@ session_start();
                     $stmtStudent = $conn->prepare("SELECT * FROM student WHERE status = ?");
                     $stmtStudent->bind_param("i", $status);
                     $stmtStudent->execute();
-                    $stmtResult = $stmtStudent->get_result();
-                    while ($row = $stmtResult->fetch_assoc()) {
+                    $stmtResultStudent = $stmtStudent->get_result();
+
+                    if (mysqli_num_rows($stmtResultStudent) > 0) {
+                      while ($row = $stmtResultStudent->fetch_assoc()) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['lrn_number']; ?></td>
+                          <td><?php echo $row['fname'] . " " . $row['lname']; ?></td>
+                          <td><?php echo $row['gender']; ?></td>
+                          <td><?php echo $row['age']; ?></td>
+                          <td><?php echo $row['email']; ?></td>
+                          <td><?php echo $row['contact']; ?></td>
+                          <td>
+                            <a href="admin_student_enroll.php?id=<?php echo $row['student_id']; ?>" class="btn btn-primary btn-sm">Enroll</a>
+                          </td>
+                        </tr>
+                      <?php
+                      }
+                    } 
+                    else {
                     ?>
                       <tr>
-                        <td><?php echo $row['lrn_number']; ?></td>
-                        <td><?php echo $row['fname'] . " " . $row['lname']; ?></td>
-                        <td><?php echo $row['gender']; ?></td>
-                        <td><?php echo $row['age']; ?></td>
-                        <td><?php echo $row['email']; ?></td>
-                        <td><?php echo $row['contact']; ?></td>
-                        <td>
-                          <a href="admin_student_enroll.php?id=<?php echo $row['student_id']; ?>" class="btn btn-primary btn-sm">Enroll</a>
-                        </td>
+                        <td colspan="7" class="text-center">No Student Please Add Student</td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
                       </tr>
                     <?php
                     }

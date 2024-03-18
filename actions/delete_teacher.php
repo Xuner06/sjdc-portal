@@ -3,7 +3,7 @@ include("../database/database.php");
 session_start();
 
 if(isset($_POST['delete-id'])) {
-  $id = mysqli_escape_string($conn, $_POST['delete-id']);
+  $id = $_POST['delete-id'];
   $status = 1;
 
   $stmtDeleteTeacher = $conn->prepare("UPDATE teacher set status = ? WHERE teacher_id = ?");

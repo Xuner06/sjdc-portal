@@ -1,12 +1,19 @@
 <?php
 include("../database/database.php");
-session_start();
-$sql = "SELECT * FROM class WHERE status = 1";
-$query = mysqli_query($conn, $sql);
+include("../actions/session.php");
+sessionAdmin();
+
+$id = $_SESSION['admin'];
+$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,21 +34,6 @@ $query = mysqli_query($conn, $sql);
 
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <?php
-    if (isset($_SESSION['restore-class'])) {
-    ?>
-      <script>
-        Swal.fire({
-          title: 'Success',
-          text: '<?php echo $_SESSION['restore-class']; ?>',
-          icon: 'success',
-        })
-      </script>
-    <?php
-      unset($_SESSION['restore-class']);
-    }
-    ?>
-
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">Account</h1>
@@ -56,24 +48,22 @@ $query = mysqli_query($conn, $sql);
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
-                <h3 class="text-center">Account Profile Information</h3>
-                <p><strong>First Name:</strong> Test</p>
-                <p><strong>First Name:</strong> Test</p>
-                <p><strong>First Name:</strong> Test</p>
-                <p><strong>First Name:</strong> Test</p>
-                <p><strong>First Name:</strong> Test</p>
-                <p><strong>First Name:</strong> Test</p>
-                <p><strong>First Name:</strong> Test</p>
-
+                <h1 class="text-center">Admin Account Information</h1>
+                <p><strong>First Name:</strong> <?php echo $row['fname']; ?></p>
+                <p><strong>Last Name:</strong> <?php echo $row['lname']; ?></p>
+                <p><strong>Gender:</strong> <?php echo $row['gender']; ?></p>
+                <p><strong>Age:</strong> <?php echo $row['age']; ?></p>
+                <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($row['birthday'])); ?></p>
+                <p><strong>Contact:</strong> <?php echo $row['contact']; ?></p>
+                <p><strong>Email:</strong> <?php echo $row['email']; ?></p>
+                <p><strong>Address:</strong> <?php echo $row['address']; ?></p>
+                <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($row['date_created'])); ?></p>
               </div>
             </div>
           </div>
-          <!-- /.col-md-6 -->
         </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
+      </div>
     </div>
-    <!-- /.content -->
   </div>
 
 

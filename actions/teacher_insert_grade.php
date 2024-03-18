@@ -2,27 +2,33 @@
 include("../database/database.php");
 session_start();
 
-if(isset($_POST['upload-grade'])) {
-  $student = mysqli_escape_string($conn,$_POST['student-id']);
-  $enroll = mysqli_escape_string($conn,$_POST['enroll-id']);
-  $sy = mysqli_escape_string($conn, $_POST['sy']);
+if (isset($_POST['upload-grade'])) {
+  $student = $_POST['student-id'];
+  $enroll = $_POST['enroll-id'];
+  $sy = $_POST['sy'];
   foreach ($_POST['grade'] as $subjectId => $grade) {
-     // Check if the grade is not "N/A"
-     if ($grade != "N/A") {
+    // Check if the grade is not "N/A"
+    if ($grade != "N/A") {
       // Check if a record already exists for the student and subject combination
-      $check_query = "SELECT * FROM grade WHERE student = '$student' AND subject = '$subjectId'";
-      $result = mysqli_query($conn, $check_query);
-      if(mysqli_num_rows($result) > 0) {
+      $stmtCheckRecord = $conn->prepare("SELECT * FROM grade WHERE student = ? AND subject = ?");
+      $stmtCheckRecord->bind_param("ii", $student, $subjectId);
+      $stmtCheckRecord->execute();
+      $stmtResult = $stmtCheckRecord->get_result();
+
+      if(mysqli_num_rows($stmtResult) > 0) {
         // If a record exists, update the grade
-        $update_query = "UPDATE grade SET grade = '$grade' WHERE student = '$student' AND subject = '$subjectId'";
-        mysqli_query($conn, $update_query);
-      } else {
+        $stmtUpdateGrade = $conn->prepare("UPDATE grade SET grade = ? WHERE student = ? AND subject = ?");
+        $stmtUpdateGrade->bind_param("iii", $grade, $student, $subjectId);
+        $stmtUpdateGrade->execute();
+      }
+      else {
         // If no record exists, insert a new grade
-        $insert_query = "INSERT INTO grade (student, subject, grade, sy) VALUES ('$student', '$subjectId', '$grade', '$sy')";
-        mysqli_query($conn, $insert_query);
+        $stmtInsertGrade = $conn->prepare("INSERT INTO grade (student, subject, grade, sy) VALUES (?, ?, ?, ?)");
+        $stmtInsertGrade->bind_param("iiii", $student, $subjectId, $grade, $sy);
+        $stmtInsertGrade->execute();
       }
     }
-  }  
+  }
   $_SESSION['success-upload'] = "Successfully Uploaded Grade";
   header("Location: ../teacher/teacher_encode_grade.php?grade=$enroll");
   exit();

@@ -2,27 +2,27 @@
 include("../database/database.php");
 session_start();
 
-if(isset($_POST['update-class'])) {
-  $id = mysqli_escape_string($conn, $_POST['edit-id']);
-  $level = mysqli_escape_string($conn, $_POST['edit-level']);
-  $strand = mysqli_escape_string($conn, $_POST['edit-strand']);
-  $section = mysqli_escape_string($conn, $_POST['edit-section']);
-  $adviser = mysqli_escape_string($conn, $_POST['edit-adviser']);
-  $sy = mysqli_escape_string($conn, $_POST['edit-sy']);
+if (isset($_POST['update-class'])) {
+  $id = $_POST['edit-id'];
+  $level = $_POST['edit-level'];
+  $strand = $_POST['edit-strand'];
+  $section = $_POST['edit-section'];
+  $adviser = $_POST['edit-adviser'];
+  $sy = $_POST['edit-sy'];
 
-  $sql = "UPDATE class SET level = '$level', strand = '$strand', section = '$section', adviser = '$adviser', sy = '$sy' WHERE class_id = '$id'";
-  $query = mysqli_query($conn, $sql);
+  $stmtUpdateClass = $conn->prepare("UPDATE class SET level = ?, strand = ?, section = ?, adviser = ?, sy = ? WHERE class_id = ?");
+  $stmtUpdateClass->bind_param("sisiii", $level, $strand, $section, $adviser, $sy, $id);
+  $stmtUpdateClass->execute();
 
-  if($query) {
+  if (mysqli_stmt_execute($stmtUpdateClass)) {
     $_SESSION['update-class'] = "Successfully Updated Class";
     header("Location: ../admin/admin_class.php");
     exit();
-  }
+  } 
   else {
     header("Location: ../admin/admin_class.php");
     exit();
   }
-}  
-
+}
 
 ?>

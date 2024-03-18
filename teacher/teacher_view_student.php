@@ -1,6 +1,7 @@
 <?php
 include("../database/database.php");
-session_start();
+include("../actions/session.php");
+sessionTeacher();
 
 $id = $_SESSION['teacher'];
 $stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE teacher_id = ?");

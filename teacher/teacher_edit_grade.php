@@ -12,8 +12,16 @@ $row = $stmtResult->fetch_assoc();
 
 if (isset($_GET['edit'])) {
   $enrollId = $_GET['edit'];
-  $stmtEnroll = $conn->prepare("SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = ? AND c.adviser = ?");
-  $stmtEnroll->bind_param("ii", $enrollId, $id);
+  $status = "Active";
+  $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+  $stmtSy->bind_param("s", $status);
+  $stmtSy->execute();
+  $stmtResultSy = $stmtSy->get_result();
+  $result = $stmtResultSy->fetch_assoc();
+  $sy = $result['sy_id'];
+
+  $stmtEnroll = $conn->prepare("SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = ? AND c.adviser = ? AND e.sy = ?");
+  $stmtEnroll->bind_param("iii", $enrollId, $id, $sy);
   $stmtEnroll->execute();
   $stmtResultEnroll = $stmtEnroll->get_result();
   $result = $stmtResultEnroll->fetch_assoc();
@@ -49,17 +57,17 @@ if (isset($_GET['edit'])) {
   <?php include("../components/teacher_navbar.php"); ?>
   <div class="content-wrapper">
     <?php
-    if (isset($_SESSION['success-upload'])) {
+    if (isset($_SESSION['success-update'])) {
     ?>
       <script>
         Swal.fire({
           title: 'Success',
-          text: '<?php echo $_SESSION['success-upload']; ?>',
+          text: '<?php echo $_SESSION['success-update']; ?>',
           icon: 'success',
         })
       </script>
     <?php
-      unset($_SESSION['success-upload']);
+      unset($_SESSION['success-update']);
     }
     ?>
 
@@ -85,10 +93,9 @@ if (isset($_GET['edit'])) {
             <div class="card">
               <div class="card-body">
                 <h1 class="text-center">Student Edit Grade</h1>
-                <form action="../actions/teacher_insert_grade.php" method="post">
+                <form action="../actions/teacher_update_grade.php" method="post">
                   <input type="hidden" value="<?php echo $result['student_id']; ?>" name="student-id">
                   <input type="hidden" value="<?php echo $result['enroll_id']; ?>" name="enroll-id">
-                  <input type="hidden" value="<?php echo $result['sy']; ?>" name="sy">
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -101,7 +108,7 @@ if (isset($_GET['edit'])) {
                       <?php
                       $studentId = $result['student_id'];
                       $sy = $result['sy'];
-                      $stmtGrade = $conn->prepare("SELECT * FROM grade g WHERE g.student = ? AND g.sy = ?");
+                      $stmtGrade = $conn->prepare("SELECT g.*, s.* FROM grade g JOIN subject s ON g.subject = s.subject_id WHERE g.student = ? AND g.sy = ?");
                       $stmtGrade->bind_param("ii", $studentId, $sy);
                       $stmtGrade->execute();
                       $stmtResultGrade = $stmtGrade->get_result();
@@ -114,10 +121,10 @@ if (isset($_GET['edit'])) {
                             <td><?php echo $row['name']; ?></td>
                             <td>
                               <select class="form-control" name="grade[<?php echo $row['subject_id']; ?>]" required>
-                                <option class="text-center" value="N/A">N/A</option>
                                 <?php
-                                for ($i = 70; $i <= 100; $i++) {
-                                  echo '<option value="' . $i . '" class="text-center">' . $i . '</option>';
+                                for ($i = 50; $i <= 100; $i++) {
+                                  $selected = ($i == $row['grade']) ? 'selected' : '';
+                                  echo '<option value="' . $i . '" class="text-center"' . $selected . '>' . $i . '</option>';
                                 }
                                 ?>
                               </select>
@@ -125,11 +132,21 @@ if (isset($_GET['edit'])) {
                           </tr>
                         <?php
                         }
-                      } 
-                      else {
                         ?>
                         <tr>
+                          <td colspan="3" class="text-center">
+                            <button type="submit" class="btn btn-success btn-sm" name="update-grade">Edit Grade</button>
+                          </td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
+                        </tr>
+                      <?php
+                      } else {
+                      ?>
+                        <tr>
                           <td colspan="3" class="text-center">No Grade Yet</td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
                         </tr>
                       <?php
                       }

@@ -11,13 +11,19 @@ $stmtResult = $stmtStudent->get_result();
 $row = $stmtResult->fetch_assoc();
 
 if (isset($_GET['view'])) {
-  $sy = $_GET['view'];
-  $stmtGrade = $conn->prepare("SELECT g.*, s.* FROM grade g JOIN subject s ON g.subject = s.subject_id WHERE g.student = ? AND g.sy = ?");
-  $stmtGrade->bind_param("ii", $id, $sy);
-  $stmtGrade->execute();
-  $stmtResultGrade = $stmtGrade->get_result();
-} 
-else {
+  $enrollId = $_GET['view'];
+  $stmtEnroll = $conn->prepare("SELECT * FROM enroll_student WHERE enroll_id = ?");
+  $stmtEnroll->bind_param("i", $enrollId);
+  $stmtEnroll->execute();
+  $stmtResultEnroll = $stmtEnroll->get_result();
+  $resultEnroll = $stmtResultEnroll->fetch_assoc();
+  $sy = $resultEnroll['sy'];
+
+  if (mysqli_num_rows($stmtResultEnroll) == 0) {
+    header("Location: student_grade.php");
+    exit();
+  }
+} else {
   header("Location: student_grade.php");
   exit();
 }
@@ -76,6 +82,17 @@ else {
                   </thead>
                   <tbody>
                     <?php
+                    $stmtGrade = $conn->prepare("SELECT g.*, s.* FROM grade g JOIN subject s ON g.subject = s.subject_id WHERE g.student = ? AND g.sy = ?");
+                    $stmtGrade->bind_param("ii", $id, $sy);
+                    $stmtGrade->execute();
+                    $stmtResultGrade = $stmtGrade->get_result();
+
+                    $stmtAverage = $conn->prepare("SELECT ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.student = ? AND g.sy = ?");
+                    $stmtAverage->bind_param("ii", $id, $sy);
+                    $stmtAverage->execute();
+                    $stmtResultAverage = $stmtAverage->get_result();
+                    $average = $stmtResultAverage->fetch_assoc();
+                    $total = $average['average'];
                     if (mysqli_num_rows($stmtResultGrade) > 0) {
                       while ($rowResult = $stmtResultGrade->fetch_assoc()) {
                     ?>
@@ -84,13 +101,18 @@ else {
                           <td><?php echo $rowResult['name']; ?></td>
                           <td><?php echo $rowResult['grade']; ?></td>
                         </tr>
+                      <?php
+                      } ?>
+                      <tr>
+                        <td colspan="2">Total</td>
+                        <td class="d-none"></td>
+                        <td><?php echo $total; ?></td>
+                      </tr>
                     <?php
-                      }
-                    } 
-                    else {
+                    } else {
                     ?>
                       <tr>
-                        <td colspan="3" class="text-center">No Grade Yet For This School Year</td>
+                        <td colspan="3" class="text-center">Not Graded Yet</td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
                       </tr>
@@ -124,6 +146,7 @@ else {
   <script>
     $(function() {
       $("#example1").DataTable({
+
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,

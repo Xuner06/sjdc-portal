@@ -1,6 +1,14 @@
 <?php
 include("../database/database.php");
-session_start();
+include("../actions/session.php");
+sessionAdmin();
+
+$id = $_SESSION['admin'];
+$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
+$row = $stmtResult->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -54,20 +62,6 @@ session_start();
       unset($_SESSION['update-class']);
     }
     ?>
-    <?php
-    if (isset($_SESSION['delete-class'])) {
-    ?>
-      <script>
-        Swal.fire({
-          title: 'Success',
-          text: '<?php echo $_SESSION['delete-class']; ?>',
-          icon: 'success',
-        })
-      </script>
-    <?php
-      unset($_SESSION['delete-class']);
-    }
-    ?>
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">Class List</h1>
@@ -82,6 +76,7 @@ session_start();
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
+                <h1 class="text-center">Class List</h1>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -91,112 +86,144 @@ session_start();
                       <th>Schoolyear</th>
                       <th>Adviser</th>
                       <th>Edit</th>
-                      <th>Delete</th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php
-                    $sqlSy = "SELECT * FROM school_year WHERE status = 'Active'";
-                    $querySy = mysqli_query($conn, $sqlSy);
-                    if ($querySy && mysqli_num_rows($querySy) > 0) {
-                      $result = mysqli_fetch_assoc($querySy);
+                    $status = "Active";
+                    $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                    $stmtSy->bind_param("s", $status);
+                    $stmtSy->execute();
+                    $stmtResultSy = $stmtSy->get_result();
+                    if (mysqli_num_rows($stmtResultSy) > 0) {
+                      $result = $stmtResultSy->fetch_assoc();
                       $sy = $result['sy_id'];
-                      $sql = "SELECT c.*, s.strand as STRAND, CONCAT(sy.start_year, '-', sy.end_year, ' ', sy.semester) AS SY, CONCAT(t.lname, ', ', t.fname) AS ADVISER FROM class c JOIN strand s ON c.strand = s.strand_id JOIN school_year sy ON c.sy = sy.sy_id JOIN Teacher t ON c.adviser = t.teacher_id WHERE sy = '$sy'";
-                      $query = mysqli_query($conn, $sql);
-                      while ($row = mysqli_fetch_assoc($query)) {
+                      $stmtClass = $conn->prepare("SELECT c.*, s.*, sy.*, t.* FROM class c JOIN school_year sy ON c.sy = sy.sy_id JOIN teacher t ON c.adviser = t.teacher_id JOIN strand s ON c.strand = s.strand_id WHERE c.sy = ?");
+                      $stmtClass->bind_param("i", $sy);
+                      $stmtClass->execute();
+                      $stmtResultClass = $stmtClass->get_result();
+
+                      if (mysqli_num_rows($stmtResultClass) > 0) {
+                        while ($row = $stmtResultClass->fetch_assoc()) {
                     ?>
-                        <tr>
-                          <td><?php echo $row['level']; ?></td>
-                          <td><?php echo $row['STRAND']; ?></td>
-                          <td><?php echo $row['section']; ?></td>
-                          <td><?php echo $row['SY']; ?></td>
-                          <td><?php echo $row['ADVISER']; ?></td>
-                          <td>
-                            <!-- Edit Class Button Click -->
-                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-class-<?php echo $row['class_id']; ?>">Edit</button>
-                            <!-- Edit Class Modal -->
-                            <div class="modal fade" id="edit-class-<?php echo $row['class_id']; ?>">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h4 class="modal-title">Edit Class</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span>
-                                    </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <form action="../actions/update_class.php" method="post">
-                                      <input type="hidden" name="edit-id" value="<?php echo $row['class_id']; ?>">
-                                      <div class="form-group">
-                                        <label for="level" class="form-label">Grade Level</label>
-                                        <select class="form-control" id="level" name="edit-level" required>
-                                          <option value=""></option>
-                                          <option value="Grade 11" <?= ($row['level'] == "Grade 11") ? "selected" : "" ?>>Grade 11</option>
-                                          <option value="Grade 12" <?= ($row['level'] == "Grade 12") ? "selected" : "" ?>>Grade 12</option>
-                                        </select>
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="edit-strand" class="form-label">Strand</label>
-                                        <select class="form-control" name="edit-strand" id="edit-strand" required>
-                                          <option value=""></option>
-                                          <?php
-                                          $editSqlStrand = "SELECT * FROM strand";
-                                          $editQueryStrand = mysqli_query($conn, $editSqlStrand);
-                                          while ($rowStrand = mysqli_fetch_assoc($editQueryStrand)) {
-                                            $selected = ($rowStrand['strand_id'] == $row['strand']) ? "selected" : "";
-                                            echo '<option value="' . $rowStrand['strand_id'] . '" ' . $selected . '>' . $rowStrand['strand'] . '</option>';
-                                          }
-                                          ?>
-                                        </select>
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="section" class="form-label">Section</label>
-                                        <input type="text" class="form-control" id="section" name="edit-section" value="<?php echo $row['section']; ?>">
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="edit-sy" class="form-label">Schoolyear</label>
-                                        <select class="form-control" name="edit-sy" id="edit-sy" required>
-                                          <option value=""></option>
-                                          <?php
-                                          $editSqlSy = "SELECT * FROM school_year";
-                                          $editQuerySy = mysqli_query($conn, $editSqlSy);
-                                          while ($rowSy = mysqli_fetch_assoc($editQuerySy)) {
-                                            $selected = ($rowSy['sy_id'] == $row['sy']) ? "selected" : "";
-                                            echo '<option value="' . $rowSy['sy_id'] . '" ' . $selected . '>' . $rowSy['start_year'] . '-' . $rowSy['end_year'] . ' ' . $rowSy['semester'] . '</option>';
-                                          }
-                                          ?>
-                                        </select>
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="edit-adviser" class="form-label">Adviser</label>
-                                        <select class="form-control" name="edit-adviser" id="edit-adviser" required>
-                                          <option value=""></option>
-                                          <?php
-                                          $editSqlTeacher = "SELECT * FROM teacher ";
-                                          $editQueryTeacher = mysqli_query($conn, $editSqlTeacher);
-                                          while ($rowTeacher = mysqli_fetch_assoc($editQueryTeacher)) {
-                                            $selected = ($rowTeacher['teacher_id'] == $row['adviser']) ? "selected" : "";
-                                            echo '<option value="' . $rowTeacher['teacher_id'] . '" ' . $selected . '>' . $rowTeacher['lname'] . ', ' . $rowTeacher['fname'] . '</option>';
-                                          }
-                                          ?>
-                                        </select>
-                                      </div>
-                                      <button type="submit" class="btn btn-sm btn-success w-100" name="update-class">Update Class</button>
-                                    </form>
+                          <tr>
+                            <td><?php echo $row['level']; ?></td>
+                            <td><?php echo $row['strand']; ?></td>
+                            <td><?php echo $row['section']; ?></td>
+                            <td><?php echo $row['start_year'] . '-' . $row['end_year'] . ' ' . $row['semester']; ?></td>
+                            <td><?php echo $row['lname'] . ', ' . $row['fname']; ?></td>
+                            <td>
+                              <!-- Edit Class Button Click -->
+                              <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-class-<?php echo $row['class_id']; ?>">Edit</button>
+                              <!-- Edit Class Modal -->
+                              <div class="modal fade" id="edit-class-<?php echo $row['class_id']; ?>">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h4 class="modal-title">Edit Class</h4>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <form action="../actions/update_class.php" method="post">
+                                        <input type="hidden" name="edit-id" value="<?php echo $row['class_id']; ?>">
+                                        <div class="form-group">
+                                          <label for="level" class="form-label">Grade Level</label>
+                                          <select class="form-control" id="level" name="edit-level" required>
+                                            <option value=""></option>
+                                            <option value="Grade 11" <?= ($row['level'] == "Grade 11") ? "selected" : "" ?>>Grade 11</option>
+                                            <option value="Grade 12" <?= ($row['level'] == "Grade 12") ? "selected" : "" ?>>Grade 12</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="edit-strand" class="form-label">Strand</label>
+                                          <select class="form-control" name="edit-strand" id="edit-strand" required>
+                                            <option value=""></option>
+                                            <?php
+                                            $sqlEditStrand = "SELECT * FROM strand";
+                                            $queryEditStrand = mysqli_query($conn, $sqlEditStrand);
+                                            while ($rowStrand = mysqli_fetch_assoc($queryEditStrand)) {
+                                              $selected = ($rowStrand['strand_id'] == $row['strand_id']) ? "selected" : "";
+                                              echo '<option value="' . $rowStrand['strand_id'] . '" ' . $selected . '>' . $rowStrand['strand'] . '</option>';
+                                            }
+                                            ?>
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="section" class="form-label">Section</label>
+                                          <input type="text" class="form-control" id="section" name="edit-section" value="<?php echo $row['section']; ?>">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="edit-sy" class="form-label">Schoolyear</label>
+                                          <select class="form-control" name="edit-sy" id="edit-sy" required>
+                                            <option value=""></option>
+                                            <?php
+                                            $editSqlSy = "SELECT * FROM school_year";
+                                            $editQuerySy = mysqli_query($conn, $editSqlSy);
+                                            while ($rowSy = mysqli_fetch_assoc($editQuerySy)) {
+                                              $selected = ($rowSy['sy_id'] == $row['sy_id']) ? "selected" : "";
+                                              echo '<option value="' . $rowSy['sy_id'] . '" ' . $selected . '>' . $rowSy['start_year'] . '-' . $rowSy['end_year'] . ' ' . $rowSy['semester'] . '</option>';
+                                            }
+                                            ?>
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="edit-adviser" class="form-label">Adviser</label>
+                                          <select class="form-control" name="edit-adviser" id="edit-adviser" required>
+                                            <option value=""></option>
+                                            <option value="<?php echo $row['teacher_id']; ?>" selected><?php echo $row['lname'] . ', ' . $row['fname']; ?></option>
+                                            <?php
+                                            $statustTeacher = 0;
+                                            $stmtEditTeacher = $conn->prepare("SELECT * FROM teacher WHERE status = ? AND teacher_id NOT IN (SELECT adviser FROM class WHERE sy = ?)");
+                                            $stmtEditTeacher->bind_param("ii", $statustTeacher, $sy);
+                                            $stmtEditTeacher->execute();
+                                            $stmtResultEditTeacher = $stmtEditTeacher->get_result();
+
+                                            if (mysqli_num_rows($stmtResultEditTeacher) > 0) {
+                                              while ($rowTeacher = $stmtResultEditTeacher->fetch_assoc()) {
+                                                echo '<option value="' . $rowTeacher['teacher_id'] .'">' . $rowTeacher['lname'] . ', ' . $rowTeacher['fname'] . '</option>';
+                                              }
+                                            }
+                                            else {
+                                              echo '<option value="" disabled>No Teacher Available (Please Add Teacher)</option>';
+                                            }
+                                            ?>
+                                          </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-sm btn-success w-100" name="update-class">Update Class</button>
+                                      </form>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </td>
-                          <td>
-                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteClass('<?php echo $row['class_id']; ?>')">Delete</button>
-                            <form id="deleteForm-<?php echo $row['class_id']; ?>" action="../actions/delete_class.php" method="post">
-                              <input type="hidden" name="delete-id" value="<?php echo $row['class_id']; ?>">
-                            </form>
-                          </td>
+                            </td>
+                          </tr>
+                        <?php
+                        }
+                      } else {
+                        ?>
+                        <tr>
+                          <td colspan="6" class="text-center">No Class Please Add Class</td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
+                          <td class="d-none"></td>
                         </tr>
-                    <?php
+                      <?php
                       }
+                    } else {
+                      ?>
+                      <tr>
+                        <td colspan="6" class="text-center">No Active School Year</td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                      </tr>
+                    <?php
                     }
                     ?>
                   </tbody>
@@ -255,11 +282,14 @@ session_start();
               <select class="form-control" name="sy" id="sy" required>
                 <option value=""></option>
                 <?php
-                $sqlSy = "SELECT * FROM school_year WHERE status = 'Active'";
-                $querySy = mysqli_query($conn, $sqlSy);
-                if (mysqli_num_rows($querySy) > 0) {
-                  while ($sy = mysqli_fetch_assoc($querySy)) {
-                    echo '<option value="' . $sy['sy_id'] . '">' . $sy['start_year'] . '-' . $sy['end_year'] . ' ' . $sy['semester'] . '</option>';
+                $status = "Active";
+                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $stmtSy->bind_param("s", $status);
+                $stmtSy->execute();
+                $stmtResultSy = $stmtSy->get_result();
+                if (mysqli_num_rows($stmtResultSy) > 0) {
+                  while ($rowSy = $stmtResultSy->fetch_assoc()) {
+                    echo '<option value="' . $rowSy['sy_id'] . '">' . $rowSy['start_year'] . '-' . $rowSy['end_year'] . ' ' . $rowSy['semester'] . '</option>';
                   }
                 } else {
                   echo '<option value="" disabled>No Active School Year (Please Set School Year)</option>';
@@ -272,14 +302,28 @@ session_start();
               <select class="form-control" name="adviser" id="adviser" required>
                 <option value=""></option>
                 <?php
-                $sqlGetSy = "SELECT * FROM school_year WHERE status = 'Active'";
-                $queryGetSy = mysqli_query($conn, $sqlGetSy);
-                $result = mysqli_fetch_assoc($queryGetSy);
-                $currentSy = $result['sy_id'];
-                $sqlInsertTeacher = "SELECT * FROM teacher WHERE status = 0 AND teacher_id NOT IN (SELECT adviser FROM class WHERE sy = '$currentSy')";
-                $queryInsertTeacher = mysqli_query($conn, $sqlInsertTeacher);
-                while ($teacher = mysqli_fetch_assoc($queryInsertTeacher)) {
-                  echo '<option value="' . $teacher['teacher_id'] . '">' . $teacher['lname'] . ', ' . $teacher['fname'] . '</option>';
+                $status = "Active";
+                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $stmtSy->bind_param("s", $status);
+                $stmtSy->execute();
+                $stmtResultSy = $stmtSy->get_result();
+                if (mysqli_num_rows($stmtResultSy) > 0) {
+                  $result = $stmtResultSy->fetch_assoc();
+                  $currentSy = $result['sy_id'];
+                  $status = 0;
+                  $stmtInsertTeacher = $conn->prepare("SELECT * FROM teacher WHERE status = ? AND teacher_id NOT IN (SELECT adviser FROM class WHERE sy = ?)");
+                  $stmtInsertTeacher->bind_param("ii", $status, $currentSy);
+                  $stmtInsertTeacher->execute();
+                  $stmtResultInsertTeacher = $stmtInsertTeacher->get_result();
+                  if (mysqli_num_rows($stmtResultInsertTeacher) > 0) {
+                    while ($teacher = $stmtResultInsertTeacher->fetch_assoc()) {
+                      echo '<option value="' . $teacher['teacher_id'] . '">' . $teacher['lname'] . ', ' . $teacher['fname'] . '</option>';
+                    }
+                  } else {
+                    echo '<option value="" disabled>No Teacher Available (Please Add Teacher)</option>';
+                  }
+                } else {
+                  echo '<option value="" disabled>No Active School Year (Please Set School Year)</option>';
                 }
                 ?>
               </select>
@@ -290,24 +334,6 @@ session_start();
       </div>
     </div>
   </div>
-  <script>
-    function deleteClass(classId) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          document.getElementById("deleteForm-" + classId).submit();
-        }
-      });
-    }
-  </script>
-
 
   <!-- DataTables  & Plugins -->
   <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
@@ -337,15 +363,6 @@ session_start();
           }
         }, ]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
     });
   </script>
 

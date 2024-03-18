@@ -11,13 +11,17 @@
   $row = $stmtResult->fetch_assoc();
 
   if (isset($_GET['grade'])) {
-    $studentId = $_GET['grade'];
-    // $sql = "SELECT * FROM school_year";
-    // $query = mysqli_query($conn, $sql);
-    // $result = mysqli_fetch_assoc($query);
-    // $sy = $result['sy_id'];
-    $stmtEnroll = $conn->prepare("SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = ? AND c.adviser = ?");
-    $stmtEnroll->bind_param("ii", $studentId, $id);
+    $enrollId = $_GET['grade'];
+    $status = "Active";
+    $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+    $stmtSy->bind_param("s", $status);
+    $stmtSy->execute();
+    $stmtResultSy = $stmtSy->get_result();
+    $result = $stmtResultSy->fetch_assoc();
+    $sy = $result['sy_id'];
+
+    $stmtEnroll = $conn->prepare("SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = ? AND c.adviser = ? AND e.sy = ?");
+    $stmtEnroll->bind_param("iii", $enrollId, $id, $sy);
     $stmtEnroll->execute();
     $stmtResultEnroll = $stmtEnroll->get_result();
     $result = $stmtResultEnroll->fetch_assoc();
@@ -123,7 +127,7 @@
                                 <select class="form-control" name="grade[<?php echo $rowSubject['subject_id']; ?>]" required>
                                   <option class="text-center" value="N/A">N/A</option>
                                   <?php
-                                  for ($i = 70; $i <= 100; $i++) {
+                                  for ($i = 50; $i <= 100; $i++) {
                                     echo '<option value="' . $i . '" class="text-center">' . $i . '</option>';
                                   }
                                   ?>
