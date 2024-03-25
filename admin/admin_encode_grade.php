@@ -4,10 +4,10 @@ include("../actions/session.php");
 sessionAdmin();
 
 $id = $_SESSION['admin'];
-$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
-$stmtTeacher->bind_param("i", $id);
-$stmtTeacher->execute();
-$stmtResult = $stmtTeacher->get_result();
+$stmtAdmin = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmtAdmin->bind_param("i", $id);
+$stmtAdmin->execute();
+$stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 
 if (isset($_GET['grade'])) {
@@ -17,8 +17,8 @@ if (isset($_GET['grade'])) {
   $stmtSy->bind_param("s", $status);
   $stmtSy->execute();
   $stmtResultSy = $stmtSy->get_result();
-  $result = $stmtResultSy->fetch_assoc();
-  $sy = $result['sy_id'];
+  $resultSy = $stmtResultSy->fetch_assoc();
+  $sy = $resultSy['sy_id'];
 
   $stmtEnroll = $conn->prepare("SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = ? AND e.sy = ?");
   $stmtEnroll->bind_param("ii", $enrollId, $sy);
@@ -97,7 +97,7 @@ if (isset($_GET['grade'])) {
                   <input type="hidden" value="<?php echo $result['student_id']; ?>" name="student-id">
                   <input type="hidden" value="<?php echo $result['enroll_id']; ?>" name="enroll-id">
                   <input type="hidden" value="<?php echo $result['sy']; ?>" name="sy">
-
+                  <input type="hidden" value="<?php echo $result['class']; ?>" name="class">
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
                       <tr>

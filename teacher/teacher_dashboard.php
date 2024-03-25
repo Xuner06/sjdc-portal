@@ -4,7 +4,7 @@ include("../actions/session.php");
 sessionTeacher();
 
 $id = $_SESSION['teacher'];
-$stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE teacher_id = ?");
+$stmtTeacher = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmtTeacher->bind_param("i", $id);
 $stmtTeacher->execute();
 $stmtResult = $stmtTeacher->get_result();
@@ -73,9 +73,9 @@ $row = $stmtResult->fetch_assoc();
                 if (mysqli_num_rows($stmtResultSy) > 0) {
                   $result = $stmtResultSy->fetch_assoc();
                   $sy = $result['sy_id'];
-
-                  $stmtEnroll = $conn->prepare("SELECT e.*, c.* FROM enroll_student e JOIN class c ON e.class = c.class_id WHERE c.adviser = ? AND e.sy = ?");
-                  $stmtEnroll->bind_param("ii", $id, $sy);
+                  $status = 0;
+                  $stmtEnroll = $conn->prepare("SELECT e.*, c.*, u.status FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN users u ON e.student_id = u.id WHERE c.adviser = ? AND e.sy = ? AND u.status = ?");
+                  $stmtEnroll->bind_param("iii", $id, $sy, $status);
                   $stmtEnroll->execute();
                   $stmtResultEnroll = $stmtEnroll->get_result();
                   echo '<h3>' . mysqli_num_rows($stmtResultEnroll) . '</h3>';
@@ -103,8 +103,9 @@ $row = $stmtResult->fetch_assoc();
                 if (mysqli_num_rows($stmtResultSy) > 0) {
                   $result = $stmtResultSy->fetch_assoc();
                   $sy = $result['sy_id'];
-                  $stmtGrade = $conn->prepare("SELECT g.student, ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.sy = ? GROUP BY g.student HAVING average >= 75");
-                  $stmtGrade->bind_param("i", $sy);
+                  $status = 0;
+                  $stmtGrade = $conn->prepare("SELECT g.student, ROUND(AVG(g.grade)) AS average, c.adviser FROM grade g JOIN class c ON g.class = c.class_id JOIN users u ON g.student = u.id WHERE g.sy = ? AND c.adviser = ? AND u.status = ? GROUP BY g.student HAVING average >= 75");
+                  $stmtGrade->bind_param("iii", $sy, $id, $status);
                   $stmtGrade->execute();
                   $stmtResultGrade = $stmtGrade->get_result();
                   echo '<h3>' . mysqli_num_rows($stmtResultGrade) . '</h3>';
@@ -132,8 +133,9 @@ $row = $stmtResult->fetch_assoc();
                 if (mysqli_num_rows($stmtResultSy) > 0) {
                   $result = $stmtResultSy->fetch_assoc();
                   $sy = $result['sy_id'];
-                  $stmtGrade = $conn->prepare("SELECT g.student, ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.sy = ? GROUP BY g.student HAVING average < 75");
-                  $stmtGrade->bind_param("i", $sy);
+                  $status = 0;
+                  $stmtGrade = $conn->prepare("SELECT g.student, ROUND(AVG(g.grade)) AS average, c.adviser FROM grade g JOIN class c ON g.class = c.class_id JOIN users u ON g.student = u.id WHERE g.sy = ? AND c.adviser = ? AND u.status = ? GROUP BY g.student HAVING average < 75");
+                  $stmtGrade->bind_param("iii", $sy, $id, $status);
                   $stmtGrade->execute();
                   $stmtResultGrade = $stmtGrade->get_result();
                   echo '<h3>' . mysqli_num_rows($stmtResultGrade) . '</h3>';

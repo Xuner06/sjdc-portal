@@ -4,10 +4,10 @@ include("../actions/session.php");
 sessionAdmin();
 
 $id = $_SESSION['admin'];
-$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
-$stmtTeacher->bind_param("i", $id);
-$stmtTeacher->execute();
-$stmtResult = $stmtTeacher->get_result();
+$stmtAdmin = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmtAdmin->bind_param("i", $id);
+$stmtAdmin->execute();
+$stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 ?>
 
@@ -98,7 +98,7 @@ $row = $stmtResult->fetch_assoc();
                     if (mysqli_num_rows($stmtResultSy) > 0) {
                       $result = $stmtResultSy->fetch_assoc();
                       $sy = $result['sy_id'];
-                      $stmtClass = $conn->prepare("SELECT c.*, s.*, sy.*, t.* FROM class c JOIN school_year sy ON c.sy = sy.sy_id JOIN teacher t ON c.adviser = t.teacher_id JOIN strand s ON c.strand = s.strand_id WHERE c.sy = ?");
+                      $stmtClass = $conn->prepare("SELECT c.*, s.*, sy.*, u.* FROM class c JOIN school_year sy ON c.sy = sy.sy_id JOIN users u ON c.adviser = u.id JOIN strand s ON c.strand = s.strand_id WHERE c.sy = ?");
                       $stmtClass->bind_param("i", $sy);
                       $stmtClass->execute();
                       $stmtResultClass = $stmtClass->get_result();
@@ -172,17 +172,18 @@ $row = $stmtResult->fetch_assoc();
                                           <label for="edit-adviser" class="form-label">Adviser</label>
                                           <select class="form-control" name="edit-adviser" id="edit-adviser" required>
                                             <option value=""></option>
-                                            <option value="<?php echo $row['teacher_id']; ?>" selected><?php echo $row['lname'] . ', ' . $row['fname']; ?></option>
+                                            <option value="<?php echo $row['id']; ?>" selected><?php echo $row['lname'] . ', ' . $row['fname']; ?></option>
                                             <?php
                                             $statustTeacher = 0;
-                                            $stmtEditTeacher = $conn->prepare("SELECT * FROM teacher WHERE status = ? AND teacher_id NOT IN (SELECT adviser FROM class WHERE sy = ?)");
-                                            $stmtEditTeacher->bind_param("ii", $statustTeacher, $sy);
+                                            $role = "teacher";
+                                            $stmtEditTeacher = $conn->prepare("SELECT * FROM users WHERE status = ? AND role = ? AND id NOT IN (SELECT adviser FROM class WHERE sy = ?)");
+                                            $stmtEditTeacher->bind_param("isi", $statustTeacher, $role, $sy);
                                             $stmtEditTeacher->execute();
                                             $stmtResultEditTeacher = $stmtEditTeacher->get_result();
 
                                             if (mysqli_num_rows($stmtResultEditTeacher) > 0) {
                                               while ($rowTeacher = $stmtResultEditTeacher->fetch_assoc()) {
-                                                echo '<option value="' . $rowTeacher['teacher_id'] .'">' . $rowTeacher['lname'] . ', ' . $rowTeacher['fname'] . '</option>';
+                                                echo '<option value="' . $rowTeacher['id'] .'">' . $rowTeacher['lname'] . ', ' . $rowTeacher['fname'] . '</option>';
                                               }
                                             }
                                             else {
@@ -311,13 +312,14 @@ $row = $stmtResult->fetch_assoc();
                   $result = $stmtResultSy->fetch_assoc();
                   $currentSy = $result['sy_id'];
                   $status = 0;
-                  $stmtInsertTeacher = $conn->prepare("SELECT * FROM teacher WHERE status = ? AND teacher_id NOT IN (SELECT adviser FROM class WHERE sy = ?)");
-                  $stmtInsertTeacher->bind_param("ii", $status, $currentSy);
+                  $role = "teacher";
+                  $stmtInsertTeacher = $conn->prepare("SELECT * FROM users WHERE status = ? AND role = ? AND id NOT IN (SELECT adviser FROM class WHERE sy = ?)");
+                  $stmtInsertTeacher->bind_param("isi", $status, $role, $currentSy);
                   $stmtInsertTeacher->execute();
                   $stmtResultInsertTeacher = $stmtInsertTeacher->get_result();
                   if (mysqli_num_rows($stmtResultInsertTeacher) > 0) {
                     while ($teacher = $stmtResultInsertTeacher->fetch_assoc()) {
-                      echo '<option value="' . $teacher['teacher_id'] . '">' . $teacher['lname'] . ', ' . $teacher['fname'] . '</option>';
+                      echo '<option value="' . $teacher['id'] . '">' . $teacher['lname'] . ', ' . $teacher['fname'] . '</option>';
                     }
                   } else {
                     echo '<option value="" disabled>No Teacher Available (Please Add Teacher)</option>';

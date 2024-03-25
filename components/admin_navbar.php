@@ -131,7 +131,7 @@
               </ul>
             </li>
             <li class="nav-item">
-              <a href="../admin/admin_teacher.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_teacher.php') ? 'active' : ''; ?>"">
+              <a href="../admin/admin_teacher.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_teacher.php' || basename($_SERVER['PHP_SELF']) == 'admin_view_teacher.php') ? 'active' : ''; ?>"">
                 <i class=" nav-icon fas fa-users"></i>
                 <p>
                   Teachers

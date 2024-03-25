@@ -4,10 +4,10 @@ include("../actions/session.php");
 sessionAdmin();
 
 $id = $_SESSION['admin'];
-$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
-$stmtTeacher->bind_param("i", $id);
-$stmtTeacher->execute();
-$stmtResult = $stmtTeacher->get_result();
+$stmtAdmin = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmtAdmin->bind_param("i", $id);
+$stmtAdmin->execute();
+$stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 ?>
 
@@ -116,8 +116,9 @@ $row = $stmtResult->fetch_assoc();
                   <tbody>
                     <?php
                     $status = 0;
-                    $stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE status = ?");
-                    $stmtTeacher->bind_param("i", $status);
+                    $role = "teacher";
+                    $stmtTeacher = $conn->prepare("SELECT * FROM users WHERE status = ? AND role = ?");
+                    $stmtTeacher->bind_param("is", $status, $role);
                     $stmtTeacher->execute();
                     $stmtResultTeacher = $stmtTeacher->get_result();
 
@@ -125,7 +126,7 @@ $row = $stmtResult->fetch_assoc();
                       while ($row = $stmtResultTeacher->fetch_assoc()) {
                     ?>
                         <!-- Edit Teacher Modal -->
-                        <div class="modal fade" id="edit-teacher-<?php echo $row['teacher_id']; ?>">
+                        <div class="modal fade" id="edit-teacher-<?php echo $row['id']; ?>">
                           <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -136,7 +137,7 @@ $row = $stmtResult->fetch_assoc();
                               </div>
                               <div class="modal-body">
                                 <form action="../actions/update_teacher.php" method="post">
-                                  <input type="hidden" name="edit-id" value="<?php echo $row['teacher_id']; ?>">
+                                  <input type="hidden" name="edit-id" value="<?php echo $row['id']; ?>">
                                   <div class="row">
                                     <div class="col-sm-12 col-md-6">
                                       <div class="mb-3">
@@ -206,29 +207,28 @@ $row = $stmtResult->fetch_assoc();
                           </div>
                         </div>
                         <tr>
-                          <td><?php echo $row['teacher_id']; ?></td>
+                          <td><?php echo $row['id']; ?></td>
                           <td><?php echo $row['fname'] . ' ' . $row['lname']; ?></td>
                           <td><?php echo $row['gender']; ?></td>
                           <td><?php echo $row['email']; ?></td>
                           <td><?php echo $row['contact']; ?></td>
                           <td>
-                            <a href="admin_view_teacher.php?id=<?php echo $row['teacher_id']; ?>" class="btn btn-primary btn-sm">View</a>
+                            <a href="admin_view_teacher.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">View</a>
                           </td>
                           <td>
-                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-teacher-<?php echo $row['teacher_id']; ?>">Edit</button>
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-teacher-<?php echo $row['id']; ?>">Edit</button>
                           </td>
                           <td>
-                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteTeacher('<?php echo $row['teacher_id']; ?>')">Delete</button>
-                            <form id="deleteForm-<?php echo $row['teacher_id']; ?>" action="../actions/delete_teacher.php" method="post">
-                              <input type="hidden" name="delete-id" value="<?php echo $row['teacher_id']; ?>">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteTeacher('<?php echo $row['id']; ?>')">Delete</button>
+                            <form id="deleteForm-<?php echo $row['id']; ?>" action="../actions/delete_teacher.php" method="post">
+                              <input type="hidden" name="delete-id" value="<?php echo $row['id']; ?>">
                             </form>
                           </td>
                         </tr>
                       <?php
                       }
-                    } 
-                    else {
-                    ?>
+                    } else {
+                      ?>
                       <tr>
                         <td colspan="8" class="text-center">No Teacher Please Add Teacher</td>
                         <td class="d-none"></td>
@@ -373,7 +373,32 @@ $row = $stmtResult->fetch_assoc();
             // Open your modal or perform any action when the "Add Student" button is clicked
             $('#add-teacher').modal('show');
           }
-        }, "copy", "csv", "excel", "pdf", "print"]
+        }, {
+          extend: 'copy',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4]
+          }
+        }, {
+          extend: 'csv',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4]
+          }
+        }, {
+          extend: 'excel',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4]
+          }
+        }, {
+          extend: 'pdf',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4]
+          }
+        }, {
+          extend: 'print',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4]
+          }
+        }]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
   </script>

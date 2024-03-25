@@ -4,10 +4,10 @@ include("../actions/session.php");
 sessionAdmin();
 
 $id = $_SESSION['admin'];
-$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
-$stmtTeacher->bind_param("i", $id);
-$stmtTeacher->execute();
-$stmtResult = $stmtTeacher->get_result();
+$stmtAdmin = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmtAdmin->bind_param("i", $id);
+$stmtAdmin->execute();
+$stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 
 ?>
@@ -67,8 +67,9 @@ $row = $stmtResult->fetch_assoc();
               <div class="inner">
                 <?php
                 $statusStudent = 0;
-                $countStudent = $conn->prepare("SELECT * FROM student WHERE status = ?");
-                $countStudent->bind_param("i", $statusStudent);
+                $role = "student";
+                $countStudent = $conn->prepare("SELECT * FROM users WHERE status = ? AND role = ?");
+                $countStudent->bind_param("is", $statusStudent, $role);
                 $countStudent->execute();
                 $totalStudent = $countStudent->get_result();
 
@@ -147,8 +148,9 @@ $row = $stmtResult->fetch_assoc();
               <div class="inner">
                 <?php
                 $statusTeacher = 0;
-                $countTeacher = $conn->prepare("SELECT * FROM teacher WHERE status = ?");
-                $countTeacher->bind_param("i", $statusTeacher);
+                $role = "teacher";
+                $countTeacher = $conn->prepare("SELECT * FROM users WHERE status = ? AND role = ?");
+                $countTeacher->bind_param("is", $statusTeacher, $role);
                 $countTeacher->execute();
                 $totalTeacher = $countTeacher->get_result();
 

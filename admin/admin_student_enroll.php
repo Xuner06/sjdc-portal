@@ -4,16 +4,17 @@ include("../actions/session.php");
 sessionAdmin();
 
 $id = $_SESSION['admin'];
-$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
-$stmtTeacher->bind_param("i", $id);
-$stmtTeacher->execute();
-$stmtResult = $stmtTeacher->get_result();
+$stmtAdmin = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmtAdmin->bind_param("i", $id);
+$stmtAdmin->execute();
+$stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 
 if (isset($_GET['id'])) {
   $studentId = $_GET['id'];
-  $stmtStudent = $conn->prepare("SELECT * FROM student WHERE student_id = ?");
-  $stmtStudent->bind_param("i", $studentId);
+  $role = "student";
+  $stmtStudent = $conn->prepare("SELECT * FROM users WHERE id = ? AND role = ?");
+  $stmtStudent->bind_param("is", $studentId, $role);
   $stmtStudent->execute();
   $stmtResultStudent = $stmtStudent->get_result();
   $resultStudent = $stmtResultStudent->fetch_assoc();
@@ -113,6 +114,7 @@ if (isset($_GET['id'])) {
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
+                <h1 class="text-center">Student Enroll</h1>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -204,7 +206,7 @@ if (isset($_GET['id'])) {
         </div>
         <div class="modal-body">
           <form action="../actions/enroll_student.php" method="post">
-            <input type="hidden" name="student-id" value="<?php echo $resultStudent['student_id']; ?>">
+            <input type="hidden" name="student-id" value="<?php echo $resultStudent['id']; ?>">
             <div class="form-group">
               <label class="form-label">LRN Number</label>
               <input type="number" class="form-control" value="<?php echo $resultStudent['lrn_number']; ?>" disabled>

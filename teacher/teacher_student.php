@@ -3,7 +3,7 @@ include("../database/database.php");
 session_start();
 
 $id = $_SESSION['teacher'];
-$stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE teacher_id = ?");
+$stmtTeacher = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmtTeacher->bind_param("i", $id);
 $stmtTeacher->execute();
 $stmtResult = $stmtTeacher->get_result();
@@ -67,7 +67,7 @@ $row = $stmtResult->fetch_assoc();
                       $result = $stmtResultSy->fetch_assoc();
                       $sy = $result['sy_id'];
                       $studentStatus = 0;
-                      $stmtEnroll = $conn->prepare("SELECT e.*, c.adviser, s.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN student s ON e.student_id = s.student_id WHERE c.adviser = ? AND e.sy = ? AND s.status = ?");
+                      $stmtEnroll = $conn->prepare("SELECT e.*, c.adviser, u.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN users u ON e.student_id = u.id WHERE c.adviser = ? AND e.sy = ? AND u.status = ?");
                       $stmtEnroll->bind_param("iii", $id, $sy, $studentStatus);
                       $stmtEnroll->execute();
                       $stmtResultEnroll = $stmtEnroll->get_result();

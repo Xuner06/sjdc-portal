@@ -4,10 +4,10 @@ include("../actions/session.php");
 sessionAdmin();
 
 $id = $_SESSION['admin'];
-$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
-$stmtTeacher->bind_param("i", $id);
-$stmtTeacher->execute();
-$stmtResult = $stmtTeacher->get_result();
+$stmtAdmin = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmtAdmin->bind_param("i", $id);
+$stmtAdmin->execute();
+$stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 
 ?>
@@ -70,7 +70,7 @@ $row = $stmtResult->fetch_assoc();
                       $result = $stmtResultSy->fetch_assoc();
                       $sy = $result['sy_id'];
                       $statusStudent = 0;
-                      $stmtEnroll = $conn->prepare("SELECT e.*, c.*, st.*, s.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN strand st ON c.strand = st.strand_id JOIN student s ON e.student_id = s.student_id WHERE e.sy = ? AND s.status = ?");
+                      $stmtEnroll = $conn->prepare("SELECT e.*, c.*, st.*, u.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN strand st ON c.strand = st.strand_id JOIN users u ON e.student_id = u.id WHERE e.sy = ? AND u.status = ?");
                       $stmtEnroll->bind_param("ii", $sy, $statusStudent);
                       $stmtEnroll->execute();
                       $stmtResultEnroll = $stmtEnroll->get_result();

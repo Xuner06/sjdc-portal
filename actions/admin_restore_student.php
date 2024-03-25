@@ -6,7 +6,7 @@ if(isset($_POST['restore-student'])) {
   $id = $_POST['restore-id'];
   $status = 0;
 
-  $stmtRestoreStudent = $conn->prepare("UPDATE student SET status = ? WHERE student_id = ?");
+  $stmtRestoreStudent = $conn->prepare("UPDATE users SET status = ? WHERE id = ?");
   $stmtRestoreStudent->bind_param("ii", $status, $id);
 
   if(mysqli_stmt_execute($stmtRestoreStudent)) {

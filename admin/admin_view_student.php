@@ -4,17 +4,18 @@ include("../actions/session.php");
 sessionAdmin();
 
 $id = $_SESSION['admin'];
-$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
-$stmtTeacher->bind_param("i", $id);
-$stmtTeacher->execute();
-$stmtResult = $stmtTeacher->get_result();
+$stmtAdmin = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmtAdmin->bind_param("i", $id);
+$stmtAdmin->execute();
+$stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 
 
 if (isset($_GET['id'])) {
   $studentId = $_GET['id'];
-  $stmtStudent = $conn->prepare("SELECT * FROM student WHERE student_id = ?");
-  $stmtStudent->bind_param("i", $studentId);
+  $role = "student";
+  $stmtStudent = $conn->prepare("SELECT * FROM users WHERE id = ? AND role = ?");
+  $stmtStudent->bind_param("is", $studentId, $role);
   $stmtStudent->execute();
   $stmtResultStudent = $stmtStudent->get_result();
   $rowStudent = $stmtResultStudent->fetch_assoc();

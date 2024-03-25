@@ -4,7 +4,7 @@
   sessionTeacher();
 
   $id = $_SESSION['teacher'];
-  $stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE teacher_id = ?");
+  $stmtTeacher = $conn->prepare("SELECT * FROM users WHERE id = ?");
   $stmtTeacher->bind_param("i", $id);
   $stmtTeacher->execute();
   $stmtResult = $stmtTeacher->get_result();
@@ -17,8 +17,8 @@
     $stmtSy->bind_param("s", $status);
     $stmtSy->execute();
     $stmtResultSy = $stmtSy->get_result();
-    $result = $stmtResultSy->fetch_assoc();
-    $sy = $result['sy_id'];
+    $resultSy = $stmtResultSy->fetch_assoc();
+    $sy = $resultSy['sy_id'];
 
     $stmtEnroll = $conn->prepare("SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = ? AND c.adviser = ? AND e.sy = ?");
     $stmtEnroll->bind_param("iii", $enrollId, $id, $sy);
@@ -98,7 +98,7 @@
                     <input type="hidden" value="<?php echo $result['student_id']; ?>" name="student-id">
                     <input type="hidden" value="<?php echo $result['enroll_id']; ?>" name="enroll-id">
                     <input type="hidden" value="<?php echo $result['sy']; ?>" name="sy">
-
+                    <input type="hidden" value="<?php echo $result['class']; ?>" name="class">
                     <table id="example1" class="table table-bordered table-striped">
                       <thead>
                         <tr>

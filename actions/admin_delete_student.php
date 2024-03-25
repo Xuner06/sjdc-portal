@@ -6,7 +6,7 @@ if(isset($_POST['delete-id'])) {
   $id = $_POST['delete-id'];
   $status = 1;
 
-  $stmtDeleteStudent = $conn->prepare("UPDATE student SET status = ? WHERE student_id = ?");
+  $stmtDeleteStudent = $conn->prepare("UPDATE users SET status = ? WHERE id = ?");
   $stmtDeleteStudent->bind_param("ii", $status, $id);
 
   if(mysqli_stmt_execute($stmtDeleteStudent)) {

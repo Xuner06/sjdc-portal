@@ -13,7 +13,7 @@ if(isset($_POST['update-teacher'])) {
   $age = $_POST['edit-age'];
   $address = $_POST['edit-address'];
 
-  $stmtOriginalEmail = $conn->prepare("SELECT email FROM teacher WHERE teacher_id = ?");
+  $stmtOriginalEmail = $conn->prepare("SELECT email FROM users WHERE id = ?");
   $stmtOriginalEmail->bind_param("i", $id);
   $stmtOriginalEmail->execute();
   $stmtResult = $stmtOriginalEmail->get_result();
@@ -21,7 +21,7 @@ if(isset($_POST['update-teacher'])) {
   $originalEmail = $result['email'];
 
   if($email != $originalEmail) {
-    $stmtDuplicateEmail = $conn->prepare("SELECT * FROM teacher WHERE email = ?");
+    $stmtDuplicateEmail = $conn->prepare("SELECT * FROM users WHERE email = ?");
     $stmtDuplicateEmail->bind_param("s", $email);
     $stmtDuplicateEmail->execute();
     $stmtResultDuplicateEmail = $stmtDuplicateEmail->get_result();
@@ -32,7 +32,7 @@ if(isset($_POST['update-teacher'])) {
       exit();
     }
     else{
-      $stmtUpdateTeacher = $conn->prepare("UPDATE teacher SET fname = ?, lname = ?, gender = ?, birthday = ?, age = ?, contact = ?, email = ?,  address = ? WHERE teacher_id = ?");
+      $stmtUpdateTeacher = $conn->prepare("UPDATE users SET fname = ?, lname = ?, gender = ?, birthday = ?, age = ?, contact = ?, email = ?,  address = ? WHERE id = ?");
       $stmtUpdateTeacher->bind_param("ssssisssi", $fname, $lname, $gender, $birthday, $age, $contact, $email, $address, $id);
 
       if(mysqli_stmt_execute($stmtUpdateTeacher)) {
@@ -43,7 +43,7 @@ if(isset($_POST['update-teacher'])) {
     }
   }
   else {
-    $stmtUpdateTeacher = $conn->prepare("UPDATE teacher SET fname = ?, lname = ?, gender = ?, birthday = ?, age = ?, contact = ?, email = ?,  address = ? WHERE teacher_id = ?");
+    $stmtUpdateTeacher = $conn->prepare("UPDATE users SET fname = ?, lname = ?, gender = ?, birthday = ?, age = ?, contact = ?, email = ?,  address = ? WHERE id = ?");
     $stmtUpdateTeacher->bind_param("ssssisssi", $fname, $lname, $gender, $birthday, $age, $contact, $email, $address, $id);
 
     if(mysqli_stmt_execute($stmtUpdateTeacher)) {

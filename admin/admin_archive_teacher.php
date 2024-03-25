@@ -4,10 +4,10 @@ include("../actions/session.php");
 sessionAdmin();
 
 $id = $_SESSION['admin'];
-$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
-$stmtTeacher->bind_param("i", $id);
-$stmtTeacher->execute();
-$stmtResult = $stmtTeacher->get_result();
+$stmtAdmin = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmtAdmin->bind_param("i", $id);
+$stmtAdmin->execute();
+$stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 
 ?>
@@ -74,8 +74,9 @@ $row = $stmtResult->fetch_assoc();
                   <tbody>
                     <?php
                     $status = 1;
-                    $stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE status = ?");
-                    $stmtTeacher->bind_param("i", $status);
+                    $role = "teacher";
+                    $stmtTeacher = $conn->prepare("SELECT * FROM users WHERE status = ? AND role = ?");
+                    $stmtTeacher->bind_param("is", $status, $role);
                     $stmtTeacher->execute();
                     $stmtResultTeacher = $stmtTeacher->get_result();
 
@@ -83,14 +84,14 @@ $row = $stmtResult->fetch_assoc();
                       while ($rowTeacher = $stmtResultTeacher->fetch_assoc()) {
                     ?>
                         <tr>
-                          <td><?php echo $rowTeacher['teacher_id']; ?></td>
+                          <td><?php echo $rowTeacher['id']; ?></td>
                           <td><?php echo $rowTeacher['fname'] . ' ' . $rowTeacher['lname']; ?></td>
                           <td><?php echo $rowTeacher['gender']; ?></td>
                           <td><?php echo $rowTeacher['email']; ?></td>
                           <td><?php echo $rowTeacher['contact']; ?></td>
                           <td>
                             <form action="../actions/admin_restore_teacher.php" method="post">
-                              <input type="hidden" name="restore-id" value="<?php echo $rowTeacher['teacher_id']; ?>">
+                              <input type="hidden" name="restore-id" value="<?php echo $rowTeacher['id']; ?>">
                               <button type="submit" class="btn btn-primary btn-sm" name="restore-teacher">Restore</button>
                             </form>
                           </td>

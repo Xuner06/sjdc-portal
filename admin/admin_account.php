@@ -4,10 +4,10 @@ include("../actions/session.php");
 sessionAdmin();
 
 $id = $_SESSION['admin'];
-$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
-$stmtTeacher->bind_param("i", $id);
-$stmtTeacher->execute();
-$stmtResult = $stmtTeacher->get_result();
+$stmtAdmin = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmtAdmin->bind_param("i", $id);
+$stmtAdmin->execute();
+$stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 ?>
 
@@ -57,7 +57,7 @@ $row = $stmtResult->fetch_assoc();
                 <p><strong>Contact:</strong> <?php echo $row['contact']; ?></p>
                 <p><strong>Email:</strong> <?php echo $row['email']; ?></p>
                 <p><strong>Address:</strong> <?php echo $row['address']; ?></p>
-                <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($row['date_created'])); ?></p>
+                <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($row['reg_date'])); ?></p>
               </div>
             </div>
           </div>

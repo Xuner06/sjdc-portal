@@ -5,6 +5,7 @@ session_start();
 if (isset($_POST['upload-grade'])) {
   $student = $_POST['student-id'];
   $enroll = $_POST['enroll-id'];
+  $class = $_POST['class'];
   $sy = $_POST['sy'];
   foreach ($_POST['grade'] as $subjectId => $grade) {
     // Check if the grade is not "N/A"
@@ -23,8 +24,8 @@ if (isset($_POST['upload-grade'])) {
       }
       else {
         // If no record exists, insert a new grade
-        $stmtInsertGrade = $conn->prepare("INSERT INTO grade (student, subject, grade, sy) VALUES (?, ?, ?, ?)");
-        $stmtInsertGrade->bind_param("iiii", $student, $subjectId, $grade, $sy);
+        $stmtInsertGrade = $conn->prepare("INSERT INTO grade (student, subject, grade, sy, class) VALUES (?, ?, ?, ?, ?)");
+        $stmtInsertGrade->bind_param("iiiii", $student, $subjectId, $grade, $sy, $class);
         $stmtInsertGrade->execute();
       }
     }

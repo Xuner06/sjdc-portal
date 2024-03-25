@@ -51,6 +51,7 @@ if (isset($_SESSION['teacher'])) {
 
 <body>
   <div class="container">
+    <h1 class="text-center mt-5 text-white text-bold">St. Jude College Of Dasmarinas Cavite Student Portal</h1>
     <div class="row d-flex justify-content-center">
       <div class="col-lg-6 col-md-8 col-sm-10">
         <div class="card mt-5 transparent-card">
@@ -73,15 +74,6 @@ if (isset($_SESSION['teacher'])) {
             <img src="./assests/bg1.png" alt="">
             <form action="./actions/process_login.php" method="post" autocomplete="off">
               <div class="mb-3">
-                <label for="user" class="form-label">User</label>
-                <select class="form-control" name="user" id="user" required>
-                  <option value=""></option>
-                  <option value="student">Student</option>
-                  <option value="teacher">Teacher</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
-              <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" class="form-control" name="email" id="email" required>
               </div>
@@ -91,7 +83,7 @@ if (isset($_SESSION['teacher'])) {
               </div>
               <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="cpassword" onclick="showPassword()">
-                <label class="form-check-label" for="cpassword">Check Password</label>
+                <label class="form-check-label" for="cpassword">Show Password</label>
               </div>
               <button type="submit" class="btn btn-success w-100" name="login">Login</button>
             </form>

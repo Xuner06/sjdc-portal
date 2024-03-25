@@ -4,7 +4,7 @@ include("../actions/session.php");
 sessionTeacher();
 
 $id = $_SESSION['teacher'];
-$stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE teacher_id = ?");
+$stmtTeacher = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmtTeacher->bind_param("i", $id);
 $stmtTeacher->execute();
 $stmtResult = $stmtTeacher->get_result();
@@ -12,7 +12,7 @@ $row = $stmtResult->fetch_assoc();
 
 if (isset($_GET['id'])) {
   $studentId = $_GET['id'];
-  $stmtEnroll = $conn->prepare("SELECT e.*, c.adviser, s.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN student s ON e.student_id = s.student_id WHERE e.student_id = ? AND c.adviser = ?");
+  $stmtEnroll = $conn->prepare("SELECT e.*, c.adviser, u.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN users u ON e.student_id = u.id WHERE e.student_id = ? AND c.adviser = ?");
   $stmtEnroll->bind_param("ii", $studentId, $id);
   $stmtEnroll->execute();
   $stmtResult = $stmtEnroll->get_result();

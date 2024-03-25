@@ -4,7 +4,7 @@ include("../actions/session.php");
 sessionTeacher();
 
 $id = $_SESSION['teacher'];
-$stmtTeacher = $conn->prepare("SELECT * FROM teacher WHERE teacher_id = ?");
+$stmtTeacher = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmtTeacher->bind_param("i", $id);
 $stmtTeacher->execute();
 $stmtResult = $stmtTeacher->get_result();

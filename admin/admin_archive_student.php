@@ -4,10 +4,10 @@ include("../actions/session.php");
 sessionAdmin();
 
 $id = $_SESSION['admin'];
-$stmtTeacher = $conn->prepare("SELECT * FROM admin WHERE admin_id = ?");
-$stmtTeacher->bind_param("i", $id);
-$stmtTeacher->execute();
-$stmtResult = $stmtTeacher->get_result();
+$stmtAdmin = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmtAdmin->bind_param("i", $id);
+$stmtAdmin->execute();
+$stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 
 ?>
@@ -74,8 +74,9 @@ $row = $stmtResult->fetch_assoc();
                   <tbody>
                     <?php
                     $status = 1;
-                    $stmtStudent = $conn->prepare("SELECT * FROM student WHERE status = ?");
-                    $stmtStudent->bind_param("i", $status);
+                    $role = "student";
+                    $stmtStudent = $conn->prepare("SELECT * FROM users WHERE status = ? AND role = ?");
+                    $stmtStudent->bind_param("is", $status, $role);
                     $stmtStudent->execute();
                     $stmtResultStudent = $stmtStudent->get_result();
                     if (mysqli_num_rows($stmtResultStudent) > 0) {
@@ -90,7 +91,7 @@ $row = $stmtResult->fetch_assoc();
                           <td><?php echo $rowStudent['contact']; ?></td>
                           <td>
                             <form action="../actions/admin_restore_student.php" method="post">
-                              <input type="hidden" name="restore-id" value="<?php echo $rowStudent['student_id']; ?>">
+                              <input type="hidden" name="restore-id" value="<?php echo $rowStudent['id']; ?>">
                               <button type="submit" class="btn btn-primary btn-sm" name="restore-student">Restore</button>
                             </form>
                           </td>
