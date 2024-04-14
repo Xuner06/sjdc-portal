@@ -32,6 +32,20 @@ $row = $stmtResult->fetch_assoc();
   <?php include("../components/admin_navbar.php"); ?>
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+    <?php
+    if (isset($_SESSION['multiple-enroll'])) {
+    ?>
+      <script>
+        Swal.fire({
+          title: 'Success',
+          text: '<?php echo $_SESSION['multiple-enroll']; ?>',
+          icon: 'success',
+        })
+      </script>
+    <?php
+      unset($_SESSION['multiple-enroll']);
+    }
+    ?>
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">Student List</h1>
@@ -50,6 +64,7 @@ $row = $stmtResult->fetch_assoc();
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
+                      <th><input type="checkbox" id="checkAll"></th>
                       <th>LRN Number</th>
                       <th>Name</th>
                       <th>Gender</th>
@@ -72,6 +87,7 @@ $row = $stmtResult->fetch_assoc();
                       while ($row = $stmtResultStudent->fetch_assoc()) {
                     ?>
                         <tr>
+                          <td><input class="checkItem" type="checkbox" value="<?php echo $row['id']; ?>"></td>
                           <td><?php echo $row['lrn_number']; ?></td>
                           <td><?php echo $row['fname'] . " " . $row['lname']; ?></td>
                           <td><?php echo $row['gender']; ?></td>
@@ -84,9 +100,8 @@ $row = $stmtResult->fetch_assoc();
                         </tr>
                       <?php
                       }
-                    } 
-                    else {
-                    ?>
+                    } else {
+                      ?>
                       <tr>
                         <td colspan="7" class="text-center">No Student Please Add Student</td>
                         <td class="d-none"></td>
@@ -109,6 +124,79 @@ $row = $stmtResult->fetch_assoc();
     </div>
   </div>
 
+  <!-- Insert Student Modal -->
+  <div class="modal fade" id="add-student">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Enroll Student</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="../actions/multiple_enroll_student.php" method="post">
+            <input type="hidden" name="id" id="hiddenId">
+            <div class="form-group">
+              <label for="class" class="form-label">Class</label>
+              <select class="form-control" id="class" name="class" required>
+                <option value=""></option>
+                <?php
+                $statusSy = "Active";
+                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $stmtSy->bind_param("s", $statusSy);
+                $stmtSy->execute();
+                $stmtResultSy = $stmtSy->get_result();
+
+                if (mysqli_num_rows($stmtResultSy) > 0) {
+                  $result = $stmtResultSy->fetch_assoc();
+                  $sy = $result['sy_id'];
+                  $stmtClass = $conn->prepare("SELECT c.*, s.* FROM class c JOIN strand s ON c.strand = s.strand_id WHERE sy = ?");
+                  $stmtClass->bind_param("i", $sy);
+                  $stmtClass->execute();
+                  $stmtResultClass = $stmtClass->get_result();
+
+                  if (mysqli_num_rows($stmtResultClass) > 0) {
+                    while ($class = $stmtResultClass->fetch_assoc()) {
+                      echo '<option value="' . $class['class_id'] . '">' . $class['level'] . '-' . $class['strand'] . '-' . $class['section'] . '</option>';
+                    }
+                  } else {
+                    echo '<option value="" disabled>No Class Available (Please Add Class)</option>';
+                  }
+                } else {
+                  echo '<option value="" disabled>No Active School Year (Please Set School Year)</option>';
+                }
+                ?>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="schoolyear" class="form-label">School Year</label>
+              <select class="form-control" id="schoolyear" name="schoolyear" required>
+                <option value=""></option>
+                <?php
+                $statusSy = "Active";
+                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $stmtSy->bind_param("s", $statusSy);
+                $stmtSy->execute();
+                $stmtResultSy = $stmtSy->get_result();
+
+                if (mysqli_num_rows($stmtResultSy) > 0) {
+                  while ($schoolyear = $stmtResultSy->fetch_assoc()) {
+                    echo '<option value="' . $schoolyear['sy_id'] . '">' . $schoolyear['start_year'] . '-' . $schoolyear['end_year'] . '-' . $schoolyear['semester'] . '</option>';
+                  }
+                } else {
+                  echo '<option value="" disabled>No Active School Year (Please Set School Year)</option>';
+                }
+                ?>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary w-100" name="multiple-enroll-student">Enroll</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- DataTables  & Plugins -->
   <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -126,10 +214,69 @@ $row = $stmtResult->fetch_assoc();
   <script>
     $(function() {
       $("#example1").DataTable({
+        "columnDefs": [{
+          "orderable": false,
+          "targets": [0]
+        }],
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
+        "paging": true,
+        "order": [
+          [1, "asc"]
+        ],
+        "buttons": [{
+          text: 'Multiple Enroll',
+          action: function() {
+            var tables = $('#example1').DataTable();
+            var checkedItems = tables.rows({
+                search: 'applied'
+              })
+              .nodes()
+              .to$()
+              .find('.checkItem:checked');
+
+            // Check if there are any checked checkboxes in the entire table
+            if (checkedItems.length > 0) {
+              $('#add-student').modal('show');
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Failed',
+                text: 'Please select at least one checkbox.'
+              });
+            }
+          }
+        }]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+  </script>
+
+  <script>
+    $(document).ready(function() {
+      var table = $('#example1').DataTable();
+      // Check/Uncheck all box
+      $('#checkAll').change(function() {
+        var isChecked = $(this).prop('checked');
+
+        // Use DataTables API to check/uncheck all rows in all pages
+        table.rows().nodes().to$().find('.checkItem').prop('checked', isChecked);
+      });
+
+      $('#add-student').on('show.bs.modal', function() {
+        var checkedItems = table.rows({
+            search: 'applied'
+          }) // All rows filtered by search
+          .nodes() // Get the nodes (DOM elements)
+          .to$() // Convert nodes to jQuery object
+          .find('.checkItem:checked') // Find checked checkboxes
+          .map(function() {
+            return $(this).val(); // Get the value of each checked checkbox
+          }).get(); // Convert to array
+
+        // Set the hidden input value to the comma-separated selected item IDs
+        $('#hiddenId').val((checkedItems.join(', ')));
+      });
     });
   </script>
 </body>

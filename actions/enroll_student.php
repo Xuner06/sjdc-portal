@@ -18,7 +18,7 @@ if (isset($_POST['enroll-student'])) {
     exit();
   } 
   else {
-    $stmtInsertEnroll = $conn->prepare("INSERT INTO enroll_student (student_id, class, sy, enroll_date) VALUES (?, ?, ?, now())");
+    $stmtInsertEnroll = $conn->prepare("INSERT INTO enroll_student (student_id, class, sy, enroll_date) VALUES (?, ?, ?, NOW())");
     $stmtInsertEnroll->bind_param("iii", $studentId, $class, $schoolyear);
 
     if (mysqli_stmt_execute($stmtInsertEnroll)) {

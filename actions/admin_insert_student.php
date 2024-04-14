@@ -14,20 +14,21 @@ if (isset($_POST['add-student'])) {
   $address = $_POST['address'];
   $password = $fname . $lname;
   $status = 0;
+  $role = "student";
 
-  $stmtCheckLrn = $conn->prepare("SELECT * FROM student WHERE lrn_number = ?");
-  $stmtCheckLrn->bind_param("s", $lrn_number);
-  $stmtCheckLrn->execute();
-  $stmtResult = $stmtCheckLrn->get_result();
+  $stmtCheckEmail = $conn->prepare("SELECT * FROM users WHERE email = ?");
+  $stmtCheckEmail->bind_param("s", $email);
+  $stmtCheckEmail->execute();
+  $stmtResult = $stmtCheckEmail->get_result();
 
   if (mysqli_num_rows($stmtResult) > 0) {
-    $_SESSION['duplicate-lrn'] = "This LRN Number Is Already Registered";
+    $_SESSION['duplicate-email'] = "This Email Is Already Registered";
     header("Location: ../admin/admin_student.php");
     exit();
   }
   else {
-    $stmtInsertStudent = $conn->prepare("INSERT INTO student (lrn_number, fname, lname, gender, birthday, age, contact, email, address, password, status, reg_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-    $stmtInsertStudent->bind_param("sssssissssi", $lrn_number, $fname, $lname, $gender, $birthday, $age, $contact, $email, $address, $password, $status);
+    $stmtInsertStudent = $conn->prepare("INSERT INTO users (role, lrn_number, fname, lname, gender, birthday, age, contact, email, address, password, status, reg_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+    $stmtInsertStudent->bind_param("ssssssissssi", $role, $lrn_number, $fname, $lname, $gender, $birthday, $age, $contact, $email, $address, $password, $status);
 
     if (mysqli_stmt_execute($stmtInsertStudent)) {
       $_SESSION['add-student'] = "Successfully Added Student";
