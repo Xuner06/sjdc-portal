@@ -185,11 +185,23 @@ $row = $stmtResult->fetch_assoc();
           <form action="../actions/insert_schoolyear.php" method="post">
             <div class="form-group">
               <label for="start_year">Start Year</label>
-              <input type="number" class="form-control" name="start_year" id="start_year" required>
+              <select class="form-control" name="start_year" id="start_year" required>
+                <option value=""></option>
+                <?php
+                $startYear = date('Y');
+                echo '<option value="' . $startYear . '">' . $startYear . '</option>'
+                ?>
+              </select>
             </div>
             <div class="form-group">
               <label for="end_year">End Year</label>
-              <input type="number" class="form-control" name="end_year" id="end_year" required>
+              <select class="form-control" name="end_year" id="end_year" required>
+                <option value=""></option>
+                <?php
+                $endYear = date('Y', strtotime($currentYear . ' +1 year'));;
+                echo '<option value="' . $endYear . '">' . $endYear . '</option>'
+                ?>
+              </select>
             </div>
             <div class="form-group">
               <label for="semester">Semester</label>

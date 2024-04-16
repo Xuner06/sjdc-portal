@@ -18,17 +18,15 @@ if (isset($_GET['id'])) {
   $stmtResult = $stmtEnroll->get_result();
   $rowStudent = $stmtResult->fetch_assoc();
 
-  if(mysqli_num_rows($stmtResult) == 0) {
+  if (mysqli_num_rows($stmtResult) == 0) {
     header("Location: teacher_student.php");
     exit();
   }
-
-}
-else {
+} else {
   header("Location: teacher_student.php");
   exit();
 }
-  
+
 ?>
 
 <!DOCTYPE html>
@@ -77,7 +75,25 @@ else {
                 <p><strong>First Name:</strong> <?php echo $rowStudent['fname']; ?></p>
                 <p><strong>Last Name:</strong> <?php echo $rowStudent['lname']; ?></p>
                 <p><strong>Gender:</strong> <?php echo $rowStudent['gender']; ?></p>
-                <p><strong>Age:</strong> <?php echo $rowStudent['age']; ?></p>
+                <?php
+                $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
+                $bd = $rowStudent['birthday']; // Assuming 'birthday' is also in 'Y-m-d' format
+
+                // Calculate the age
+                $birthYear = date('Y', strtotime($bd)); // Extract the birth year from the birthday
+                $birthMonthDay = date('m-d', strtotime($bd)); // Extract the birth month and day
+
+                $currentYear = date('Y', strtotime($currentDate));
+                $currentMonthDay = date('m-d', strtotime($currentDate));
+
+                $age = $currentYear - $birthYear;
+
+                // If the birthday hasn't occurred yet this year, subtract one from the age
+                if ($currentMonthDay < $birthMonthDay) {
+                  $age--;
+                }
+                ?>
+                <p><strong>Age:</strong> <?php echo $age; ?></p>
                 <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($rowStudent['birthday'])); ?></p>
                 <p><strong>Contact:</strong> <?php echo $rowStudent['contact']; ?></p>
                 <p><strong>Email:</strong> <?php echo $rowStudent['email']; ?></p>

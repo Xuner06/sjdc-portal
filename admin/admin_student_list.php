@@ -91,7 +91,25 @@ $row = $stmtResult->fetch_assoc();
                           <td><?php echo $row['lrn_number']; ?></td>
                           <td><?php echo $row['fname'] . " " . $row['lname']; ?></td>
                           <td><?php echo $row['gender']; ?></td>
-                          <td><?php echo $row['age']; ?></td>
+                          <?php
+                          $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
+                          $bd = $row['birthday']; // Assuming 'birthday' is also in 'Y-m-d' format
+
+                          // Calculate the age
+                          $birthYear = date('Y', strtotime($bd)); // Extract the birth year from the birthday
+                          $birthMonthDay = date('m-d', strtotime($bd)); // Extract the birth month and day
+
+                          $currentYear = date('Y', strtotime($currentDate));
+                          $currentMonthDay = date('m-d', strtotime($currentDate));
+
+                          $age = $currentYear - $birthYear;
+
+                          // If the birthday hasn't occurred yet this year, subtract one from the age
+                          if ($currentMonthDay < $birthMonthDay) {
+                            $age--;
+                          }
+                          ?>
+                          <td><?php echo $age; ?></td>
                           <td><?php echo $row['email']; ?></td>
                           <td><?php echo $row['contact']; ?></td>
                           <td>

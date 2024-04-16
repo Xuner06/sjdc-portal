@@ -10,7 +10,6 @@ if(isset($_POST['update-teacher'])) {
   $contact = $_POST['edit-contact'];
   $email = $_POST['edit-email'];
   $birthday = $_POST['edit-birthday'];
-  $age = $_POST['edit-age'];
   $address = $_POST['edit-address'];
 
   $stmtOriginalEmail = $conn->prepare("SELECT email FROM users WHERE id = ?");
@@ -32,8 +31,8 @@ if(isset($_POST['update-teacher'])) {
       exit();
     }
     else{
-      $stmtUpdateTeacher = $conn->prepare("UPDATE users SET fname = ?, lname = ?, gender = ?, birthday = ?, age = ?, contact = ?, email = ?,  address = ? WHERE id = ?");
-      $stmtUpdateTeacher->bind_param("ssssisssi", $fname, $lname, $gender, $birthday, $age, $contact, $email, $address, $id);
+      $stmtUpdateTeacher = $conn->prepare("UPDATE users SET fname = ?, lname = ?, gender = ?, birthday = ?, contact = ?, email = ?,  address = ? WHERE id = ?");
+      $stmtUpdateTeacher->bind_param("sssssssi", $fname, $lname, $gender, $birthday, $contact, $email, $address, $id);
 
       if(mysqli_stmt_execute($stmtUpdateTeacher)) {
         $_SESSION['update-teacher'] = "Successfully Updated Teacher";
@@ -43,8 +42,8 @@ if(isset($_POST['update-teacher'])) {
     }
   }
   else {
-    $stmtUpdateTeacher = $conn->prepare("UPDATE users SET fname = ?, lname = ?, gender = ?, birthday = ?, age = ?, contact = ?, email = ?,  address = ? WHERE id = ?");
-    $stmtUpdateTeacher->bind_param("ssssisssi", $fname, $lname, $gender, $birthday, $age, $contact, $email, $address, $id);
+    $stmtUpdateTeacher = $conn->prepare("UPDATE users SET fname = ?, lname = ?, gender = ?, birthday = ?, contact = ?, email = ?,  address = ? WHERE id = ?");
+    $stmtUpdateTeacher->bind_param("sssssssi", $fname, $lname, $gender, $birthday, $contact, $email, $address, $id);
 
     if(mysqli_stmt_execute($stmtUpdateTeacher)) {
       $_SESSION['update-teacher'] = "Successfully Updated Teacher";

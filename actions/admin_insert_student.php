@@ -9,7 +9,6 @@ if (isset($_POST['add-student'])) {
   $gender = $_POST['gender'];
   $contact = $_POST['contact'];
   $email = $_POST['email'];
-  $age = $_POST['age'];
   $birthday = $_POST['birthday'];
   $address = $_POST['address'];
   $password = $fname . $lname;
@@ -27,8 +26,8 @@ if (isset($_POST['add-student'])) {
     exit();
   }
   else {
-    $stmtInsertStudent = $conn->prepare("INSERT INTO users (role, lrn_number, fname, lname, gender, birthday, age, contact, email, address, password, status, reg_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-    $stmtInsertStudent->bind_param("ssssssissssi", $role, $lrn_number, $fname, $lname, $gender, $birthday, $age, $contact, $email, $address, $password, $status);
+    $stmtInsertStudent = $conn->prepare("INSERT INTO users (role, lrn_number, fname, lname, gender, birthday, contact, email, address, password, status, reg_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+    $stmtInsertStudent->bind_param("ssssssssssi", $role, $lrn_number, $fname, $lname, $gender, $birthday, $contact, $email, $address, $password, $status);
 
     if (mysqli_stmt_execute($stmtInsertStudent)) {
       $_SESSION['add-student'] = "Successfully Added Student";

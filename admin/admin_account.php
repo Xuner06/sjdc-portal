@@ -52,7 +52,25 @@ $row = $stmtResult->fetch_assoc();
                 <p><strong>First Name:</strong> <?php echo $row['fname']; ?></p>
                 <p><strong>Last Name:</strong> <?php echo $row['lname']; ?></p>
                 <p><strong>Gender:</strong> <?php echo $row['gender']; ?></p>
-                <p><strong>Age:</strong> <?php echo $row['age']; ?></p>
+                <?php
+                $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
+                $bd = $row['birthday']; // Assuming 'birthday' is also in 'Y-m-d' format
+
+                // Calculate the age
+                $birthYear = date('Y', strtotime($bd)); // Extract the birth year from the birthday
+                $birthMonthDay = date('m-d', strtotime($bd)); // Extract the birth month and day
+
+                $currentYear = date('Y', strtotime($currentDate));
+                $currentMonthDay = date('m-d', strtotime($currentDate));
+
+                $age = $currentYear - $birthYear;
+
+                // If the birthday hasn't occurred yet this year, subtract one from the age
+                if ($currentMonthDay < $birthMonthDay) {
+                  $age--;
+                }
+                ?>
+                <p><strong>Age:</strong> <?php echo $age; ?></p>
                 <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($row['birthday'])); ?></p>
                 <p><strong>Contact:</strong> <?php echo $row['contact']; ?></p>
                 <p><strong>Email:</strong> <?php echo $row['email']; ?></p>

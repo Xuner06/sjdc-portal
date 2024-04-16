@@ -86,7 +86,25 @@ $row = $stmtResult->fetch_assoc();
                           <td><?php echo $rowStudent['lrn_number']; ?></td>
                           <td><?php echo $rowStudent['fname'] . " " . $rowStudent['lname']; ?></td>
                           <td><?php echo $rowStudent['gender']; ?></td>
-                          <td><?php echo $rowStudent['age']; ?></td>
+                          <?php
+                          $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
+                          $bd = $rowStudent['birthday']; // Assuming 'birthday' is also in 'Y-m-d' format
+
+                          // Calculate the age
+                          $birthYear = date('Y', strtotime($bd)); // Extract the birth year from the birthday
+                          $birthMonthDay = date('m-d', strtotime($bd)); // Extract the birth month and day
+
+                          $currentYear = date('Y', strtotime($currentDate));
+                          $currentMonthDay = date('m-d', strtotime($currentDate));
+
+                          $age = $currentYear - $birthYear;
+
+                          // If the birthday hasn't occurred yet this year, subtract one from the age
+                          if ($currentMonthDay < $birthMonthDay) {
+                            $age--;
+                          }
+                          ?>
+                          <td><?php echo $age; ?></td>
                           <td><?php echo $rowStudent['email']; ?></td>
                           <td><?php echo $rowStudent['contact']; ?></td>
                           <td>
@@ -98,9 +116,8 @@ $row = $stmtResult->fetch_assoc();
                         </tr>
                       <?php
                       }
-                    } 
-                    else {
-                    ?>
+                    } else {
+                      ?>
                       <tr>
                         <td colspan="7" class="text-center">Empty Student Archive</td>
                         <td class="d-none"></td>

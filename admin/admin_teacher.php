@@ -174,26 +174,19 @@ $row = $stmtResult->fetch_assoc();
                                   <div class="row">
                                     <div class="col-sm-12 col-md-6">
                                       <div class="mb-3">
-                                        <label for="edit-age" class="form-label">Age</label>
-                                        <input type="number" class="form-control" id="edit-age" name="edit-age" value="<?php echo $row['age']; ?>" required>
-                                      </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                      <div class="mb-3">
                                         <label for="edit-contact" class="form-label">Contact</label>
                                         <input type="number" class="form-control" id="edit-contact" name="edit-contact" value="<?php echo $row['contact']; ?>" required>
                                       </div>
                                     </div>
-                                  </div>
-
-                                  <div class="row">
                                     <div class="col-sm-12 col-md-6">
                                       <div class="mb-3">
                                         <label for="edit-email" class="form-label">Email</label>
                                         <input type="email" class="form-control" id="edit-email" name="edit-email" value="<?php echo $row['email']; ?>" required>
                                       </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-6">
+                                  </div>
+                                  <div class="row">
+                                    <div class="col">
                                       <div class="mb-3">
                                         <label for="edit-address" class="form-label">Address</label>
                                         <input type="text" class="form-control" id="edit-address" name="edit-address" value="<?php echo $row['address']; ?>" required>
@@ -316,27 +309,19 @@ $row = $stmtResult->fetch_assoc();
             <div class="row">
               <div class="col-sm-12 col-md-6">
                 <div class="mb-3">
-                  <label for="age" class="form-label">Age</label>
-                  <input type="number" class="form-control" id="age" name="age" required>
-                </div>
-              </div>
-              <div class="col-sm-12 col-md-6">
-                <div class="mb-3">
                   <label for="contact" class="form-label">Contact</label>
                   <input type="number" class="form-control" id="contact" name="contact" required>
                 </div>
               </div>
-
-            </div>
-
-            <div class="row">
               <div class="col-sm-12 col-md-6">
                 <div class="mb-3">
                   <label for="email" class="form-label">Email</label>
                   <input type="email" class="form-control" id="email" name="email" required>
                 </div>
               </div>
-              <div class="col-sm-12 col-md-6">
+            </div>
+            <div class="row">
+              <div class="col">
                 <div class="mb-3">
                   <label for="address" class="form-label">Address</label>
                   <input type="text" class="form-control" id="address" name="address" required>
