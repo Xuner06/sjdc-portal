@@ -119,21 +119,32 @@ $row = $stmtResult->fetch_assoc();
                                   </div>
                                   <div class="form-group">
                                     <label for="edit-startYear" class="form-label">Start Year</label>
-                                    <input type="number" class="form-control" name="edit-startYear" id="edit-startYear" value="<?php echo $row['start_year']; ?>" required>
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="edit-endYear" class="form-label">End Year</label>
-                                    <input type="number" class="form-control" name="edit-endYear" id="edit-endYear" value="<?php echo $row['end_year']; ?>" required>
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="edit-semester" class="form-label">Semester</label>
-                                    <select class="form-control" name="edit-semester" id="edit-semester" required>
-                                      <option value=""></option>
-                                      <option value="First Semester" <?php echo ($row['semester'] == "First Semester") ? "selected" : "" ?>>First Semester</option>
-                                      <option value="Second Semester" <?php echo ($row['semester'] == "Second Semester") ? "selected" : "" ?>>Second Semester</option>
+                                    <select class="form-control" name="edit-startYear" id="edit-startYear" required>
+                                      <option value="" selected><?php echo $row['start_year']; ?></option>
+                                      <?php
+                                      $startYear = date('Y');
+                                      echo '<option value="' . $startYear . '">' . $startYear . '</option>'
+                                      ?>
                                     </select>
-                                  </div>
-                                  <button type="submit" class="btn btn-sm btn-success w-100" name="update-schoolyear">Update School Year</button>
+                                    <div class="form-group">
+                                      <label for="edit-endYear" class="form-label">End Year</label>
+                                      <select class="form-control" name="edit-endYear" id="edit-endYear" required>
+                                        <option value="" selected><?php echo $row['end_year']; ?></option>
+                                        <?php
+                                        $endYear = date('Y', strtotime($currentYear . ' +1 year'));;
+                                        echo '<option value="' . $endYear . '">' . $endYear . '</option>'
+                                        ?>
+                                      </select>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="edit-semester" class="form-label">Semester</label>
+                                      <select class="form-control" name="edit-semester" id="edit-semester" required>
+                                        <option value=""></option>
+                                        <option value="First Semester" <?php echo ($row['semester'] == "First Semester") ? "selected" : "" ?>>First Semester</option>
+                                        <option value="Second Semester" <?php echo ($row['semester'] == "Second Semester") ? "selected" : "" ?>>Second Semester</option>
+                                      </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-success w-100" name="update-schoolyear">Update School Year</button>
                                 </form>
                               </div>
                             </div>
