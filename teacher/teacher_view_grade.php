@@ -10,23 +10,38 @@ $stmtTeacher->execute();
 $stmtResult = $stmtTeacher->get_result();
 $row = $stmtResult->fetch_assoc();
 
-if (isset($_GET['view'])) {
-  $enrollId = $_GET['view'];
+if (isset($_GET['subject_view'])) {
+  $subject = $_GET['subject_view'];
+
   $status = "Active";
   $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
   $stmtSy->bind_param("s", $status);
   $stmtSy->execute();
   $stmtResultSy = $stmtSy->get_result();
-  $result = $stmtResultSy->fetch_assoc();
-  $sy = $result['sy_id'];
+  $resultSy = $stmtResultSy->fetch_assoc();
+  $sy = $resultSy['sy_id'];
 
-  $stmtEnroll = $conn->prepare("SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = ? AND c.adviser = ? AND e.sy = ?");
-  $stmtEnroll->bind_param("iii", $enrollId, $id, $sy);
-  $stmtEnroll->execute();
-  $stmtResultEnroll = $stmtEnroll->get_result();
-  $result = $stmtResultEnroll->fetch_assoc();
+  $stmtClass = $conn->prepare("SELECT * FROM class c JOIN school_year sy ON c.sy = sy.sy_id WHERE adviser = ? AND sy = ?");
+  $stmtClass->bind_param("ii", $id, $sy);
+  $stmtClass->execute();
+  $stmtResultClass = $stmtClass->get_result();
+  $class = $stmtResultClass->fetch_assoc();
 
-  if (mysqli_num_rows($stmtResultEnroll) == 0) {
+  $level = $class['level'];
+  $strand = $class['strand'];
+  $semester = $class['semester'];
+
+  $stmtSubject = $conn->prepare("SELECT * FROM subject WHERE subject_id = ?");
+  $stmtSubject->bind_param("i", $subject);
+  $stmtSubject->execute();
+  $stmtResultSubject = $stmtSubject->get_result();
+  $resultSubject = $stmtResultSubject->fetch_assoc();
+
+  $subjectLevel = $resultSubject['level'];
+  $subjectStrand = $resultSubject['strand'];
+  $subjectSemester = $resultSubject['semester'];
+
+  if ($level != $subjectLevel || $strand != $subjectStrand || $semester != $subjectSemester) {
     header("Location: teacher_grade.php");
     exit();
   }
@@ -83,49 +98,56 @@ if (isset($_GET['view'])) {
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>Subject Code</th>
-                      <th>Subject Name</th>
+                      <th>LRN Number</th>
+                      <th>Name</th>
                       <th>Grade</th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php
-                    $studentId = $result['student_id'];
-                    $sy = $result['sy'];
+                    $status = "Active";
+                    $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                    $stmtSy->bind_param("s", $status);
+                    $stmtSy->execute();
+                    $stmtResultSy = $stmtSy->get_result();
+                    $resultSy = $stmtResultSy->fetch_assoc();
+                    $sy = $resultSy['sy_id'];
 
-                    $stmtGrade = $conn->prepare("SELECT * FROM grade g JOIN subject s ON g.subject = s.subject_id WHERE g.student = ? AND g.sy = ?");
-                    $stmtGrade->bind_param("ii", $studentId, $sy);
-                    $stmtGrade->execute();
-                    $stmtResultGrade = $stmtGrade->get_result();
+                    $studentStatus = 0;
+                    $stmtEnroll = $conn->prepare("SELECT e.*, c.*, u.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN users u ON e.student_id = u.id WHERE c.adviser = ? AND e.sy = ? AND u.status = ?");
+                    $stmtEnroll->bind_param("iii", $id, $sy, $studentStatus);
+                    $stmtEnroll->execute();
+                    $stmtResultEnroll = $stmtEnroll->get_result();
 
-                    $stmtAverage = $conn->prepare("SELECT ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.student = ? AND g.sy = ?");
-                    $stmtAverage->bind_param("ii", $studentId, $sy);
-                    $stmtAverage->execute();
-                    $stmtResultAverage = $stmtAverage->get_result();
-                    $average = $stmtResultAverage->fetch_assoc();
-                    $total = $average['average'];
-
-                    if (mysqli_num_rows($stmtResultGrade) > 0) {
-                      while ($grade = $stmtResultGrade->fetch_assoc()) {
+                    if (mysqli_num_rows($stmtResultEnroll) > 0) {
+                      while ($rowStudent = $stmtResultEnroll->fetch_assoc()) {
                     ?>
                         <tr>
-                          <td><?php echo $grade['subject']; ?></td>
-                          <td><?php echo $grade['name']; ?></td>
-                          <td><?php echo $grade['grade']; ?></td>
+                          <td><?php echo $rowStudent['lrn_number']; ?></td>
+                          <td><?php echo $rowStudent['lname'] . ', ' . $rowStudent['fname']; ?></td>
+                          <td>
+                            <?php
+                            $stmtGrade = $conn->prepare("SELECT * FROM grade WHERE student = ? AND subject = ? AND sy = ?");
+                            $stmtGrade->bind_param("iii", $rowStudent['student_id'], $subject, $sy);
+                            $stmtGrade->execute();
+                            $stmtResultGrade = $stmtGrade->get_result();
+
+                            if (mysqli_num_rows($stmtResultGrade) > 0) {
+                              $grade = $stmtResultGrade->fetch_assoc();
+                              $currentGrade = $grade['grade'];
+                            } else {
+                              $currentGrade = 'N/A';
+                            }
+                            ?>
+                            <?php echo $currentGrade; ?>
+                          </td>
                         </tr>
                       <?php
                       }
-                      ?>
-                      <tr>
-                        <td colspan="2">Total</td>
-                        <td class="d-none">wew</td>
-                        <td><?php echo $total; ?></td>
-                      </tr>
-                    <?php
                     } else {
-                    ?>
-                      <tr>
-                        <td colspan="3" class="text-center">Not Graded Yet</td>
+                      ?>
+                      <tr class="no-assign-student">
+                        <td colspan="3" class="text-center">No Assign Student</td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
                       </tr>
@@ -163,7 +185,7 @@ if (isset($_GET['view'])) {
         "lengthChange": false,
         "autoWidth": false,
         "info": false,
-        "paging": false,
+        "paging": true,
         "buttons": ["copy", "csv", "excel", "pdf", "print"],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 

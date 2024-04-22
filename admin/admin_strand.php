@@ -63,6 +63,20 @@ $row = $stmtResult->fetch_assoc();
       unset($_SESSION['update-strand']);
     }
     ?>
+    <?php
+    if (isset($_SESSION['duplicate-strand'])) {
+    ?>
+      <script>
+        Swal.fire({
+          title: 'Failed',
+          text: '<?php echo $_SESSION['duplicate-strand']; ?>',
+          icon: 'error',
+        })
+      </script>
+    <?php
+      unset($_SESSION['duplicate-strand']);
+    }
+    ?>
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">Strand List</h1>
@@ -113,7 +127,7 @@ $row = $stmtResult->fetch_assoc();
                                     </button>
                                   </div>
                                   <div class="modal-body">
-                                    <form action="../actions/update_strand.php" method="post">
+                                    <form action="../actions/update_strand.php" method="post" id="editForm-<?php echo $row['strand_id']; ?>">
                                       <input type="hidden" name="edit-id" value="<?php echo $row['strand_id']; ?>">
                                       <div class="form-group">
                                         <label for="edit-strand" class="form-label">Strand</label>
@@ -133,9 +147,8 @@ $row = $stmtResult->fetch_assoc();
                         </tr>
                       <?php
                       }
-                    } 
-                    else {
-                    ?>
+                    } else {
+                      ?>
                       <tr>
                         <td colspan="4" class="text-center">No Strand Please Add Strand</td>
                         <td class="d-none"></td>
@@ -166,7 +179,7 @@ $row = $stmtResult->fetch_assoc();
           </button>
         </div>
         <div class="modal-body">
-          <form action="../actions/insert_strand.php" method="post">
+          <form action="../actions/insert_strand.php" method="post" id="insertForm">
             <div class="form-group">
               <label for="strand" class="form-label">Strand</label>
               <input type="text" class="form-control" name="strand" id="strand" required>
@@ -181,6 +194,10 @@ $row = $stmtResult->fetch_assoc();
       </div>
     </div>
   </div>
+
+  <!-- jquery-validation -->
+  <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
+  <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
 
   <!-- DataTables  & Plugins -->
   <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
@@ -210,6 +227,36 @@ $row = $stmtResult->fetch_assoc();
           }
         }, ]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+
+    $('#insertForm').validate({
+      errorElement: 'span',
+      errorPlacement: function(error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      }
+    });
+
+    $('form[id^="editForm-"]').each(function() {
+      $(this).validate({
+        errorElement: 'span',
+        errorPlacement: function(error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function(element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        }
+      });
     });
   </script>
 

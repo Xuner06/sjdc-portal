@@ -10,8 +10,9 @@
   $stmtResult = $stmtTeacher->get_result();
   $row = $stmtResult->fetch_assoc();
 
-  if (isset($_GET['grade'])) {
-    $enrollId = $_GET['grade'];
+  if (isset($_GET['subject'])) {
+    $subject = $_GET['subject'];
+
     $status = "Active";
     $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
     $stmtSy->bind_param("s", $status);
@@ -20,18 +21,31 @@
     $resultSy = $stmtResultSy->fetch_assoc();
     $sy = $resultSy['sy_id'];
 
-    $stmtEnroll = $conn->prepare("SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = ? AND c.adviser = ? AND e.sy = ?");
-    $stmtEnroll->bind_param("iii", $enrollId, $id, $sy);
-    $stmtEnroll->execute();
-    $stmtResultEnroll = $stmtEnroll->get_result();
-    $result = $stmtResultEnroll->fetch_assoc();
+    $stmtClass = $conn->prepare("SELECT * FROM class c JOIN school_year sy ON c.sy = sy.sy_id WHERE adviser = ? AND sy = ?");
+    $stmtClass->bind_param("ii", $id, $sy);
+    $stmtClass->execute();
+    $stmtResultClass = $stmtClass->get_result();
+    $class = $stmtResultClass->fetch_assoc();
 
-    if(mysqli_num_rows($stmtResultEnroll) == 0) {
+    $level = $class['level'];
+    $strand = $class['strand'];
+    $semester = $class['semester'];
+
+    $stmtSubject = $conn->prepare("SELECT * FROM subject WHERE subject_id = ?");
+    $stmtSubject->bind_param("i", $subject);
+    $stmtSubject->execute();
+    $stmtResultSubject = $stmtSubject->get_result();
+    $resultSubject = $stmtResultSubject->fetch_assoc();
+
+    $subjectLevel = $resultSubject['level'];
+    $subjectStrand = $resultSubject['strand'];
+    $subjectSemester = $resultSubject['semester'];
+
+    if ($level != $subjectLevel || $strand != $subjectStrand || $semester != $subjectSemester) {
       header("Location: teacher_grade.php");
       exit();
     }
-  } 
-  else {
+  } else {
     header("Location: teacher_grade.php");
     exit();
   }
@@ -94,37 +108,34 @@
               <div class="card">
                 <div class="card-body">
                   <h1 class="text-center">Student Upload Grade</h1>
-                  <form action="../actions/teacher_insert_grade.php" method="post">
-                    <input type="hidden" value="<?php echo $result['student_id']; ?>" name="student-id">
-                    <input type="hidden" value="<?php echo $result['enroll_id']; ?>" name="enroll-id">
-                    <input type="hidden" value="<?php echo $result['sy']; ?>" name="sy">
-                    <input type="hidden" value="<?php echo $result['class']; ?>" name="class">
+                  <form action="../actions/teacher_insert_grade.php" method="post" id="insertGrade">
                     <table id="example1" class="table table-bordered table-striped">
                       <thead>
                         <tr>
-                          <th>Subject Code</th>
-                          <th>Subject Name</th>
+                          <th>LRN Number</th>
+                          <th>Name</th>
                           <th>Grade</th>
                         </tr>
                       </thead>
                       <tbody>
                         <?php
-                        $level = $result['level'];
-                        $strand = $result['strand'];
-                        $semester = $result['semester'];
-                        $stmtSubject = $conn->prepare("SELECT * FROM subject WHERE level = ? AND strand = ? AND semester = ?");
-                        $stmtSubject->bind_param("sis", $level, $strand, $semester);
-                        $stmtSubject->execute();
-                        $stmtResultSubject = $stmtSubject->get_result();
+                        $studentStatus = 0;
+                        $stmtEnroll = $conn->prepare("SELECT e.*, c.*, u.* FROM enroll_student e JOIN class c ON e.class = c.class_id JOIN users u ON e.student_id = u.id WHERE c.adviser = ? AND e.sy = ? AND u.status = ?");
+                        $stmtEnroll->bind_param("iii", $id, $sy, $studentStatus);
+                        $stmtEnroll->execute();
+                        $stmtResultEnroll = $stmtEnroll->get_result();
 
-                        if (mysqli_num_rows($stmtResultSubject) > 0) {
-                          while ($rowSubject = $stmtResultSubject->fetch_assoc()) {
+                        if (mysqli_num_rows($stmtResultEnroll) > 0) {
+                          while ($rowStudent = $stmtResultEnroll->fetch_assoc()) {
                         ?>
                             <tr>
-                              <td><?php echo $rowSubject['subject_id']; ?></td>
-                              <td><?php echo $rowSubject['name']; ?></td>
+                              <td><?php echo $rowStudent['lrn_number']; ?></td>
+                              <td><?php echo $rowStudent['lname'] . ', ' . $rowStudent['fname']; ?></td>
                               <td>
-                                <select class="form-control" name="grade[<?php echo $rowSubject['subject_id']; ?>]" required>
+                                <input type="hidden" name="class" value="<?php echo $rowStudent['class']; ?>">
+                                <input type="hidden" name="sy" value="<?php echo $sy; ?>">
+                                <input type="hidden" name="subject" value="<?php echo $subject; ?>">
+                                <select class="form-control" name="grade[<?php echo $rowStudent['student_id']; ?>]" required>
                                   <option class="text-center" value="N/A">N/A</option>
                                   <?php
                                   for ($i = 50; $i <= 100; $i++) {
@@ -136,20 +147,10 @@
                             </tr>
                           <?php
                           }
-                        ?>
-                          <tr>
-                            <td colspan="3" class="text-center">
-                              <button type="submit" class="btn btn-primary btn-sm" name="upload-grade">Upload Grade</button>
-                            </td>
-                            <td class="d-none"></td>
-                            <td class="d-none"></td>
-                          </tr>
-                        <?php
-                        } 
-                        else {
-                        ?>
-                          <tr>
-                            <td colspan="3" class="text-center">No Subject Available</td>
+                        } else {
+                          ?>
+                          <tr class="no-assign-student">
+                            <td colspan="3" class="text-center">No Assign Student</td>
                             <td class="d-none"></td>
                             <td class="d-none"></td>
                           </tr>
@@ -165,7 +166,6 @@
           </div>
         </div>
       </div>
-
     </div>
 
     <!-- DataTables  & Plugins -->
@@ -185,12 +185,40 @@
     <script>
       $(function() {
         $("#example1").DataTable({
+          "paging": false,
           "responsive": true,
           "lengthChange": false,
           "autoWidth": false,
-          "searching": false,
-          "info": false,
-          "paging": false,
+          "buttons": [{
+            text: 'Upload Grades',
+            className: 'upload-button', // Add a class to the button for easy targeting
+            action: function() {
+              // Check again if there are rows with assigned students before submitting
+              var tableRows = $('#example1 tbody tr:not(.no-assign-student)').length;
+              if (tableRows > 0) {
+                // If there are assigned students, submit the form
+                Swal.fire({
+                  title: "Upload Grades?",
+                  text: "You won't be able to revert this!",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Yes"
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    $('#insertGrade').submit();
+                  }
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Failed",
+                  text: "No Assign Student",
+                });
+              }
+            }
+          }, ]
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
       });
     </script>

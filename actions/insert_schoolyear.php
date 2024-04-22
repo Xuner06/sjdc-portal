@@ -2,7 +2,7 @@
 include("../database/database.php");
 session_start();
 
-if(isset($_POST['add-schoolyear'])) {
+if (isset($_POST['add-schoolyear'])) {
   $start_year = $_POST['start_year'];
   $end_year = $_POST['end_year'];
   $semester = $_POST['semester'];
@@ -13,24 +13,34 @@ if(isset($_POST['add-schoolyear'])) {
   $stmtCheckActive->execute();
   $stmtResult = $stmtCheckActive->get_result();
 
-  if(mysqli_num_rows($stmtResult) >= 0) {
+  if (mysqli_num_rows($stmtResult) >= 0) {
     $statusInactive = "Inactive";
-    $stmtUpdateActive = $conn->prepare( "UPDATE school_year SET status = ?");
+    $stmtUpdateActive = $conn->prepare("UPDATE school_year SET status = ?");
     $stmtUpdateActive->bind_param("s", $statusInactive);
     $stmtUpdateActive->execute();
 
-    $stmtInsertSy = $conn->prepare("INSERT INTO school_year (start_year, end_year, semester, status, created_at) VALUES (?, ?, ?, ?, NOW())");
-    $stmtInsertSy->bind_param("ssss", $start_year, $end_year, $semester, $statusActive);
+    $stmtCheckDuplicate = $conn->prepare("SELECT * FROM school_year WHERE start_year = ? AND end_year = ? AND semester = ?");
+    $stmtCheckDuplicate->bind_param("sss", $start_year, $end_year, $semester);
+    $stmtCheckDuplicate->execute();
+    $stmtResultDuplicate = $stmtCheckDuplicate->get_result();
 
-    if(mysqli_stmt_execute($stmtInsertSy)) {
-      $_SESSION['add-schoolyear'] = "Successfully Added School Year";
+    if (mysqli_num_rows($stmtResultDuplicate) > 0) {
+      $_SESSION['duplicate-sy'] = "School Year Already Exists";
       header("Location: ../admin/admin_schoolyear.php");
       exit();
-    }
+    } 
     else {
-      header("Location: ../admin/admin_schoolyear.php");
-      exit();
+      $stmtInsertSy = $conn->prepare("INSERT INTO school_year (start_year, end_year, semester, status, created_at) VALUES (?, ?, ?, ?, NOW())");
+      $stmtInsertSy->bind_param("ssss", $start_year, $end_year, $semester, $statusActive);
+
+      if (mysqli_stmt_execute($stmtInsertSy)) {
+        $_SESSION['add-schoolyear'] = "Successfully Added School Year";
+        header("Location: ../admin/admin_schoolyear.php");
+        exit();
+      } else {
+        header("Location: ../admin/admin_schoolyear.php");
+        exit();
+      }
     }
   }
 }
-?>

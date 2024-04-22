@@ -70,7 +70,7 @@ else {
                 <h1 class="text-center">Teacher Account Information</h1>
                 <p><strong>First Name:</strong> <?php echo $rowTeacher['fname']; ?></p>
                 <p><strong>Last Name:</strong> <?php echo $rowTeacher['lname']; ?></p>
-                <p><strong>Gender:</strong> <?php echo $rowTeacher['gender']; ?></p>
+                <p><strong>Sex:</strong> <?php echo $rowTeacher['gender']; ?></p>
                 <?php
                 $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
                 $bd = $rowTeacher['birthday']; // Assuming 'birthday' is also in 'Y-m-d' format

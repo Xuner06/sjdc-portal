@@ -65,7 +65,7 @@ $row = $stmtResult->fetch_assoc();
                     <tr>
                       <th>Teacher ID</th>
                       <th>Name</th>
-                      <th>Gender</th>
+                      <th>Sex</th>
                       <th>Email</th>
                       <th>Contact</th>
                       <th>Action</th>

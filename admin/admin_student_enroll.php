@@ -205,7 +205,7 @@ if (isset($_GET['id'])) {
           </button>
         </div>
         <div class="modal-body">
-          <form action="../actions/enroll_student.php" method="post">
+          <form action="../actions/enroll_student.php" method="post" id="insertForm">
             <input type="hidden" name="student-id" value="<?php echo $resultStudent['id']; ?>">
             <div class="form-group">
               <label class="form-label">LRN Number</label>
@@ -247,33 +247,16 @@ if (isset($_GET['id'])) {
                 ?>
               </select>
             </div>
-            <div class="form-group">
-              <label for="schoolyear" class="form-label">School Year</label>
-              <select class="form-control" id="schoolyear" name="schoolyear" required>
-                <option value=""></option>
-                <?php
-                $statusSy = "Active";
-                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
-                $stmtSy->bind_param("s", $statusSy);
-                $stmtSy->execute();
-                $stmtResultSy = $stmtSy->get_result();
-
-                if (mysqli_num_rows($stmtResultSy) > 0) {
-                  while ($schoolyear = $stmtResultSy->fetch_assoc()) {
-                    echo '<option value="' . $schoolyear['sy_id'] . '">' . $schoolyear['start_year'] . '-' . $schoolyear['end_year'] . '-' . $schoolyear['semester'] . '</option>';
-                  }
-                } else {
-                  echo '<option value="" disabled>No Active School Year (Please Set School Year)</option>';
-                }
-                ?>
-              </select>
-            </div>
             <button type="submit" class="btn btn-sm btn-primary w-100" name="enroll-student">Enroll</button>
           </form>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- jquery-validation -->
+  <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
+  <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
 
   <!-- DataTables  & Plugins -->
   <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
@@ -303,6 +286,20 @@ if (isset($_GET['id'])) {
           }
         }, ]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+
+    $('#insertForm').validate({
+      errorElement: 'span',
+      errorPlacement: function(error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      }
     });
   </script>
 </body>

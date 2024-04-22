@@ -5,7 +5,14 @@ session_start();
 if (isset($_POST['enroll-student'])) {
   $studentId = $_POST['student-id'];
   $class = $_POST['class'];
-  $schoolyear = $_POST['schoolyear'];
+  
+  $statusSy = "Active";
+  $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+  $stmtSy->bind_param("s", $statusSy);
+  $stmtSy->execute();
+  $stmtResultSy = $stmtSy->get_result();
+  $result = $stmtResultSy->fetch_assoc();
+  $schoolyear = $result['sy_id'];
 
   $stmtEnroll = $conn->prepare("SELECT * FROM enroll_student WHERE student_id = ? AND sy = ?");
   $stmtEnroll->bind_param("ii", $studentId, $schoolyear);

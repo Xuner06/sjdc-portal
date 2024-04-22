@@ -27,6 +27,16 @@ $row = $stmtResult->fetch_assoc();
   <link rel="stylesheet" href="../plugins/sweetalert2/sweetalert2.min.css">
   <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
   <title>SJDC | Class</title>
+
+  <style>
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      margin: 0;
+    }
+  </style>
 </head>
 
 <body>
@@ -62,6 +72,20 @@ $row = $stmtResult->fetch_assoc();
       unset($_SESSION['update-class']);
     }
     ?>
+    <?php
+    if (isset($_SESSION['duplicate-class'])) {
+    ?>
+      <script>
+        Swal.fire({
+          title: 'Failed',
+          text: '<?php echo $_SESSION['duplicate-class']; ?>',
+          icon: 'error',
+        })
+      </script>
+    <?php
+      unset($_SESSION['duplicate-class']);
+    }
+    ?>
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">Class List</h1>
@@ -83,7 +107,7 @@ $row = $stmtResult->fetch_assoc();
                       <th>Grade Level</th>
                       <th>Strand</th>
                       <th>Section</th>
-                      <th>Schoolyear</th>
+                      <th>School Year</th>
                       <th>Adviser</th>
                       <th>Edit</th>
                     </tr>
@@ -126,7 +150,7 @@ $row = $stmtResult->fetch_assoc();
                                       </button>
                                     </div>
                                     <div class="modal-body">
-                                      <form action="../actions/update_class.php" method="post">
+                                      <form action="../actions/update_class.php" method="post" id="editForm-<?php echo $row['class_id']; ?>">
                                         <input type="hidden" name="edit-id" value="<?php echo $row['class_id']; ?>">
                                         <div class="form-group">
                                           <label for="level" class="form-label">Grade Level</label>
@@ -152,21 +176,7 @@ $row = $stmtResult->fetch_assoc();
                                         </div>
                                         <div class="form-group">
                                           <label for="section" class="form-label">Section</label>
-                                          <input type="text" class="form-control" id="section" name="edit-section" value="<?php echo $row['section']; ?>">
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="edit-sy" class="form-label">Schoolyear</label>
-                                          <select class="form-control" name="edit-sy" id="edit-sy" required>
-                                            <option value=""></option>
-                                            <?php
-                                            $editSqlSy = "SELECT * FROM school_year";
-                                            $editQuerySy = mysqli_query($conn, $editSqlSy);
-                                            while ($rowSy = mysqli_fetch_assoc($editQuerySy)) {
-                                              $selected = ($rowSy['sy_id'] == $row['sy_id']) ? "selected" : "";
-                                              echo '<option value="' . $rowSy['sy_id'] . '" ' . $selected . '>' . $rowSy['start_year'] . '-' . $rowSy['end_year'] . ' ' . $rowSy['semester'] . '</option>';
-                                            }
-                                            ?>
-                                          </select>
+                                          <input type="number" class="form-control" id="section" name="edit-section" value="<?php echo $row['section']; ?>" required>
                                         </div>
                                         <div class="form-group">
                                           <label for="edit-adviser" class="form-label">Adviser</label>
@@ -183,10 +193,9 @@ $row = $stmtResult->fetch_assoc();
 
                                             if (mysqli_num_rows($stmtResultEditTeacher) > 0) {
                                               while ($rowTeacher = $stmtResultEditTeacher->fetch_assoc()) {
-                                                echo '<option value="' . $rowTeacher['id'] .'">' . $rowTeacher['lname'] . ', ' . $rowTeacher['fname'] . '</option>';
+                                                echo '<option value="' . $rowTeacher['id'] . '">' . $rowTeacher['lname'] . ', ' . $rowTeacher['fname'] . '</option>';
                                               }
-                                            }
-                                            else {
+                                            } else {
                                               echo '<option value="" disabled>No Teacher Available (Please Add Teacher)</option>';
                                             }
                                             ?>
@@ -248,7 +257,7 @@ $row = $stmtResult->fetch_assoc();
           </button>
         </div>
         <div class="modal-body">
-          <form action="../actions/insert_class.php" method="post">
+          <form action="../actions/insert_class.php" method="post" id="insertForm">
             <div class="form-group">
               <label for="level" class="form-label">Grade Level</label>
               <select class="form-control" name="level" id="level" required>
@@ -276,9 +285,9 @@ $row = $stmtResult->fetch_assoc();
             </div>
             <div class="form-group">
               <label for="section" class="form-label">Section</label>
-              <input type="text" class="form-control" name="section" id="section" required>
+              <input type="number" class="form-control" name="section" id="section" required>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label for="sy" class="form-label">Schoolyear</label>
               <select class="form-control" name="sy" id="sy" required>
                 <option value=""></option>
@@ -297,7 +306,7 @@ $row = $stmtResult->fetch_assoc();
                 }
                 ?>
               </select>
-            </div>
+            </div> -->
             <div class="form-group">
               <label for="adviser" class="form-label">Adviser</label>
               <select class="form-control" name="adviser" id="adviser" required>
@@ -337,6 +346,10 @@ $row = $stmtResult->fetch_assoc();
     </div>
   </div>
 
+  <!-- jquery-validation -->
+  <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
+  <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
+
   <!-- DataTables  & Plugins -->
   <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -365,6 +378,36 @@ $row = $stmtResult->fetch_assoc();
           }
         }, ]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+
+    $('#insertForm').validate({
+      errorElement: 'span',
+      errorPlacement: function(error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      }
+    });
+
+    $('form[id^="editForm-"]').each(function() {
+      $(this).validate({
+        errorElement: 'span',
+        errorPlacement: function(error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function(element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        }
+      });
     });
   </script>
 

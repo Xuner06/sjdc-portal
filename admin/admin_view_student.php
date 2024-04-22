@@ -71,7 +71,7 @@ if (isset($_GET['id'])) {
                 <p><strong>LRN Number:</strong> <?php echo $rowStudent['lrn_number']; ?></p>
                 <p><strong>First Name:</strong> <?php echo $rowStudent['fname']; ?></p>
                 <p><strong>Last Name:</strong> <?php echo $rowStudent['lname']; ?></p>
-                <p><strong>Gender:</strong> <?php echo $rowStudent['gender']; ?></p>
+                <p><strong>Sex:</strong> <?php echo $rowStudent['gender']; ?></p>
                 <?php
                 $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
                 $bd = $rowStudent['birthday']; // Assuming 'birthday' is also in 'Y-m-d' format

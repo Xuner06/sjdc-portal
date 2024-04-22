@@ -64,7 +64,7 @@ $row = $stmtResult->fetch_assoc();
                     <tr>
                       <th>LRN Number</th>
                       <th>Name</th>
-                      <th>Gender</th>
+                      <th>Sex</th>
                       <th>Age</th>
                       <th>Email</th>
                       <th>Contact</th>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 16, 2024 at 04:19 AM
+-- Generation Time: Apr 22, 2024 at 05:24 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -42,8 +42,10 @@ CREATE TABLE `class` (
 --
 
 INSERT INTO `class` (`class_id`, `level`, `strand`, `section`, `sy`, `adviser`, `created_at`) VALUES
-(111, 'Grade 11', 21, 'A', 79, 68, '2024-04-16'),
-(112, 'Grade 11', 21, 'B', 79, 69, '2024-04-16');
+(116, 'Grade 11', 21, '1', 79, 106, '2024-04-22'),
+(117, 'Grade 11', 21, '2', 79, 107, '2024-04-22'),
+(118, 'Grade 11', 21, '1', 80, 106, '2024-04-22'),
+(119, 'Grade 11', 20, '1', 80, 107, '2024-04-22');
 
 -- --------------------------------------------------------
 
@@ -64,26 +66,26 @@ CREATE TABLE `enroll_student` (
 --
 
 INSERT INTO `enroll_student` (`enroll_id`, `student_id`, `class`, `sy`, `enroll_date`) VALUES
-(168, 58, 112, 79, '2024-04-16'),
-(169, 59, 112, 79, '2024-04-16'),
-(170, 60, 112, 79, '2024-04-16'),
-(171, 61, 112, 79, '2024-04-16'),
-(172, 62, 112, 79, '2024-04-16'),
-(173, 63, 112, 79, '2024-04-16'),
-(174, 64, 112, 79, '2024-04-16'),
-(175, 65, 112, 79, '2024-04-16'),
-(176, 66, 112, 79, '2024-04-16'),
-(177, 67, 112, 79, '2024-04-16'),
-(178, 48, 111, 79, '2024-04-16'),
-(179, 49, 111, 79, '2024-04-16'),
-(180, 50, 111, 79, '2024-04-16'),
-(181, 51, 111, 79, '2024-04-16'),
-(182, 52, 111, 79, '2024-04-16'),
-(183, 53, 111, 79, '2024-04-16'),
-(184, 54, 111, 79, '2024-04-16'),
-(185, 55, 111, 79, '2024-04-16'),
-(186, 56, 111, 79, '2024-04-16'),
-(187, 57, 111, 79, '2024-04-16');
+(212, 86, 116, 79, '2024-04-22'),
+(213, 87, 116, 79, '2024-04-22'),
+(214, 88, 116, 79, '2024-04-22'),
+(215, 89, 116, 79, '2024-04-22'),
+(216, 90, 116, 79, '2024-04-22'),
+(217, 91, 116, 79, '2024-04-22'),
+(218, 92, 116, 79, '2024-04-22'),
+(219, 93, 116, 79, '2024-04-22'),
+(220, 94, 116, 79, '2024-04-22'),
+(221, 95, 116, 79, '2024-04-22'),
+(222, 96, 117, 79, '2024-04-22'),
+(223, 97, 117, 79, '2024-04-22'),
+(224, 98, 117, 79, '2024-04-22'),
+(225, 99, 117, 79, '2024-04-22'),
+(226, 100, 117, 79, '2024-04-22'),
+(227, 101, 117, 79, '2024-04-22'),
+(228, 102, 117, 79, '2024-04-22'),
+(229, 103, 117, 79, '2024-04-22'),
+(230, 104, 117, 79, '2024-04-22'),
+(231, 105, 117, 79, '2024-04-22');
 
 -- --------------------------------------------------------
 
@@ -99,14 +101,6 @@ CREATE TABLE `grade` (
   `grade` int(11) NOT NULL,
   `class` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `grade`
---
-
-INSERT INTO `grade` (`id`, `student`, `sy`, `subject`, `grade`, `class`) VALUES
-(169, 48, 79, 1020, 96, 111),
-(170, 48, 79, 1021, 96, 111);
 
 -- --------------------------------------------------------
 
@@ -128,7 +122,8 @@ CREATE TABLE `school_year` (
 --
 
 INSERT INTO `school_year` (`sy_id`, `start_year`, `end_year`, `semester`, `status`, `created_at`) VALUES
-(79, 2024, 2025, 'First Semester', 'Active', '2024-04-16 09:58:42');
+(79, 2024, 2025, 'First Semester', 'Active', '2024-04-16 09:58:42'),
+(80, 2024, 2025, 'Second Semester', 'Inactive', '2024-04-21 04:23:27');
 
 -- --------------------------------------------------------
 
@@ -153,7 +148,10 @@ INSERT INTO `strand` (`strand_id`, `strand`, `description`, `date_created`) VALU
 (18, 'ABM', 'Accountancy, Business and Management Strand', '2024-03-18'),
 (19, 'STEM', 'Science, Technology, Engineering, and Mathematics Strand', '2024-03-18'),
 (20, 'HUMMS', 'Humanities and Social Science Strand', '2024-03-18'),
-(21, 'ICT', 'Information and Communication Technology', '2024-03-18');
+(21, 'ICT', 'Information and Communication Technology', '2024-03-18'),
+(24, 'TEST', 'test', '2024-04-18'),
+(25, '123', '123', '2024-04-18'),
+(26, 'WEWS', 'wew', '2024-04-19');
 
 -- --------------------------------------------------------
 
@@ -183,7 +181,9 @@ INSERT INTO `subject` (`subject_id`, `name`, `level`, `strand`, `semester`, `cre
 (1023, 'Media and Information Literacy', 'Grade 11', 16, 'Second Semester', '0000-00-00 00:00:00'),
 (1024, 'Understanding Culture, Politics, and Society', 'Grade 11', 16, 'Second Semester', '0000-00-00 00:00:00'),
 (1025, 'Statistics and Probability', 'Grade 11', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1026, 'Personal Development', 'Grade 11', 21, 'Second Semester', '0000-00-00 00:00:00');
+(1026, 'Personal Development', 'Grade 11', 21, 'Second Semester', '0000-00-00 00:00:00'),
+(1028, 'Test', 'Grade 11', 20, 'First Semester', '0000-00-00 00:00:00'),
+(1029, 'Test2', 'Grade 11', 20, 'Second Semester', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -213,36 +213,36 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `lrn_number`, `role`, `fname`, `lname`, `gender`, `birthday`, `contact`, `email`, `address`, `password`, `status`, `reg_date`) VALUES
 (13, 'N/A', 'admin', 'Super', 'Admin', 'Male', '2009-01-29', '09813043186', 'admin@gmail.com', '2809 Ruskin Road', '123', 0, '2022-07-09'),
-(48, '201915079', 'student', 'Roi', 'Badayos', 'Male', '1999-12-06', '09579046364', 'roibadayos@gmail.com', '3751 Forest Run Hill', 'roibadayos', 0, '2021-03-12'),
-(49, '201915080', 'student', 'Maia', 'Chettoe', 'Female', '1999-07-29', '09365114462', 'maiachettoe@gmail.com', '7 Lerdahl Crossing', 'maiachettoe', 0, '2021-11-01'),
-(50, '201915081', 'student', 'Sidnee', 'Luff', 'Male', '2002-05-25', '09580696997', 'sidneeluff@gmail.com', '9925 Hauk Drive', 'sidneeluff', 0, '2020-12-24'),
-(51, '201915082', 'student', 'Julissa', 'Attree', 'Female', '2011-03-29', '09919056507', 'julissaattree@gmail.com', '742 La Follette Junction', 'julissaattree', 0, '2021-10-17'),
-(52, '201915083', 'student', 'Sari', 'Sinderson', 'Female', '2011-01-19', '09209808962', 'sarisinderson@gmail.com', '639 Summerview Hill', 'sarisinderson', 0, '2024-02-11'),
-(53, '201915084', 'student', 'Anitra', 'Sulman', 'Female', '2007-01-28', '09305726942', 'anitrasulman@gmail.com', '866 Reindahl Lane', 'anitrasulman', 0, '2022-04-23'),
-(54, '201915085', 'student', 'Cecilio', 'Bateson', 'Male', '2000-05-27', '09443930766', 'ceciliobateson@gmail.com', '6087 David Parkway', 'ceciliobateson', 0, '2020-03-07'),
-(55, '201915086', 'student', 'Rorke', 'Du Plantier', 'Male', '2018-09-20', '09081143104', 'rorkedu plantier@gmail.com', '8672 Caliangt Lane', 'rorkedu plantier', 0, '2022-12-22'),
-(56, '201915087', 'student', 'Ashlee', 'Allnatt', 'Female', '2003-08-07', '09684359983', 'ashleeallnatt@gmail.com', '574 Burning Wood Parkway', 'ashleeallnatt', 0, '2023-03-02'),
-(57, '201915088', 'student', 'Frederico', 'Heighway', 'Male', '2011-08-26', '09701684185', 'fredericoheighway@gmail.com', '01 Hanson Circle', 'fredericoheighway', 0, '2021-07-08'),
-(58, '201915089', 'student', 'Arabelle', 'Brazer', 'Female', '2002-04-23', '09529547156', 'arabellebrazer@gmail.com', '86 Judy Street', 'arabellebrazer', 0, '2020-08-31'),
-(59, '201915090', 'student', 'Anderson', 'Croxton', 'Male', '2002-11-01', '09238324930', 'andersoncroxton@gmail.com', '300 Wayridge Hill', 'andersoncroxton', 0, '2022-06-14'),
-(60, '201915091', 'student', 'Kurtis', 'Franchi', 'Male', '2002-12-31', '09595590186', 'kurtisfranchi@gmail.com', '8 Petterle Street', 'kurtisfranchi', 0, '2022-11-16'),
-(61, '201915092', 'student', 'Jared', 'Tuny', 'Male', '2013-08-13', '09902952494', 'jaredtuny@gmail.com', '9 Scott Lane', 'jaredtuny', 0, '2023-11-24'),
-(62, '201915093', 'student', 'Lazaro', 'O\'Cannan', 'Male', '2018-06-07', '09881419531', 'lazaroo\'cannan@gmail.com', '43 Muir Court', 'lazaroo\'cannan', 0, '2020-09-27'),
-(63, '201915094', 'student', 'Rosamond', 'Jovey', 'Female', '2020-01-10', '09091050196', 'rosamondjovey@gmail.com', '14 Sugar Hill', 'rosamondjovey', 0, '2021-06-11'),
-(64, '201915095', 'student', 'Neilla', 'Paulo', 'Female', '2010-07-03', '09064122120', 'neillapaulo@gmail.com', '9903 Scott Circle', 'neillapaulo', 0, '2021-12-24'),
-(65, '201915096', 'student', 'Dot', 'Daile', 'Female', '2007-03-12', '09534951530', 'dotdaile@gmail.com', '16300 Talmadge Circle', 'dotdaile', 0, '2023-05-02'),
-(66, '201915097', 'student', 'Dulcia', 'Durtnel', 'Female', '2015-10-19', '09540561362', 'dulciadurtnel@gmail.com', '1564 Sunfield Terrace', 'dulciadurtnel', 0, '2023-01-04'),
-(67, '201915098', 'student', 'Taddeo', 'Hurcombe', 'Male', '2013-02-15', '09832554098', 'taddeohurcombe@gmail.com', '342 Bultman Circle', 'taddeohurcombe', 0, '2020-04-17'),
-(68, 'N/A', 'teacher', 'Lharens', 'Indus', 'Male', '1994-08-13', '09596577717', 'lharensindus@gmail.com', '65537 Mandrake Plaza', 'lharensindus', 0, '2021-05-05'),
-(69, 'N/A', 'teacher', 'Ren', 'Dimabogte', 'Male', '1993-05-03', '09328439014', 'rendimabogte@gmail.com', '9778 Westport Road', 'rendimabogte', 0, '2022-09-09'),
-(70, 'N/A', 'teacher', 'Neville', 'O\' Molan', 'Male', '2023-11-10', '09604315113', 'nevilleo\' molan@gmail.com', '09939 Armistice Crossing', 'nevilleo\' molan', 0, '2020-06-13'),
-(71, 'N/A', 'teacher', 'Fern', 'Klinck', 'Female', '2022-02-13', '09274587814', 'fernklinck@gmail.com', '6 Kipling Hill', 'fernklinck', 0, '2020-08-31'),
-(72, 'N/A', 'teacher', 'Carla', 'Joplin', 'Female', '2005-04-11', '09104965312', 'carlajoplin@gmail.com', '9 Novick Hill', 'carlajoplin', 0, '2020-11-09'),
-(73, 'N/A', 'teacher', 'Roze', 'Baysting', 'Female', '2002-03-16', '09238815492', 'rozebaysting@gmail.com', '3587 Warrior Circle', 'rozebaysting', 0, '2022-03-28'),
-(74, 'N/A', 'teacher', 'Monro', 'Fripps', 'Male', '2015-09-25', '09756933464', 'monrofripps@gmail.com', '19 Monica Junction', 'monrofripps', 0, '2020-12-24'),
-(75, 'N/A', 'teacher', 'Valry', 'Pigden', 'Female', '2009-04-25', '09227836818', 'valrypigden@gmail.com', '34540 Talmadge Hill', 'valrypigden', 0, '2022-04-01'),
-(76, 'N/A', 'teacher', 'Andras', 'Harmes', 'Male', '2013-12-18', '09051539457', 'andrasharmes@gmail.com', '48 Randy Road', 'andrasharmes', 0, '2024-01-18'),
-(77, 'N/A', 'teacher', 'Susette', 'Alton', 'Female', '2002-11-26', '09921456652', 'susettealton@gmail.com', '425 Burning Wood Pass', 'susettealton', 0, '2023-11-27');
+(86, '201915078011', 'student', 'Roi', 'Badayos', 'Male', '1999-12-06', '09381666941', 'roibadayos@gmail.com', '2117 Monument Parkway', 'roibadayos', 0, '2023-08-21'),
+(87, '201915078012', 'student', 'Helaine', 'Calfe', 'Female', '1994-08-13', '09572272179', 'helainecalfe@gmail.com', '3 Center Pass', 'helainecalfe', 0, '2022-06-02'),
+(88, '201915078013', 'student', 'Reggis', 'Wooler', 'Male', '1991-10-22', '09276999250', 'reggiswooler@gmail.com', '89 Westport Park', 'reggiswooler', 0, '2021-05-17'),
+(89, '201915078014', 'student', 'Lizzie', 'Brittian', 'Female', '1997-05-03', '09468644998', 'lizziebrittian@gmail.com', '0137 Lotheville Point', 'lizziebrittian', 0, '2023-07-23'),
+(90, '201915078015', 'student', 'Hagen', 'De Francesco', 'Male', '1991-11-06', '09773271875', 'hagende francesco@gmail.com', '506 Nevada Avenue', 'hagende francesco', 0, '2023-01-15'),
+(91, '201915078016', 'student', 'Marco', 'Maciejewski', 'Male', '1992-05-08', '09239827986', 'marcomaciejewski@gmail.com', '7 Steensland Avenue', 'marcomaciejewski', 0, '2020-12-03'),
+(92, '201915078017', 'student', 'Valentijn', 'Branton', 'Male', '1993-06-13', '09678537962', 'valentijnbranton@gmail.com', '7504 Hazelcrest Plaza', 'valentijnbranton', 0, '2023-01-23'),
+(93, '201915078018', 'student', 'Udell', 'Dacre', 'Male', '1995-01-29', '09733426417', 'udelldacre@gmail.com', '593 Summit Place', 'udelldacre', 0, '2023-07-28'),
+(94, '201915078019', 'student', 'Tynan', 'Pettingill', 'Male', '1993-12-12', '09710941915', 'tynanpettingill@gmail.com', '6 Little Fleur Hill', 'tynanpettingill', 0, '2021-01-21'),
+(95, '201915078020', 'student', 'Llewellyn', 'Atley', 'Male', '1997-01-19', '09194960696', 'llewellynatley@gmail.com', '45 Clemons Pass', 'llewellynatley', 0, '2021-02-14'),
+(96, '201915078021', 'student', 'Farrand', 'Miettinen', 'Female', '1994-04-10', '09967413624', 'farrandmiettinen@gmail.com', '64745 Gerald Lane', 'farrandmiettinen', 0, '2023-02-07'),
+(97, '201915078022', 'student', 'Vernor', 'Anniwell', 'Male', '1992-04-29', '09187701720', 'vernoranniwell@gmail.com', '566 Clove Hill', 'vernoranniwell', 0, '2020-05-27'),
+(98, '201915078023', 'student', 'Price', 'Astupenas', 'Male', '1996-11-04', '09503132280', 'priceastupenas@gmail.com', '211 Browning Circle', 'priceastupenas', 0, '2020-09-16'),
+(99, '201915078024', 'student', 'Babbette', 'Wozencroft', 'Female', '1990-05-10', '09182894697', 'babbettewozencroft@gmail.com', '39 Luster Park', 'babbettewozencroft', 0, '2022-02-23'),
+(100, '201915078025', 'student', 'Amelie', 'Ellum', 'Female', '1998-11-22', '09708056930', 'amelieellum@gmail.com', '93 Londonderry Trail', 'amelieellum', 0, '2020-12-09'),
+(101, '201915078026', 'student', 'Pepita', 'Rumney', 'Female', '1998-05-07', '09393486708', 'pepitarumney@gmail.com', '75958 Pankratz Hill', 'pepitarumney', 0, '2023-10-18'),
+(102, '201915078027', 'student', 'Jessalin', 'Nicklin', 'Female', '1991-06-07', '09831680510', 'jessalinnicklin@gmail.com', '736 Northfield Terrace', 'jessalinnicklin', 0, '2023-09-04'),
+(103, '201915078028', 'student', 'Cordy', 'Gambie', 'Male', '1997-02-20', '09845821819', 'cordygambie@gmail.com', '5 Oak Way', 'cordygambie', 0, '2022-04-18'),
+(104, '201915078029', 'student', 'Roseline', 'Eddis', 'Female', '1996-07-14', '09985800193', 'roselineeddis@gmail.com', '9 Eggendart Junction', 'roselineeddis', 0, '2023-02-03'),
+(105, '201915078030', 'student', 'Brooks', 'Abelson', 'Female', '1990-12-16', '09682401812', 'brooksabelson@gmail.com', '2846 Reinke Alley', 'brooksabelson', 0, '2020-10-16'),
+(106, 'N/A', 'teacher', 'Lharens', 'Indus', 'Male', '1990-03-26', '09070748329', 'lharensindus@gmail.com', '61772 Comanche Avenue', '123', 0, '2022-03-03'),
+(107, 'N/A', 'teacher', 'Ren', 'Dimabogte', 'Male', '1991-01-09', '09699476662', 'rendimabogte@gmail.com', '33557 Arizona Court', 'rendimabogte', 0, '2023-06-23'),
+(108, 'N/A', 'teacher', 'Moll', 'Leteve', 'Female', '1993-03-11', '09251153501', 'mollleteve@gmail.com', '15 Columbus Alley', 'mollleteve', 0, '2023-11-28'),
+(109, 'N/A', 'teacher', 'Shae', 'Lyte', 'Male', '1997-01-05', '09405562879', 'shaelyte@gmail.com', '903 Mosinee Parkway', 'shaelyte', 0, '2023-10-19'),
+(110, 'N/A', 'teacher', 'Bobine', 'Fleote', 'Female', '1995-04-15', '09450480279', 'bobinefleote@gmail.com', '5817 Florence Park', 'bobinefleote', 0, '2022-07-14'),
+(111, 'N/A', 'teacher', 'Lothaire', 'Caukill', 'Male', '1996-05-02', '09921337833', 'lothairecaukill@gmail.com', '41 Village Crossing', 'lothairecaukill', 0, '2021-05-15'),
+(112, 'N/A', 'teacher', 'Ramon', 'Garstang', 'Male', '1999-06-29', '09006928858', 'ramongarstang@gmail.com', '8409 Charing Cross Road', 'ramongarstang', 0, '2021-01-08'),
+(113, 'N/A', 'teacher', 'Rafa', 'Dake', 'Female', '1996-05-19', '09926724307', 'rafadake@gmail.com', '0 Milwaukee Place', 'rafadake', 0, '2023-01-07'),
+(114, 'N/A', 'teacher', 'Jorgan', 'Penton', 'Male', '1998-08-09', '09407892244', 'jorganpenton@gmail.com', '25 Fallview Way', 'jorganpenton', 0, '2023-09-27'),
+(115, 'N/A', 'teacher', 'Adamo', 'Gregoli', 'Male', '1996-01-18', '09066619061', 'adamogregoli@gmail.com', '2753 Gina Hill', 'adamogregoli', 0, '2022-02-28');
 
 --
 -- Indexes for dumped tables
@@ -309,43 +309,43 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `class`
 --
 ALTER TABLE `class`
-  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
 
 --
 -- AUTO_INCREMENT for table `enroll_student`
 --
 ALTER TABLE `enroll_student`
-  MODIFY `enroll_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=188;
+  MODIFY `enroll_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=232;
 
 --
 -- AUTO_INCREMENT for table `grade`
 --
 ALTER TABLE `grade`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=171;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=201;
 
 --
 -- AUTO_INCREMENT for table `school_year`
 --
 ALTER TABLE `school_year`
-  MODIFY `sy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `sy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `strand`
 --
 ALTER TABLE `strand`
-  MODIFY `strand_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `strand_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `subject`
 --
 ALTER TABLE `subject`
-  MODIFY `subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1027;
+  MODIFY `subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1030;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- Constraints for dumped tables
