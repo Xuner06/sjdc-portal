@@ -5,8 +5,9 @@ session_start();
 if (isset($_POST['update-student'])) {
   $id = $_POST['edit-id'];
   $lrn = $_POST['edit_lrn'];
-  $fname = $_POST['edit-fname'];
-  $lname = $_POST['edit-lname'];
+  $fname = ucfirst($_POST['edit-fname']);
+  $mname = ucfirst($_POST['edit-mname']);
+  $lname = ucfirst($_POST['edit-lname']);
   $gender = $_POST['edit-gender'];
   $contact = $_POST['edit-contact'];
   $email = $_POST['edit_email'];
@@ -43,8 +44,8 @@ if (isset($_POST['update-student'])) {
           header("Location: ../admin/admin_student.php");
           exit();
         } else {
-          $stmtUpdateStudent = $conn->prepare("UPDATE users SET lrn_number = ?, fname = ?, lname = ?, gender = ?, birthday = ?, contact = ?, email = ?, address = ? WHERE id = ?");
-          $stmtUpdateStudent->bind_param("ssssssssi", $lrn, $fname, $lname, $gender, $birthday, $contact, $email, $address, $id);
+          $stmtUpdateStudent = $conn->prepare("UPDATE users SET lrn_number = ?, fname = ?, lname = ?, mname = ?, gender = ?, birthday = ?, contact = ?, email = ?, address = ? WHERE id = ?");
+          $stmtUpdateStudent->bind_param("sssssssssi", $lrn, $fname, $lname, $mname, $gender, $birthday, $contact, $email, $address, $id);
 
           if (mysqli_stmt_execute($stmtUpdateStudent)) {
             $_SESSION['update-student'] = "Successfully Updated Student";
@@ -53,8 +54,8 @@ if (isset($_POST['update-student'])) {
           }
         }
       } else {
-        $stmtUpdateStudent = $conn->prepare("UPDATE users SET lrn_number = ?, fname = ?, lname = ?, gender = ?, birthday = ?, contact = ?, email = ?, address = ? WHERE id = ?");
-        $stmtUpdateStudent->bind_param("ssssssssi", $lrn, $fname, $lname, $gender, $birthday, $contact, $email, $address, $id);
+        $stmtUpdateStudent = $conn->prepare("UPDATE users SET lrn_number = ?, fname = ?, lname = ?, mname = ?, gender = ?, birthday = ?, contact = ?, email = ?, address = ? WHERE id = ?");
+        $stmtUpdateStudent->bind_param("sssssssssi", $lrn, $fname, $lname, $mname, $gender, $birthday, $contact, $email, $address, $id);
 
         if (mysqli_stmt_execute($stmtUpdateStudent)) {
           $_SESSION['update-student'] = "Successfully Updated Student";
@@ -63,8 +64,7 @@ if (isset($_POST['update-student'])) {
         }
       }
     }
-  }
-  elseif($email != $originalEmail) {
+  } elseif ($email != $originalEmail) {
     $stmtDuplicateEmail = $conn->prepare("SELECT * FROM users WHERE email = ?");
     $stmtDuplicateEmail->bind_param("s", $email);
     $stmtDuplicateEmail->execute();
@@ -74,10 +74,9 @@ if (isset($_POST['update-student'])) {
       $_SESSION['duplicate-email'] = "This Email Is Already Registered";
       header("Location: ../admin/admin_student.php");
       exit();
-    } 
-    else {
-      $stmtUpdateStudent = $conn->prepare("UPDATE users SET lrn_number = ?, fname = ?, lname = ?, gender = ?, birthday = ?, contact = ?, email = ?, address = ? WHERE id = ?");
-      $stmtUpdateStudent->bind_param("ssssssssi", $lrn, $fname, $lname, $gender, $birthday, $contact, $email, $address, $id);
+    } else {
+      $stmtUpdateStudent = $conn->prepare("UPDATE users SET lrn_number = ?, fname = ?, lname = ?, mname = ?, gender = ?, birthday = ?, contact = ?, email = ?, address = ? WHERE id = ?");
+      $stmtUpdateStudent->bind_param("sssssssssi", $lrn, $fname, $lname, $mname, $gender, $birthday, $contact, $email, $address, $id);
 
       if (mysqli_stmt_execute($stmtUpdateStudent)) {
         $_SESSION['update-student'] = "Successfully Updated Student";
@@ -85,10 +84,9 @@ if (isset($_POST['update-student'])) {
         exit();
       }
     }
-  } 
-  else {
-    $stmtUpdateStudent = $conn->prepare("UPDATE users SET lrn_number = ?, fname = ?, lname = ?, gender = ?, birthday = ?, contact = ?, email = ?, address = ? WHERE id = ?");
-    $stmtUpdateStudent->bind_param("ssssssssi", $lrn, $fname, $lname, $gender, $birthday, $contact, $email, $address, $id);
+  } else {
+    $stmtUpdateStudent = $conn->prepare("UPDATE users SET lrn_number = ?, fname = ?, lname = ?, mname = ?, gender = ?, birthday = ?, contact = ?, email = ?, address = ? WHERE id = ?");
+    $stmtUpdateStudent->bind_param("sssssssssi", $lrn, $fname, $lname, $mname, $gender, $birthday, $contact, $email, $address, $id);
 
     if (mysqli_stmt_execute($stmtUpdateStudent)) {
       $_SESSION['update-student'] = "Successfully Updated Student";

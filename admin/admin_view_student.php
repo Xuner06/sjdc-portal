@@ -70,6 +70,7 @@ if (isset($_GET['id'])) {
                 <h1 class="text-center">Student Account Information</h1>
                 <p><strong>LRN Number:</strong> <?php echo $rowStudent['lrn_number']; ?></p>
                 <p><strong>First Name:</strong> <?php echo $rowStudent['fname']; ?></p>
+                <p><strong>Middle Name:</strong> <?php echo $rowStudent['mname']; ?></p>
                 <p><strong>Last Name:</strong> <?php echo $rowStudent['lname']; ?></p>
                 <p><strong>Sex:</strong> <?php echo $rowStudent['gender']; ?></p>
                 <?php

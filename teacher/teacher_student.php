@@ -76,7 +76,7 @@ $row = $stmtResult->fetch_assoc();
                     ?>
                           <tr>
                             <td><?php echo $row['lrn_number']; ?></td>
-                            <td><?php echo $row['lname'] . ", " . $row['fname']; ?></td>
+                            <td><?php echo $row['lname'] . ', ' . $row['fname']. ' ' . substr($row['mname'], 0, 1) . '.'; ?></td>
                             <td><?php echo $row['gender']; ?></td>
                             <td><?php echo $row['email']; ?></td>
                             <td><?php echo $row['contact']; ?></td>

@@ -44,6 +44,7 @@ $row = $stmtResult->fetch_assoc();
               <div class="card-body">
                 <h1 class="text-center">Teacher Account Information</h1>
                 <p><strong>First Name:</strong> <?php echo $row['fname']; ?></p>
+                <p><strong>Middle Name:</strong> <?php echo $row['mname']; ?></p>
                 <p><strong>Last Name:</strong> <?php echo $row['lname']; ?></p>
                 <p><strong>Gender:</strong> <?php echo $row['gender']; ?></p>
                 <?php

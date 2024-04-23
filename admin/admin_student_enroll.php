@@ -121,7 +121,7 @@ if (isset($_GET['id'])) {
                       <th>Class</th>
                       <th>School Year</th>
                       <th>Semester</th>
-                      <th>Date Enroll</th>
+                      <th>Date Enrolled</th>
                       <th>Delete</th>
                     </tr>
                   </thead>
@@ -213,7 +213,7 @@ if (isset($_GET['id'])) {
             </div>
             <div class="form-group">
               <label class="form-label">Name</label>
-              <input type="text" class="form-control" value="<?php echo $resultStudent['lname'] . ', ' . $resultStudent['fname']; ?>" disabled>
+              <input type="text" class="form-control" value="<?php echo $resultStudent['lname'] . ', ' . $resultStudent['fname'] . " " . substr($resultStudent['mname'], 0, 1) . "."; ?>" disabled>
             </div>
             <div class="form-group">
               <label for="class" class="form-label">Class</label>

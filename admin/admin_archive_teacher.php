@@ -85,7 +85,7 @@ $row = $stmtResult->fetch_assoc();
                     ?>
                         <tr>
                           <td><?php echo $rowTeacher['id']; ?></td>
-                          <td><?php echo $rowTeacher['fname'] . ' ' . $rowTeacher['lname']; ?></td>
+                          <td><?php echo $rowTeacher['lname'] . ", " . $rowTeacher['fname'] . " " . substr($rowTeacher['mname'], 0, 1) . "."; ?></td>
                           <td><?php echo $rowTeacher['gender']; ?></td>
                           <td><?php echo $rowTeacher['email']; ?></td>
                           <td><?php echo $rowTeacher['contact']; ?></td>

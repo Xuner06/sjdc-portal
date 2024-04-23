@@ -167,7 +167,7 @@ $row = $stmtResult->fetch_assoc();
                     ?>
                         <tr>
                           <td><?php echo $row['lrn_number']; ?></td>
-                          <td><?php echo $row['fname'] . " " . $row['lname']; ?></td>
+                          <td><?php echo $row['lname'] . ", " . $row['fname'] . " " . substr($row['mname'], 0, 1) . "."; ?></td>
                           <td><?php echo $row['gender']; ?></td>
                           <?php
                           $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
@@ -227,10 +227,19 @@ $row = $stmtResult->fetch_assoc();
                                       <div class="row">
                                         <div class="col-sm-12 col-md-6">
                                           <div class="form-group">
+                                            <label for="edit-mname" class="form-label">Middle Name</label>
+                                            <input type="text" class="form-control" id="edit-mname" name="edit-mname" value="<?php echo $row['mname']; ?>" required>
+                                          </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6">
+                                          <div class="form-group">
                                             <label for="edit-lname" class="form-label">Last Name</label>
                                             <input type="text" class="form-control" id="edit-lname" name="edit-lname" value="<?php echo $row['lname']; ?>" required>
                                           </div>
                                         </div>
+                                      </div>
+
+                                      <div class="row">
                                         <div class="col-sm-12 col-md-6">
                                           <div class="form-group">
                                             <label for="edit-gender" class="form-label">Sex</label>
@@ -241,31 +250,29 @@ $row = $stmtResult->fetch_assoc();
                                             </select>
                                           </div>
                                         </div>
-                                      </div>
-
-                                      <div class="row">
                                         <div class="col-sm-12 col-md-6">
                                           <div class="form-group">
                                             <label for="edit_birthday" class="form-label">Birthday</label>
                                             <input type="date" class="form-control" id="edit_birthday" name="edit_birthday" value="<?php echo $row['birthday']; ?>" required>
                                           </div>
                                         </div>
+                                      </div>
+                                      <div class="row">
                                         <div class="col-sm-12 col-md-6">
                                           <div class="form-group">
                                             <label for="edit-contact" class="form-label">Contact</label>
                                             <input type="number" class="form-control" id="edit-contact" name="edit-contact" value="<?php echo $row['contact']; ?>" required>
                                           </div>
                                         </div>
-                                      </div>
-
-                                      <div class="row">
                                         <div class="col-sm-12 col-md-6">
                                           <div class="form-group">
                                             <label for="edit_email" class="form-label">Email</label>
                                             <input type="email" class="form-control" id="edit_email" name="edit_email" value="<?php echo $row['email']; ?>" required>
                                           </div>
                                         </div>
-                                        <div class="col-sm-12 col-md-6">
+                                      </div>
+                                      <div class="row">
+                                        <div class="col">
                                           <div class="form-group">
                                             <label for="edit-address" class="form-label">Address</label>
                                             <input type="text" class="form-control" id="edit-address" name="edit-address" value="<?php echo $row['address']; ?>" required>
@@ -361,10 +368,18 @@ $row = $stmtResult->fetch_assoc();
             <div class="row">
               <div class="col-sm-12 col-md-6">
                 <div class="form-group">
+                  <label for="mname" class="form-label">Middle Name</label>
+                  <input type="text" class="form-control" id="mname" name="mname" required>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div class="form-group">
                   <label for="lname" class="form-label">Last Name</label>
                   <input type="text" class="form-control" id="lname" name="lname" required>
                 </div>
               </div>
+            </div>
+            <div class="row">
               <div class="col-sm-12 col-md-6">
                 <div class="form-group">
                   <label for="gender" class="form-label">Sex</label>
@@ -375,29 +390,29 @@ $row = $stmtResult->fetch_assoc();
                   </select>
                 </div>
               </div>
-            </div>
-            <div class="row">
               <div class="col-sm-12 col-md-6">
                 <div class="form-group">
                   <label for="birthday" class="form-label">Birthday</label>
                   <input type="date" class="form-control" id="birthday" name="birthday" required>
                 </div>
               </div>
+            </div>
+            <div class="row">
               <div class="col-sm-12 col-md-6">
                 <div class="form-group">
                   <label for="contact" class="form-label">Contact</label>
                   <input type="number" class="form-control" id="contact" name="contact" required>
                 </div>
               </div>
-            </div>
-            <div class="row">
               <div class="col-sm-12 col-md-6">
                 <div class="form-group">
                   <label for="email" class="form-label">Email</label>
                   <input type="email" class="form-control" id="email" name="email" required>
                 </div>
               </div>
-              <div class="col-sm-12 col-md-6">
+            </div>
+            <div class="row">
+              <div class="col">
                 <div class="form-group">
                   <label for="address" class="form-label">Address</label>
                   <input type="text" class="form-control" id="address" name="address" required>

@@ -27,6 +27,7 @@
     $stmtResultClass = $stmtClass->get_result();
     $class = $stmtResultClass->fetch_assoc();
 
+    $classId = $class['class_id'];
     $level = $class['level'];
     $strand = $class['strand'];
     $semester = $class['semester'];
@@ -85,7 +86,34 @@
         unset($_SESSION['success-upload']);
       }
       ?>
-
+      <?php
+      if (isset($_SESSION['invalid-file'])) {
+      ?>
+        <script>
+          Swal.fire({
+            title: 'Failed',
+            text: '<?php echo $_SESSION['invalid-file']; ?>',
+            icon: 'error',
+          })
+        </script>
+      <?php
+        unset($_SESSION['invalid-file']);
+      }
+      ?>
+      <?php
+      if (isset($_SESSION['success-import'])) {
+      ?>
+        <script>
+          Swal.fire({
+            title: 'Success',
+            text: '<?php echo $_SESSION['success-import']; ?>',
+            icon: 'success',
+          })
+        </script>
+      <?php
+        unset($_SESSION['success-import']);
+      }
+      ?>
       <div class="content-header">
         <div class="container-fluid">
           <div class="row mb-2">
@@ -130,19 +158,38 @@
                         ?>
                             <tr>
                               <td><?php echo $rowStudent['lrn_number']; ?></td>
-                              <td><?php echo $rowStudent['lname'] . ', ' . $rowStudent['fname']; ?></td>
+                              <td><?php echo $rowStudent['lname'] . ', ' . $rowStudent['fname'] . ' ' . substr($rowStudent['mname'], 0, 1) . '.'; ?></td>
                               <td>
                                 <input type="hidden" name="class" value="<?php echo $rowStudent['class']; ?>">
                                 <input type="hidden" name="sy" value="<?php echo $sy; ?>">
                                 <input type="hidden" name="subject" value="<?php echo $subject; ?>">
-                                <select class="form-control" name="grade[<?php echo $rowStudent['student_id']; ?>]" required>
-                                  <option class="text-center" value="N/A">N/A</option>
-                                  <?php
-                                  for ($i = 50; $i <= 100; $i++) {
-                                    echo '<option value="' . $i . '" class="text-center">' . $i . '</option>';
-                                  }
-                                  ?>
-                                </select>
+                                <?php
+                                $stmtCheckGrade = $conn->prepare("SELECT * FROM grade WHERE student = ? AND subject = ? AND sy = ?");
+                                $stmtCheckGrade->bind_param("iii", $rowStudent['student_id'], $subject, $sy);
+                                $stmtCheckGrade->execute();
+                                $stmtResultGrade = $stmtCheckGrade->get_result();
+
+                                if (mysqli_num_rows($stmtResultGrade) > 0) {
+                                  $resultGrade = $stmtResultGrade->fetch_assoc();
+                                  $grade = $resultGrade['grade'];
+                                ?>
+                                  <select class="form-control" disabled>
+                                    <option value="" class="text-center" selected><?php echo $grade; ?></option>
+                                  </select>
+                                <?php
+                                } else {
+                                ?>
+                                  <select class="form-control" name="grade[<?php echo $rowStudent['student_id']; ?>]" required>
+                                    <option class="text-center" value="N/A">N/A</option>
+                                    <?php
+                                    for ($i = 50; $i <= 100; $i++) {
+                                      echo '<option value="' . $i . '" class="text-center">' . $i . '</option>';
+                                    }
+                                    ?>
+                                  </select>
+                                <?php
+                                }
+                                ?>
                               </td>
                             </tr>
                           <?php
@@ -167,6 +214,36 @@
         </div>
       </div>
     </div>
+    <!-- Import Grade Modal -->
+    <div class="modal fade" id="importGrade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Import Grade</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="../actions/import_grade.php" method="post" id="insertForm" enctype="multipart/form-data">
+              <input type="hidden" name="class" value="<?php echo $classId; ?>">
+              <input type="hidden" name="sy" value="<?php echo $sy; ?>">
+              <input type="hidden" name="subject" value="<?php echo $subject; ?>">
+              <div class="form-group">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" name="file" id="customFile">
+                  <label class="custom-file-label" for="customFile">Choose file</label>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-sm btn-primary w-100" name="import-grade">Import Grade</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- bs-custom-file-input -->
+    <script src="../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 
     <!-- DataTables  & Plugins -->
     <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
@@ -184,6 +261,7 @@
 
     <script>
       $(function() {
+        bsCustomFileInput.init();
         $("#example1").DataTable({
           "paging": false,
           "responsive": true,
@@ -218,7 +296,23 @@
                 });
               }
             }
-          }, ]
+          }, {
+            text: 'Import Grades',
+            action: function() {
+              // Open your modal or perform any action when the "Add Class" button is clicked
+              var tableRows = $('#example1 tbody tr:not(.no-assign-student)').length;
+              if (tableRows > 0) {
+                $('#importGrade').modal('show');
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Failed",
+                  text: "No Assign Student",
+                });
+              }
+            }
+
+          }]
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
       });
     </script>

@@ -135,7 +135,7 @@ $row = $stmtResult->fetch_assoc();
                             <td><?php echo $row['strand']; ?></td>
                             <td><?php echo $row['section']; ?></td>
                             <td><?php echo $row['start_year'] . '-' . $row['end_year'] . ' ' . $row['semester']; ?></td>
-                            <td><?php echo $row['lname'] . ', ' . $row['fname']; ?></td>
+                            <td><?php echo $row['lname'] . ", " . $row['fname'] . " " . substr($row['mname'], 0, 1) . "."; ?></td>
                             <td>
                               <!-- Edit Class Button Click -->
                               <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-class-<?php echo $row['class_id']; ?>">Edit</button>
@@ -182,7 +182,7 @@ $row = $stmtResult->fetch_assoc();
                                           <label for="edit-adviser" class="form-label">Adviser</label>
                                           <select class="form-control" name="edit-adviser" id="edit-adviser" required>
                                             <option value=""></option>
-                                            <option value="<?php echo $row['id']; ?>" selected><?php echo $row['lname'] . ', ' . $row['fname']; ?></option>
+                                            <option value="<?php echo $row['id']; ?>" selected><?php echo $row['lname'] . ', ' . $row['fname'] . ' ' . substr($row['mname'], 0, 1) . '.'; ?></option>
                                             <?php
                                             $statustTeacher = 0;
                                             $role = "teacher";
@@ -193,7 +193,7 @@ $row = $stmtResult->fetch_assoc();
 
                                             if (mysqli_num_rows($stmtResultEditTeacher) > 0) {
                                               while ($rowTeacher = $stmtResultEditTeacher->fetch_assoc()) {
-                                                echo '<option value="' . $rowTeacher['id'] . '">' . $rowTeacher['lname'] . ', ' . $rowTeacher['fname'] . '</option>';
+                                                echo '<option value="' . $rowTeacher['id'] . '">' . $rowTeacher['lname'] . ', ' . $rowTeacher['fname'] . ' ' . substr($rowTeacher['mname'], 0, 1) . '.' . '</option>';
                                               }
                                             } else {
                                               echo '<option value="" disabled>No Teacher Available (Please Add Teacher)</option>';
@@ -287,26 +287,6 @@ $row = $stmtResult->fetch_assoc();
               <label for="section" class="form-label">Section</label>
               <input type="number" class="form-control" name="section" id="section" required>
             </div>
-            <!-- <div class="form-group">
-              <label for="sy" class="form-label">Schoolyear</label>
-              <select class="form-control" name="sy" id="sy" required>
-                <option value=""></option>
-                <?php
-                $status = "Active";
-                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
-                $stmtSy->bind_param("s", $status);
-                $stmtSy->execute();
-                $stmtResultSy = $stmtSy->get_result();
-                if (mysqli_num_rows($stmtResultSy) > 0) {
-                  while ($rowSy = $stmtResultSy->fetch_assoc()) {
-                    echo '<option value="' . $rowSy['sy_id'] . '">' . $rowSy['start_year'] . '-' . $rowSy['end_year'] . ' ' . $rowSy['semester'] . '</option>';
-                  }
-                } else {
-                  echo '<option value="" disabled>No Active School Year (Please Set School Year)</option>';
-                }
-                ?>
-              </select>
-            </div> -->
             <div class="form-group">
               <label for="adviser" class="form-label">Adviser</label>
               <select class="form-control" name="adviser" id="adviser" required>
@@ -328,7 +308,7 @@ $row = $stmtResult->fetch_assoc();
                   $stmtResultInsertTeacher = $stmtInsertTeacher->get_result();
                   if (mysqli_num_rows($stmtResultInsertTeacher) > 0) {
                     while ($teacher = $stmtResultInsertTeacher->fetch_assoc()) {
-                      echo '<option value="' . $teacher['id'] . '">' . $teacher['lname'] . ', ' . $teacher['fname'] . '</option>';
+                      echo '<option value="' . $teacher['id'] . '">' . $teacher['lname'] . ', ' . $teacher['fname'] . ' ' . substr($teacher['mname'], 0, 1) . '.' . '</option>';
                     }
                   } else {
                     echo '<option value="" disabled>No Teacher Available (Please Add Teacher)</option>';

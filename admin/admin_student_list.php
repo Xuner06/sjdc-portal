@@ -89,7 +89,7 @@ $row = $stmtResult->fetch_assoc();
                         <tr>
                           <td><input class="checkItem" type="checkbox" value="<?php echo $row['id']; ?>"></td>
                           <td><?php echo $row['lrn_number']; ?></td>
-                          <td><?php echo $row['fname'] . " " . $row['lname']; ?></td>
+                          <td><?php echo $row['lname'] . ", " . $row['fname'] . " " . substr($row['mname'], 0, 1) . "."; ?></td>
                           <td><?php echo $row['gender']; ?></td>
                           <?php
                           $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format

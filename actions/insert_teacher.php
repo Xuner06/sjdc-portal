@@ -4,8 +4,9 @@ session_start();
 
 if(isset($_POST['add-teacher'])) {
   $lrn_number = "N/A";
-  $fname = $_POST['fname'];
-  $lname = $_POST['lname'];
+  $fname = ucfirst($_POST['fname']);
+  $mname = ucfirst($_POST['mname']);
+  $lname = ucfirst($_POST['lname']);
   $gender = $_POST['gender'];
   $contact = $_POST['contact'];
   $email = $_POST['email'];
@@ -26,8 +27,8 @@ if(isset($_POST['add-teacher'])) {
     exit();
   }
   else {
-    $stmtInsertTeacher = $conn->prepare("INSERT INTO users (lrn_number, role, fname, lname, gender, birthday, contact, email, address, password, status, reg_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-    $stmtInsertTeacher->bind_param("ssssssssssi", $lrn_number, $role, $fname, $lname, $gender, $birthday, $contact, $email, $address, $password, $status);
+    $stmtInsertTeacher = $conn->prepare("INSERT INTO users (lrn_number, role, fname, lname, mname, gender, birthday, contact, email, address, password, status, reg_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+    $stmtInsertTeacher->bind_param("sssssssssssi", $lrn_number, $role, $fname, $lname, $mname, $gender, $birthday, $contact, $email, $address, $password, $status);
   
     if(mysqli_stmt_execute($stmtInsertTeacher)) {
       $_SESSION['add-teacher'] = "Successfully Added Teacher";

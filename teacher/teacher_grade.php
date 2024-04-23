@@ -51,7 +51,7 @@ $row = $stmtResult->fetch_assoc();
                       <th>Subject Name</th>
                       <th>View</th>
                       <th>Upload</th>
-                      <th>Edit</th>
+                      <!-- <th>Edit</th> -->
                     </tr>
                   </thead>
                   <tbody>
@@ -96,9 +96,9 @@ $row = $stmtResult->fetch_assoc();
                               <td>
                                 <a href="teacher_encode_grade.php?subject=<?php echo $subject['subject_id']; ?>" class="btn btn-primary btn-sm">Upload</a>
                               </td>
-                              <td>
+                              <!-- <td>
                                 <a href="teacher_edit_grade.php?subject_edit=<?php echo $subject['subject_id']; ?>" class="btn btn-success btn-sm">Edit</a>
-                              </td>
+                              </td> -->
                             </tr>
                           <?php
                           }

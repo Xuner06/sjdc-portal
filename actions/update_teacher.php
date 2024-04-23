@@ -4,8 +4,9 @@ session_start();
 
 if(isset($_POST['update-teacher'])) {
   $id = $_POST['edit-id'];
-  $fname = $_POST['edit-fname'];
-  $lname = $_POST['edit-lname'];
+  $fname = ucfirst($_POST['edit-fname']);
+  $mname = ucfirst($_POST['edit-mname']);
+  $lname = ucfirst($_POST['edit-lname']);
   $gender = $_POST['edit-gender'];
   $contact = $_POST['edit-contact'];
   $email = $_POST['edit_email'];
@@ -31,8 +32,8 @@ if(isset($_POST['update-teacher'])) {
       exit();
     }
     else{
-      $stmtUpdateTeacher = $conn->prepare("UPDATE users SET fname = ?, lname = ?, gender = ?, birthday = ?, contact = ?, email = ?,  address = ? WHERE id = ?");
-      $stmtUpdateTeacher->bind_param("sssssssi", $fname, $lname, $gender, $birthday, $contact, $email, $address, $id);
+      $stmtUpdateTeacher = $conn->prepare("UPDATE users SET fname = ?, lname = ?, mname = ?, gender = ?, birthday = ?, contact = ?, email = ?,  address = ? WHERE id = ?");
+      $stmtUpdateTeacher->bind_param("ssssssssi", $fname, $lname, $mname, $gender, $birthday, $contact, $email, $address, $id);
 
       if(mysqli_stmt_execute($stmtUpdateTeacher)) {
         $_SESSION['update-teacher'] = "Successfully Updated Teacher";
@@ -42,8 +43,8 @@ if(isset($_POST['update-teacher'])) {
     }
   }
   else {
-    $stmtUpdateTeacher = $conn->prepare("UPDATE users SET fname = ?, lname = ?, gender = ?, birthday = ?, contact = ?, email = ?,  address = ? WHERE id = ?");
-    $stmtUpdateTeacher->bind_param("sssssssi", $fname, $lname, $gender, $birthday, $contact, $email, $address, $id);
+    $stmtUpdateTeacher = $conn->prepare("UPDATE users SET fname = ?, lname = ?, mname = ?, gender = ?, birthday = ?, contact = ?, email = ?,  address = ? WHERE id = ?");
+    $stmtUpdateTeacher->bind_param("ssssssssi", $fname, $lname, $mname, $gender, $birthday, $contact, $email, $address, $id);
 
     if(mysqli_stmt_execute($stmtUpdateTeacher)) {
       $_SESSION['update-teacher'] = "Successfully Updated Teacher";
