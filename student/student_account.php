@@ -54,6 +54,34 @@ $row = $stmtResult->fetch_assoc();
       unset($_SESSION['login-student']);
     }
     ?>
+    <?php
+    if (isset($_SESSION['wrong-pass'])) {
+    ?>
+      <script>
+        Swal.fire({
+          title: 'Failed',
+          text: '<?php echo $_SESSION['wrong-pass']; ?>',
+          icon: 'error',
+        })
+      </script>
+    <?php
+      unset($_SESSION['wrong-pass']);
+    }
+    ?>
+    <?php
+    if (isset($_SESSION['success-changePass'])) {
+    ?>
+      <script>
+        Swal.fire({
+          title: 'Success',
+          text: '<?php echo $_SESSION['success-changePass']; ?>',
+          icon: 'success',
+        })
+      </script>
+    <?php
+      unset($_SESSION['success-changePass']);
+    }
+    ?>
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">Account</h1>
@@ -96,6 +124,7 @@ $row = $stmtResult->fetch_assoc();
                 <p><strong>Email:</strong> <?php echo $row['email']; ?></p>
                 <p><strong>Address:</strong> <?php echo $row['address']; ?></p>
                 <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($row['reg_date'])); ?></p>
+                <a href="#change-pass" data-toggle="modal"><i class="fas fa-lock"></i> Change Password</a>
               </div>
             </div>
           </div>
@@ -103,6 +132,66 @@ $row = $stmtResult->fetch_assoc();
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="change-pass">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Change Password</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="../actions/change_password.php" method="post" id="changePassForm">
+            <input type="hidden" name="id" value="<?php echo $id; ?>">
+            <div class="form-group">
+              <label for="current-pass" class="form-label">Current Password</label>
+              <input type="password" class="form-control" name="current-pass" id="current-pass" required>
+            </div>
+            <div class="form-group">
+              <label for="new-pass" class="form-label">New Password</label>
+              <input type="password" class="form-control" name="new-pass" id="new-pass" required>
+            </div>
+            <div class="form-group">
+              <label for="confirm_pass" class="form-label">Confirm Password</label>
+              <input type="password" class="form-control" name="confirm_pass" id="confirm_pass" required>
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary w-100" name="student-change-password">Change Password</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- jquery-validation -->
+  <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
+  <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
+  <script>
+    $('#changePassForm').validate({
+      rules: {
+        confirm_pass: {
+          equalTo: "#new-pass"
+        }
+      },
+      messages: {
+        confirm_pass: {
+          equalTo: "New Passwords Does Not Match"
+        }
+      },
+      errorElement: 'span',
+      errorPlacement: function(error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      }
+    });
+  </script>
 </body>
 
 </html>

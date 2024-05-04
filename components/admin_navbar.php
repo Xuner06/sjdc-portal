@@ -169,6 +169,14 @@
                 </p>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="../admin/admin_archive_sy.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_archive_sy.php') ? 'active' : ''; ?>">
+                <i class="nav-icon fas fa-calendar-alt"></i>
+                <p>
+                  School Year
+                </p>
+              </a>
+            </li>
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
