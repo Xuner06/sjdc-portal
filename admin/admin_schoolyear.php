@@ -95,7 +95,6 @@ $row = $stmtResult->fetch_assoc();
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>School Year ID</th>
                       <th>School Year</th>
                       <th>Semester</th>
                       <th>Status</th>
@@ -110,9 +109,7 @@ $row = $stmtResult->fetch_assoc();
                     if (mysqli_num_rows($querySchoolyear) > 0) {
                       while ($row = mysqli_fetch_assoc($querySchoolyear)) {
                     ?>
-
                         <tr>
-                          <td><?php echo $row['sy_id']; ?></td>
                           <td><?php echo $row['start_year'] . "-" . $row['end_year']; ?></td>
                           <td><?php echo $row['semester']; ?></td>
                           <td><?php echo $row['status']; ?></td>
