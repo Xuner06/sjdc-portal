@@ -49,7 +49,7 @@ $row = $stmtResult->fetch_assoc();
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
-                <h1 class="text-center">School Year List</h1>
+                <h1 class="text-center">School Year <?php echo isset($_SESSION['start_year']) && isset($_SESSION['end_year']) ? $_SESSION['start_year'] . '-' . $_SESSION['end_year'] : ''; ?></h1>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -57,6 +57,9 @@ $row = $stmtResult->fetch_assoc();
                       <th>Name</th>
                       <th>Class</th>
                       <th>Semester</th>
+                      <th>View</th>
+                      <th>Edit</th>
+                      <th>Upload</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -65,7 +68,7 @@ $row = $stmtResult->fetch_assoc();
                       $startYear = $_SESSION['start_year'];
                       $endYear = $_SESSION['end_year'];
 
-                      $stmtEnroll = $conn->prepare("SELECT e.*, s.* FROM enroll_student e JOIN school_year s ON e.sy = s.sy_id WHERE s.start_year = ? AND s.end_year = ?");
+                      $stmtEnroll = $conn->prepare("SELECT e.*, s.*, u.*, c.*, st.* FROM enroll_student e JOIN school_year s ON e.sy = s.sy_id JOIN users u ON e.student_id = u.id JOIN class c ON e.class = c.class_id JOIN strand st ON c.strand = st.strand_id WHERE s.start_year = ? AND s.end_year = ?");
                       $stmtEnroll->bind_param("ss", $startYear, $endYear);
                       $stmtEnroll->execute();
                       $stmtResultEnroll = $stmtEnroll->get_result();
@@ -73,17 +76,23 @@ $row = $stmtResult->fetch_assoc();
                       while ($rowEnroll = $stmtResultEnroll->fetch_assoc()) {
                     ?>
                         <tr>
-                          <td><?php echo $rowEnroll['student_id']; ?></td>
-                          <td>Name</td>
-                          <td><?php echo $rowEnroll['class']; ?></td>
+                          <td><?php echo $rowEnroll['lrn_number']; ?></td>
+                          <td><?php echo $rowEnroll['lname'] . ", " . $rowEnroll['fname'] . " " . substr($rowEnroll['mname'], 0, 1) . "."; ?></td>
+                          <td><?php echo $rowEnroll['level'] . "-" . $rowEnroll['strand'] . "-" . $rowEnroll['section']; ?></td>
                           <td><?php echo $rowEnroll['semester']; ?></td>
+                          <td><a href="admin_archive_view_grade.php?view=<?php echo $rowEnroll['enroll_id']; ?>" class="btn btn-primary btn-sm">View</a></td>
+                          <td><a href="admin_archive_edit_grade.php?edit=<?php echo $rowEnroll['enroll_id']; ?>" class="btn btn-success btn-sm">Edit</a></td>
+                          <td><a href="admin_archive_upload_grade.php?grade=<?php echo $rowEnroll['enroll_id']; ?>" class="btn btn-primary btn-sm">Upload</a></td>
                         </tr>
                       <?php
                       }
                     } else {
                       ?>
                       <tr>
-                        <td colspan="4" class="text-center">Not Set</td>
+                        <td colspan="7" class="text-center">Select School Year</td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
+                        <td class="d-none"></td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>

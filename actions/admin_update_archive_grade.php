@@ -2,7 +2,7 @@
 include("../database/database.php");
 session_start();
 
-if (isset($_POST['update-grade'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $student = $_POST['student-id'];
   $enroll = $_POST['enroll-id'];
   $sy = $_POST['sy'];
@@ -14,7 +14,7 @@ if (isset($_POST['update-grade'])) {
     $stmtUpdateGrade->execute();
   }
   $_SESSION['success-update'] = "Successfully Updated Grade";
-  header("Location: ../admin/admin_edit_grade.php?edit=$enroll");
+  header("Location: ../admin/admin_archive_edit_grade.php?edit=$enroll");
   exit();
 }
 ?>

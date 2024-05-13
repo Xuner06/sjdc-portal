@@ -100,6 +100,7 @@ $row = $stmtResult->fetch_assoc();
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
+                <h1 class="text-center">Teacher List</h1>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>

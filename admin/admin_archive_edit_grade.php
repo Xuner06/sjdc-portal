@@ -10,28 +10,21 @@ $stmtAdmin->execute();
 $stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 
-if (isset($_GET['grade'])) {
-  $enrollId = $_GET['grade'];
-  $status = "Active";
-  $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
-  $stmtSy->bind_param("s", $status);
-  $stmtSy->execute();
-  $stmtResultSy = $stmtSy->get_result();
-  $resultSy = $stmtResultSy->fetch_assoc();
-  $sy = $resultSy['sy_id'];
+if (isset($_GET['edit'])) {
+  $enrollId = $_GET['edit'];
 
-  $stmtEnroll = $conn->prepare("SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = ? AND e.sy = ?");
-  $stmtEnroll->bind_param("ii", $enrollId, $sy);
+  $stmtEnroll = $conn->prepare("SELECT e.* FROM enroll_student e WHERE e.enroll_id = ?");
+  $stmtEnroll->bind_param("i", $enrollId);
   $stmtEnroll->execute();
   $stmtResultEnroll = $stmtEnroll->get_result();
   $result = $stmtResultEnroll->fetch_assoc();
 
   if (mysqli_num_rows($stmtResultEnroll) == 0) {
-    header("Location: admin_grade.php");
+    header("Location: admin_archive_sy.php");
     exit();
   }
 } else {
-  header("Location: admin_grade.php");
+  header("Location: admin_archive_sy.php");
   exit();
 }
 
@@ -57,17 +50,17 @@ if (isset($_GET['grade'])) {
   <?php include("../components/admin_navbar.php"); ?>
   <div class="content-wrapper">
     <?php
-    if (isset($_SESSION['success-upload'])) {
+    if (isset($_SESSION['success-update'])) {
     ?>
       <script>
         Swal.fire({
           title: 'Success',
-          text: '<?php echo $_SESSION['success-upload']; ?>',
+          text: '<?php echo $_SESSION['success-update']; ?>',
           icon: 'success',
         })
       </script>
     <?php
-      unset($_SESSION['success-upload']);
+      unset($_SESSION['success-update']);
     }
     ?>
 
@@ -79,7 +72,7 @@ if (isset($_GET['grade'])) {
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <a href="admin_grade.php" class="btn btn-primary btn-sm">Back</a>
+              <a href="admin_archive_sy.php" class="btn btn-primary btn-sm">Back</a>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -92,12 +85,10 @@ if (isset($_GET['grade'])) {
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
-                <h1 class="text-center">Student Upload Grade</h1>
-                <form action="../actions/admin_insert_grade.php" method="post">
+                <h1 class="text-center">Student Edit Grade</h1>
+                <form action="../actions/admin_update_archive_grade.php" method="post" id="editGrade">
                   <input type="hidden" value="<?php echo $result['student_id']; ?>" name="student-id">
                   <input type="hidden" value="<?php echo $result['enroll_id']; ?>" name="enroll-id">
-                  <input type="hidden" value="<?php echo $result['sy']; ?>" name="sy">
-                  <input type="hidden" value="<?php echo $result['class']; ?>" name="class">
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -108,26 +99,25 @@ if (isset($_GET['grade'])) {
                     </thead>
                     <tbody>
                       <?php
-                      $level = $result['level'];
-                      $strand = $result['strand'];
-                      $semester = $result['semester'];
-                      $stmtSubject = $conn->prepare("SELECT * FROM subject WHERE level = ? AND strand = ? AND semester = ?");
-                      $stmtSubject->bind_param("sis", $level, $strand, $semester);
-                      $stmtSubject->execute();
-                      $stmtResultSubject = $stmtSubject->get_result();
+                      $studentId = $result['student_id'];
+                      $sy = $result['sy'];
+                      $stmtGrade = $conn->prepare("SELECT g.*, s.* FROM grade g JOIN subject s ON g.subject = s.subject_id WHERE g.student = ? AND g.sy = ?");
+                      $stmtGrade->bind_param("ii", $studentId, $sy);
+                      $stmtGrade->execute();
+                      $stmtResultGrade = $stmtGrade->get_result();
 
-                      if (mysqli_num_rows($stmtResultSubject) > 0) {
-                        while ($rowSubject = $stmtResultSubject->fetch_assoc()) {
+                      if (mysqli_num_rows($stmtResultGrade) > 0) {
+                        while ($row = $stmtResultGrade->fetch_assoc()) {
                       ?>
                           <tr>
-                            <td><?php echo $rowSubject['subject_id']; ?></td>
-                            <td><?php echo $rowSubject['name']; ?></td>
+                            <td><?php echo $row['subject']; ?></td>
+                            <td><?php echo $row['name']; ?></td>
                             <td>
-                              <select class="form-control" name="grade[<?php echo $rowSubject['subject_id']; ?>]" required>
-                                <option class="text-center" value="N/A">N/A</option>
+                              <select class="form-control" name="grade[<?php echo $row['subject_id']; ?>]" required>
                                 <?php
                                 for ($i = 50; $i <= 100; $i++) {
-                                  echo '<option value="' . $i . '" class="text-center">' . $i . '</option>';
+                                  $selected = ($i == $row['grade']) ? 'selected' : '';
+                                  echo '<option value="' . $i . '" class="text-center"' . $selected . '>' . $i . '</option>';
                                 }
                                 ?>
                               </select>
@@ -135,28 +125,19 @@ if (isset($_GET['grade'])) {
                           </tr>
                         <?php
                         }
-                        ?>
-                        <tr>
-                          <td colspan="3" class="text-center">
-                            <button type="submit" class="btn btn-primary btn-sm" name="upload-grade">Upload Grade</button>
-                          </td>
-                          <td class="d-none"></td>
-                          <td class="d-none"></td>
-                        </tr>
-                      <?php
                       } else {
-                      ?>
-                        <tr>
-                          <td colspan="3" class="text-center">No Subject Available</td>
+                        ?>
+                        <tr class="no-grade">
+                          <td colspan="3" class="text-center">No Grade Yet</td>
                           <td class="d-none"></td>
                           <td class="d-none"></td>
                         </tr>
                       <?php
                       }
                       ?>
+                    </tbody>
+                  </table>
                 </form>
-                </tbody>
-                </table>
               </div>
             </div>
           </div>
@@ -190,15 +171,14 @@ if (isset($_GET['grade'])) {
         "info": false,
         "paging": false,
         "buttons": [{
-          text: 'Upload Grades',
-          className: 'upload-button', // Add a class to the button for easy targeting
+          text: 'Edit Grades',
           action: function() {
             // Check again if there are rows with assigned students before submitting
-            var tableRows = $('#example1 tbody tr:not(.no-assign-student)').length;
+            var tableRows = $('#example1 tbody tr:not(.no-grade)').length;
             if (tableRows > 0) {
               // If there are assigned students, submit the form
               Swal.fire({
-                title: "Upload Grades?",
+                title: "Edit Grades?",
                 text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
@@ -207,14 +187,14 @@ if (isset($_GET['grade'])) {
                 confirmButtonText: "Yes"
               }).then((result) => {
                 if (result.isConfirmed) {
-                  $('#insertGrade').submit();
+                  $('#editGrade').submit();
                 }
               });
             } else {
               Swal.fire({
                 icon: "error",
                 title: "Failed",
-                text: "No Assign Student",
+                text: "No Grade Yet",
               });
             }
           }

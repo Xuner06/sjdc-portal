@@ -88,7 +88,7 @@
                     <p>Student Enroll</p>
                   </a>
                 </li>
-                
+
               </ul>
             </li>
             <li class="nav-item">
@@ -138,8 +138,8 @@
                 </p>
               </a>
             </li>
-            <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_archive_student.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_teacher.php') ? 'menu-open' : ''; ?>">
-              <a href="#" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_archive_student.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_teacher.php') ? 'active' : ''; ?>">
+            <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_archive_student.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_teacher.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_sy.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_upload_grade.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_view_grade.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_edit_grade.php') ? 'menu-open' : ''; ?>">
+              <a href="#" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_archive_student.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_teacher.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_sy.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_upload_grade.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_view_grade.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_edit_grade.php') ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-trash-alt"></i>
                 <p>
                   Archive
@@ -159,6 +159,12 @@
                     <p>Teachers</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="../admin/admin_archive_sy.php" class="nav-link text-dark <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_archive_sy.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_upload_grade.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_view_grade.php' || basename($_SERVER['PHP_SELF']) == 'admin_archive_edit_grade.php') ? 'active' : ''; ?>">
+                    <i class="nav-icon fas fa-calendar-alt"></i>
+                    <p>School Year</p>
+                  </a>
+                </li>
               </ul>
             </li>
             <li class="nav-item">
@@ -166,14 +172,6 @@
                 <i class="nav-icon fas fa-cog"></i>
                 <p>
                   Account
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="../admin/admin_archive_sy.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_archive_sy.php') ? 'active' : ''; ?>">
-                <i class="nav-icon fas fa-calendar-alt"></i>
-                <p>
-                  School Year
                 </p>
               </a>
             </li>
