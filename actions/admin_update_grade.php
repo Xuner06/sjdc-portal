@@ -2,7 +2,7 @@
 include("../database/database.php");
 session_start();
 
-if (isset($_POST['update-grade'])) {
+if (($_SERVER["REQUEST_METHOD"] == "POST")) {
   $student = $_POST['student-id'];
   $enroll = $_POST['enroll-id'];
   $sy = $_POST['sy'];

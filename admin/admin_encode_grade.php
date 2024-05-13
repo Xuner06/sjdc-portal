@@ -50,6 +50,7 @@ if (isset($_GET['grade'])) {
   <!-- Sweetalert -->
   <link rel="stylesheet" href="../plugins/sweetalert2/sweetalert2.min.css">
   <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
+  <link rel="icon" href="../assests/bg1.png" type="image/x-icon">
   <title>SJDC | Student</title>
 </head>
 
@@ -93,7 +94,7 @@ if (isset($_GET['grade'])) {
             <div class="card">
               <div class="card-body">
                 <h1 class="text-center">Student Upload Grade</h1>
-                <form action="../actions/admin_insert_grade.php" method="post">
+                <form action="../actions/admin_insert_grade.php" method="post" id="insertGrade">
                   <input type="hidden" value="<?php echo $result['student_id']; ?>" name="student-id">
                   <input type="hidden" value="<?php echo $result['enroll_id']; ?>" name="enroll-id">
                   <input type="hidden" value="<?php echo $result['sy']; ?>" name="sy">
@@ -108,6 +109,7 @@ if (isset($_GET['grade'])) {
                     </thead>
                     <tbody>
                       <?php
+                      $studentId = $result['student_id'];
                       $level = $result['level'];
                       $strand = $result['strand'];
                       $semester = $result['semester'];
@@ -123,30 +125,40 @@ if (isset($_GET['grade'])) {
                             <td><?php echo $rowSubject['subject_id']; ?></td>
                             <td><?php echo $rowSubject['name']; ?></td>
                             <td>
-                              <select class="form-control" name="grade[<?php echo $rowSubject['subject_id']; ?>]" required>
-                                <option class="text-center" value="N/A">N/A</option>
-                                <?php
-                                for ($i = 50; $i <= 100; $i++) {
-                                  echo '<option value="' . $i . '" class="text-center">' . $i . '</option>';
-                                }
-                                ?>
-                              </select>
+                              <?php
+                              $stmtCheckGrade = $conn->prepare("SELECT * FROM grade WHERE student = ? AND subject = ? AND sy = ?");
+                              $stmtCheckGrade->bind_param("iii", $studentId, $rowSubject['subject_id'], $sy);
+                              $stmtCheckGrade->execute();
+                              $stmtResultGrade = $stmtCheckGrade->get_result();
+
+                              if (mysqli_num_rows($stmtResultGrade) > 0) {
+                                $resultGrade = $stmtResultGrade->fetch_assoc();
+                                $grade = $resultGrade['grade'];
+                              ?>
+                                <select class="form-control" disabled>
+                                  <option value="" class="text-center" selected><?php echo $grade; ?></option>
+                                </select>
+                              <?php
+                              } else {
+                              ?>
+                                <select class="form-control" name="grade[<?php echo $rowSubject['subject_id']; ?>]" required>
+                                  <option class="text-center" value="N/A">N/A</option>
+                                  <?php
+                                  for ($i = 50; $i <= 100; $i++) {
+                                    echo '<option value="' . $i . '" class="text-center">' . $i . '</option>';
+                                  }
+                                  ?>
+                                </select>
+                              <?php
+                              }
+                              ?>
                             </td>
                           </tr>
                         <?php
                         }
-                        ?>
-                        <tr>
-                          <td colspan="3" class="text-center">
-                            <button type="submit" class="btn btn-primary btn-sm" name="upload-grade">Upload Grade</button>
-                          </td>
-                          <td class="d-none"></td>
-                          <td class="d-none"></td>
-                        </tr>
-                      <?php
                       } else {
-                      ?>
-                        <tr>
+                        ?>
+                        <tr class="no-subject">
                           <td colspan="3" class="text-center">No Subject Available</td>
                           <td class="d-none"></td>
                           <td class="d-none"></td>
@@ -194,7 +206,7 @@ if (isset($_GET['grade'])) {
           className: 'upload-button', // Add a class to the button for easy targeting
           action: function() {
             // Check again if there are rows with assigned students before submitting
-            var tableRows = $('#example1 tbody tr:not(.no-assign-student)').length;
+            var tableRows = $('#example1 tbody tr:not(.no-subject)').length;
             if (tableRows > 0) {
               // If there are assigned students, submit the form
               Swal.fire({
@@ -214,7 +226,7 @@ if (isset($_GET['grade'])) {
               Swal.fire({
                 icon: "error",
                 title: "Failed",
-                text: "No Assign Student",
+                text: "No Subject Available",
               });
             }
           }

@@ -50,6 +50,7 @@ if (isset($_GET['edit'])) {
   <!-- Sweetalert -->
   <link rel="stylesheet" href="../plugins/sweetalert2/sweetalert2.min.css">
   <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
+  <link rel="icon" href="../assests/bg1.png" type="image/x-icon">
   <title>SJDC | Student</title>
 </head>
 
@@ -93,7 +94,7 @@ if (isset($_GET['edit'])) {
             <div class="card">
               <div class="card-body">
                 <h1 class="text-center">Student Edit Grade</h1>
-                <form action="../actions/admin_update_grade.php" method="post">
+                <form action="../actions/admin_update_grade.php" method="post" id="editGrade">
                   <input type="hidden" value="<?php echo $result['student_id']; ?>" name="student-id">
                   <input type="hidden" value="<?php echo $result['enroll_id']; ?>" name="enroll-id">
                   <table id="example1" class="table table-bordered table-striped">
@@ -132,18 +133,9 @@ if (isset($_GET['edit'])) {
                           </tr>
                         <?php
                         }
-                        ?>
-                        <tr>
-                          <td colspan="3" class="text-center">
-                            <button type="submit" class="btn btn-success btn-sm" name="update-grade">Edit Grade</button>
-                          </td>
-                          <td class="d-none"></td>
-                          <td class="d-none"></td>
-                        </tr>
-                      <?php
                       } else {
-                      ?>
-                        <tr>
+                        ?>
+                        <tr class="no-grade">
                           <td colspan="3" class="text-center">No Grade Yet</td>
                           <td class="d-none"></td>
                           <td class="d-none"></td>
@@ -186,6 +178,35 @@ if (isset($_GET['edit'])) {
         "searching": false,
         "info": false,
         "paging": false,
+        "buttons": [{
+          text: 'Edit Grades',
+          action: function() {
+            // Check again if there are rows with assigned students before submitting
+            var tableRows = $('#example1 tbody tr:not(.no-grade)').length;
+            if (tableRows > 0) {
+              // If there are assigned students, submit the form
+              Swal.fire({
+                title: "Edit Grades?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  $('#editGrade').submit();
+                }
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Failed",
+                text: "No Grade Yet",
+              });
+            }
+          }
+        }],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
   </script>

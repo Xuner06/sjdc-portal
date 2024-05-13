@@ -50,6 +50,7 @@ if (isset($_GET['view'])) {
   <!-- Sweetalert -->
   <link rel="stylesheet" href="../plugins/sweetalert2/sweetalert2.min.css">
   <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
+  <link rel="icon" href="../assests/bg1.png" type="image/x-icon">
   <title>SJDC | Grade</title>
 
 </head>
