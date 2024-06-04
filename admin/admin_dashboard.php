@@ -10,6 +10,8 @@ $stmtAdmin->execute();
 $stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 
+// $sql = "SELECT * FROM "
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,6 +24,7 @@ $row = $stmtResult->fetch_assoc();
   <link rel="stylesheet" href="../plugins/sweetalert2/sweetalert2.min.css">
   <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
   <link rel="icon" href="../assests/bg1.png" type="image/x-icon">
+  <script src="../plugins/chart.js/Chart.js"></script>
   <title>SJDC | Dashboard</title>
 </head>
 
@@ -170,6 +173,77 @@ $row = $stmtResult->fetch_assoc();
           </div>
         </div>
       </div>
+    </section>
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-6 col-12">
+            <div class="card">
+              <div class="card-body">
+                <div>
+                  <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                <script>
+                  const ctx = document.getElementById('myChart');
+
+                  new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                      datasets: [{
+                        label: '# of Votes',
+                        data: [12, 19, 3, 5, 2, 3],
+                        borderWidth: 1
+                      }]
+                    },
+                    options: {
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+                </script>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-12">
+            <div class="card">
+              <div class="card-body">
+                <div>
+                  <canvas id="myChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+                <script>
+                  const ctx2 = document.getElementById('myChart2');
+
+                  new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                      datasets: [{
+                        label: '# of Votes',
+                        data: [12, 19, 3, 5, 2, 3],
+                        borderWidth: 1
+                      }]
+                    },
+                    options: {
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+                </script>
+              </div>
+            </div>
+          </div>
+        </div>
     </section>
   </div>
 

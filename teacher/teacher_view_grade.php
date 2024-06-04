@@ -187,7 +187,22 @@ if (isset($_GET['subject_view'])) {
         "autoWidth": false,
         "info": false,
         "paging": true,
-        "buttons": ["copy", "csv", "excel", "pdf", "print"],
+        "buttons": [{
+          extend: 'copy',
+          className: 'mr-2 rounded rounded-2',
+        }, {
+          extend: 'csv',
+          className: 'mr-2 rounded rounded-2',
+        }, {
+          extend: 'excel',
+          className: 'mr-2 rounded rounded-2',
+        }, {
+          extend: 'pdf',
+          className: 'mr-2 rounded rounded-2',
+        }, {
+          extend: 'print',
+          className: 'mr-2 rounded rounded-2',
+        }],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
     });

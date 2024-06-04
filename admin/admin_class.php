@@ -110,7 +110,7 @@ $row = $stmtResult->fetch_assoc();
                       <th>Section</th>
                       <th>School Year</th>
                       <th>Adviser</th>
-                      <th>Edit</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -138,6 +138,7 @@ $row = $stmtResult->fetch_assoc();
                             <td><?php echo $row['start_year'] . '-' . $row['end_year'] . ' ' . $row['semester']; ?></td>
                             <td><?php echo $row['lname'] . ", " . $row['fname'] . " " . substr($row['mname'], 0, 1) . "."; ?></td>
                             <td>
+                              <a href="admin_view_class.php?class=<?php echo $row['class_id']; ?>" class="btn btn-primary btn-sm">View</a>
                               <!-- Edit Class Button Click -->
                               <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-class-<?php echo $row['class_id']; ?>">Edit</button>
                               <!-- Edit Class Modal -->

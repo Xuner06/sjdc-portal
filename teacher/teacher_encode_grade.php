@@ -269,8 +269,8 @@
           "lengthChange": false,
           "autoWidth": false,
           "buttons": [{
+            className: 'mr-2 rounded rounded-2',
             text: 'Upload Grades',
-            className: 'upload-button', // Add a class to the button for easy targeting
             action: function() {
               // Check again if there are rows with assigned students before submitting
               var tableRows = $('#example1 tbody tr:not(.no-assign-student)').length;
@@ -298,6 +298,7 @@
               }
             }
           }, {
+            className: 'mr-2 rounded rounded-2',
             text: 'Import Grades',
             action: function() {
               // Open your modal or perform any action when the "Add Class" button is clicked

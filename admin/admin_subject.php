@@ -77,12 +77,11 @@ $row = $stmtResult->fetch_assoc();
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>Subject ID</th>
                       <th>Subject Name</th>
                       <th>Grade Level</th>
                       <th>Strand</th>
                       <th>Semester</th>
-                      <th>Edit</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -93,7 +92,6 @@ $row = $stmtResult->fetch_assoc();
                       while ($row = mysqli_fetch_assoc($querySubject)) {
                     ?>
                         <tr>
-                          <td><?php echo $row['subject_id']; ?></td>
                           <td><?php echo $row['name']; ?></td>
                           <td><?php echo $row['level']; ?></td>
                           <td><?php echo $row['strands']; ?></td>
@@ -162,8 +160,7 @@ $row = $stmtResult->fetch_assoc();
                     else {
                     ?>
                       <tr>
-                        <td colspan="6" class="text-center">No Subject Please Add Subject</td>
-                        <td class="d-none"></td>
+                        <td colspan="5" class="text-center">No Subject Please Add Subject</td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>

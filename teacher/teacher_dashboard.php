@@ -144,9 +144,35 @@ $row = $stmtResult->fetch_assoc();
                   echo '<h3>No Active SY</h3>';
                 }
                 ?>
-
-
                 <p>Total Failed</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-3 col-12">
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <?php
+                $status = "Active";
+                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $stmtSy->bind_param("s", $status);
+                $stmtSy->execute();
+                $stmtResultSy = $stmtSy->get_result();
+                if (mysqli_num_rows($stmtResultSy) > 0) {
+                  $result = $stmtResultSy->fetch_assoc();
+                  $sy = $result['sy_id'];
+                  $startYear = $result['start_year'];
+                  $endYear = $result['end_year'];
+                  $semester = $result['semester'];
+                  echo '<h3>' . $startYear. '-' . $endYear . '</h3>';
+                  echo '<p>' . $semester . '</p>';
+                } else {
+                  echo '<h3>No Active SY</h3>';
+                }
+                ?>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>

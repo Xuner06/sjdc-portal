@@ -102,7 +102,6 @@ if (isset($_GET['grade'])) {
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>Subject Code</th>
                         <th>Subject Name</th>
                         <th>Grade</th>
                       </tr>
@@ -122,7 +121,6 @@ if (isset($_GET['grade'])) {
                         while ($rowSubject = $stmtResultSubject->fetch_assoc()) {
                       ?>
                           <tr>
-                            <td><?php echo $rowSubject['subject_id']; ?></td>
                             <td><?php echo $rowSubject['name']; ?></td>
                             <td>
                               <?php
@@ -159,8 +157,7 @@ if (isset($_GET['grade'])) {
                       } else {
                         ?>
                         <tr class="no-subject">
-                          <td colspan="3" class="text-center">No Subject Available</td>
-                          <td class="d-none"></td>
+                          <td colspan="2" class="text-center">No Subject Available</td>
                           <td class="d-none"></td>
                         </tr>
                       <?php

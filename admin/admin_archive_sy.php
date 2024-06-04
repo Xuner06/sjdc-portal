@@ -58,9 +58,7 @@ $row = $stmtResult->fetch_assoc();
                       <th>Name</th>
                       <th>Class</th>
                       <th>Semester</th>
-                      <th>View</th>
-                      <th>Edit</th>
-                      <th>Upload</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -81,18 +79,18 @@ $row = $stmtResult->fetch_assoc();
                           <td><?php echo $rowEnroll['lname'] . ", " . $rowEnroll['fname'] . " " . substr($rowEnroll['mname'], 0, 1) . "."; ?></td>
                           <td><?php echo $rowEnroll['level'] . "-" . $rowEnroll['strand'] . "-" . $rowEnroll['section']; ?></td>
                           <td><?php echo $rowEnroll['semester']; ?></td>
-                          <td><a href="admin_archive_view_grade.php?view=<?php echo $rowEnroll['enroll_id']; ?>" class="btn btn-primary btn-sm">View</a></td>
-                          <td><a href="admin_archive_edit_grade.php?edit=<?php echo $rowEnroll['enroll_id']; ?>" class="btn btn-success btn-sm">Edit</a></td>
-                          <td><a href="admin_archive_upload_grade.php?grade=<?php echo $rowEnroll['enroll_id']; ?>" class="btn btn-primary btn-sm">Upload</a></td>
+                          <td>
+                            <a href="admin_archive_view_grade.php?view=<?php echo $rowEnroll['enroll_id']; ?>" class="btn btn-primary btn-sm">View</a>
+                            <a href="admin_archive_edit_grade.php?edit=<?php echo $rowEnroll['enroll_id']; ?>" class="btn btn-success btn-sm">Edit</a>
+                            <a href="admin_archive_upload_grade.php?grade=<?php echo $rowEnroll['enroll_id']; ?>" class="btn btn-primary btn-sm">Upload</a>
+                          </td>
                         </tr>
                       <?php
                       }
                     } else {
                       ?>
                       <tr>
-                        <td colspan="7" class="text-center">Select School Year</td>
-                        <td class="d-none"></td>
-                        <td class="d-none"></td>
+                        <td colspan="5" class="text-center">Select School Year</td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>

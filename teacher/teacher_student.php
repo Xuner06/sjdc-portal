@@ -45,6 +45,28 @@ $row = $stmtResult->fetch_assoc();
             <div class="card">
               <div class="card-body">
                 <h1 class="text-center">Student List</h1>
+                <?php
+                $stat = "Active";
+                $Sy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $Sy->bind_param("s", $stat);
+                $Sy->execute();
+                $ResultSy = $Sy->get_result();
+
+                if (mysqli_num_rows($ResultSy) > 0) {
+                  $result = $ResultSy->fetch_assoc();
+                  $schoolyear = $result['sy_id'];
+  
+                  $class = $conn->prepare("SELECT c.*, s.* FROM class c JOIN strand s ON c.strand = s.strand_id WHERE c.adviser = ? AND c.sy = ?");
+                  $class->bind_param("ii", $id, $schoolyear);
+                  $class->execute();
+                  $stmtResultClass = $class->get_result();
+                  if (mysqli_num_rows($stmtResultClass) > 0) {
+                    while ($rowClass = $stmtResultClass->fetch_assoc()) {
+                      echo '<h1>' . $rowClass['level'] . '-' . $rowClass['strand'] . '-' . $rowClass['section'] . '</h1>';
+                    }
+                  }
+                } 
+                ?>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -53,7 +75,7 @@ $row = $stmtResult->fetch_assoc();
                       <th>Sex</th>
                       <th>Email</th>
                       <th>Contact</th>
-                      <th>View</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -77,7 +99,7 @@ $row = $stmtResult->fetch_assoc();
                     ?>
                           <tr>
                             <td><?php echo $row['lrn_number']; ?></td>
-                            <td><?php echo $row['lname'] . ', ' . $row['fname']. ' ' . substr($row['mname'], 0, 1) . '.'; ?></td>
+                            <td><?php echo $row['lname'] . ', ' . $row['fname'] . ' ' . substr($row['mname'], 0, 1) . '.'; ?></td>
                             <td><?php echo $row['gender']; ?></td>
                             <td><?php echo $row['email']; ?></td>
                             <td><?php echo $row['contact']; ?></td>
@@ -161,29 +183,36 @@ $row = $stmtResult->fetch_assoc();
         "autoWidth": false,
         "buttons": [{
           extend: 'copy',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
             columns: [0, 1, 2, 3, 4]
           }
         }, {
           extend: 'csv',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
             columns: [0, 1, 2, 3, 4]
           }
         }, {
           extend: 'excel',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
             columns: [0, 1, 2, 3, 4]
           }
         }, {
           extend: 'pdf',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
             columns: [0, 1, 2, 3, 4]
           }
         }, {
           extend: 'print',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
             columns: [0, 1, 2, 3, 4]
-          }
+          },
+          title: '',
+          message: '<h1 class="text-center">STUDENT LIST</h1><br><h1>Hello</h1>',
         }],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });

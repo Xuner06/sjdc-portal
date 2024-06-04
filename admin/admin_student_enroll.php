@@ -119,11 +119,11 @@ if (isset($_GET['id'])) {
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>Class</th>
                       <th>School Year</th>
+                      <th>Class</th>
                       <th>Semester</th>
                       <th>Date Enrolled</th>
-                      <th>Delete</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -137,8 +137,8 @@ if (isset($_GET['id'])) {
                       while ($row = $stmtResultEnroll->fetch_assoc()) {
                     ?>
                         <tr>
-                          <td><?php echo $row['level'] . '-', $row['strand'] . '-' . $row['section']; ?></td>
                           <td><?php echo $row['start_year'] . '-' . $row['end_year']; ?></td>
+                          <td><?php echo $row['level'] . '-', $row['strand'] . '-' . $row['section']; ?></td>
                           <td><?php echo $row['semester']; ?></td>
                           <td><?php echo $row['enroll_date']; ?></td>
                           <td>

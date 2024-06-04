@@ -28,6 +28,15 @@ $row = $stmtResult->fetch_assoc();
   <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
   <link rel="icon" href="../assests/bg1.png" type="image/x-icon">
   <title>SJDC | Teacher</title>
+  <style>
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      margin: 0;
+    }
+  </style>
 </head>
 
 <body>
@@ -105,14 +114,11 @@ $row = $stmtResult->fetch_assoc();
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>Teacher ID</th>
                       <th>Name</th>
                       <th>Sex</th>
                       <th>Email</th>
                       <th>Contact</th>
-                      <th>View</th>
-                      <th>Edit</th>
-                      <th>Delete</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -128,15 +134,12 @@ $row = $stmtResult->fetch_assoc();
                       while ($row = $stmtResultTeacher->fetch_assoc()) {
                     ?>
                         <tr>
-                          <td><?php echo $row['id']; ?></td>
                           <td><?php echo $row['lname'] . ", " . $row['fname'] . " " . substr($row['mname'], 0, 1) . "."; ?></td>
                           <td><?php echo $row['gender']; ?></td>
                           <td><?php echo $row['email']; ?></td>
                           <td><?php echo $row['contact']; ?></td>
                           <td>
                             <a href="admin_view_teacher.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">View</a>
-                          </td>
-                          <td>
                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-teacher-<?php echo $row['id']; ?>">Edit</button>
                             <!-- Edit Teacher Modal -->
                             <div class="modal fade" id="edit-teacher-<?php echo $row['id']; ?>">
@@ -218,8 +221,6 @@ $row = $stmtResult->fetch_assoc();
                                 </div>
                               </div>
                             </div>
-                          </td>
-                          <td>
                             <button type="button" class="btn btn-danger btn-sm" onclick="deleteTeacher('<?php echo $row['id']; ?>')">Delete</button>
                             <form id="deleteForm-<?php echo $row['id']; ?>" action="../actions/delete_teacher.php" method="post">
                               <input type="hidden" name="delete-id" value="<?php echo $row['id']; ?>">
@@ -231,8 +232,7 @@ $row = $stmtResult->fetch_assoc();
                     } else {
                       ?>
                       <tr>
-                        <td colspan="8" class="text-center">No Teacher Please Add Teacher</td>
-                        <td class="d-none"></td>
+                        <td colspan="7" class="text-center">No Teacher Please Add Teacher</td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
@@ -372,6 +372,7 @@ $row = $stmtResult->fetch_assoc();
         "lengthChange": false,
         "autoWidth": false,
         "buttons": [{
+          className: 'mr-2 rounded rounded-2',
           text: 'Add Teacher',
           action: function() {
             // Open your modal or perform any action when the "Add Student" button is clicked
@@ -379,29 +380,35 @@ $row = $stmtResult->fetch_assoc();
           }
         }, {
           extend: 'copy',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4]
+            columns: [0, 1, 2, 3]
           }
         }, {
           extend: 'csv',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4]
+            columns: [0, 1, 2, 3]
           }
         }, {
           extend: 'excel',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4]
+            columns: [0, 1, 2, 3]
           }
         }, {
           extend: 'pdf',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4]
+            columns: [0, 1, 2, 3]
           }
         }, {
           extend: 'print',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4]
-          }
+            columns: [0, 1, 2, 3]
+          },
+          
         }]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });

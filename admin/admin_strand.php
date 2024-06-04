@@ -96,10 +96,9 @@ $row = $stmtResult->fetch_assoc();
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>Strand ID</th>
                       <th>Strand</th>
                       <th>Description</th>
-                      <th>Edit</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -111,7 +110,6 @@ $row = $stmtResult->fetch_assoc();
                       while ($row = mysqli_fetch_assoc($queryStrand)) {
                     ?>
                         <tr>
-                          <td><?php echo $row['strand_id']; ?></td>
                           <td><?php echo $row['strand']; ?></td>
                           <td><?php echo $row['description']; ?></td>
                           <td>
@@ -151,8 +149,7 @@ $row = $stmtResult->fetch_assoc();
                     } else {
                       ?>
                       <tr>
-                        <td colspan="4" class="text-center">No Strand Please Add Strand</td>
-                        <td class="d-none"></td>
+                        <td colspan="3" class="text-center">No Strand Please Add Strand</td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
                       </tr>

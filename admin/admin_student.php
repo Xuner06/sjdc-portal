@@ -149,9 +149,8 @@ $row = $stmtResult->fetch_assoc();
                       <th>Age</th>
                       <th>Email</th>
                       <th>Contact</th>
-                      <th>View</th>
-                      <th>Edit</th>
-                      <th>Delete</th>
+                      <th>Action</th>
+
                     </tr>
                   </thead>
                   <tbody>
@@ -193,8 +192,7 @@ $row = $stmtResult->fetch_assoc();
                           <td><?php echo $row['contact']; ?></td>
                           <td>
                             <a href="admin_view_student.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">View</a>
-                          </td>
-                          <td>
+                       
                             <!-- Edit Student Button Click -->
                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-student-<?php echo $row['id']; ?>">Edit</button>
                             <!-- Edit Student Modal -->
@@ -286,8 +284,7 @@ $row = $stmtResult->fetch_assoc();
                                 </div>
                               </div>
                             </div>
-                          </td>
-                          <td>
+                          
                             <button type="button" class="btn btn-danger btn-sm" onclick="deleteStudent('<?php echo $row['id']; ?>')">Delete</button>
                             <form id="deleteForm-<?php echo $row['id']; ?>" action="../actions/admin_delete_student.php" method="post">
                               <input type="hidden" name="delete-id" value="<?php echo $row['id']; ?>">
@@ -299,9 +296,7 @@ $row = $stmtResult->fetch_assoc();
                     } else {
                       ?>
                       <tr>
-                        <td colspan="9" class="text-center">No Student Please Add Student</td>
-                        <td class="d-none"></td>
-                        <td class="d-none"></td>
+                        <td colspan="7" class="text-center">No Student Please Add Student</td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
@@ -452,6 +447,7 @@ $row = $stmtResult->fetch_assoc();
         "lengthChange": false,
         "autoWidth": false,
         "buttons": [{
+          className: 'mr-2 rounded rounded-2',
           text: 'Add Student',
           action: function() {
             // Open your modal or perform any action when the "Add Student" button is clicked
@@ -459,29 +455,36 @@ $row = $stmtResult->fetch_assoc();
           }
         }, {
           extend: 'copy',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4]
+            columns: [0, 1, 2, 3, 4, 5]
           }
         }, {
           extend: 'csv',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4]
+            columns: [0, 1, 2, 3, 4, 5]
           }
         }, {
           extend: 'excel',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4]
+            columns: [0, 1, 2, 3, 4, 5]
           }
         }, {
           extend: 'pdf',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4]
+            columns: [0, 1, 2, 3, 4, 5]
           }
         }, {
           extend: 'print',
+          title: '',
+          message: '<h1 class="text-center">SJDC STUDENT LIST</h1>',
+          className: 'mr-2 rounded rounded-2',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4]
-          }
+            columns: [0, 1, 2, 3, 4, 5]
+          },
         }],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });

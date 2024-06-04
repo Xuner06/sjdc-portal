@@ -70,7 +70,7 @@ $row = $stmtResult->fetch_assoc();
                       <th>Age</th>
                       <th>Email</th>
                       <th>Contact</th>
-                      <th>Restore</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>

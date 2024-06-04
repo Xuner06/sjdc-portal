@@ -93,7 +93,6 @@ if (isset($_GET['edit'])) {
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>Subject Code</th>
                         <th>Subject Name</th>
                         <th>Grade</th>
                       </tr>
@@ -111,7 +110,6 @@ if (isset($_GET['edit'])) {
                         while ($row = $stmtResultGrade->fetch_assoc()) {
                       ?>
                           <tr>
-                            <td><?php echo $row['subject']; ?></td>
                             <td><?php echo $row['name']; ?></td>
                             <td>
                               <select class="form-control" name="grade[<?php echo $row['subject_id']; ?>]" required>

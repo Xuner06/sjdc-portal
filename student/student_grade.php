@@ -46,7 +46,7 @@ $row = $stmtResult->fetch_assoc();
                     <tr>
                       <th>School Year</th>
                       <th>Semester</th>
-                      <th>View</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>

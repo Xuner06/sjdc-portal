@@ -105,7 +105,7 @@ if (isset($_GET['view'])) {
                       <?php
                       } ?>
                       <tr>
-                        <td colspan="2">Total</td>
+                        <td colspan="2">GWA</td>
                         <td class="d-none"></td>
                         <td><?php echo $total; ?></td>
                       </tr>
@@ -153,7 +153,22 @@ if (isset($_GET['view'])) {
         "autoWidth": false,
         "info": false,
         "paging": false,
-        "buttons": ["csv", "excel", "pdf", "print"]
+        "buttons": [{
+          extend: 'copy',
+          className: 'mr-2 rounded rounded-2',
+        }, {
+          extend: 'csv',
+          className: 'mr-2 rounded rounded-2',
+        }, {
+          extend: 'excel',
+          className: 'mr-2 rounded rounded-2',
+        }, {
+          extend: 'pdf',
+          className: 'mr-2 rounded rounded-2',
+        }, {
+          extend: 'print',
+          className: 'mr-2 rounded rounded-2',
+        }]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
   </script>

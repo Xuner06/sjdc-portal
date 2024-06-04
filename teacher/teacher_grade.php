@@ -48,11 +48,8 @@ $row = $stmtResult->fetch_assoc();
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>Subject Code</th>
                       <th>Subject Name</th>
-                      <th>View</th>
-                      <th>Upload</th>
-                      <!-- <th>Edit</th> -->
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -89,27 +86,18 @@ $row = $stmtResult->fetch_assoc();
                           while ($subject = $stmtResultSubject->fetch_assoc()) {
                     ?>
                             <tr>
-                              <td><?php echo $subject['subject_id']; ?></td>
                               <td><?php echo $subject['name']; ?></td>
                               <td>
                                 <a href="teacher_view_grade.php?subject_view=<?php echo $subject['subject_id']; ?>" class="btn btn-primary btn-sm">View</a>
-                              </td>
-                              <td>
                                 <a href="teacher_encode_grade.php?subject=<?php echo $subject['subject_id']; ?>" class="btn btn-primary btn-sm">Upload</a>
                               </td>
-                              <!-- <td>
-                                <a href="teacher_edit_grade.php?subject_edit=<?php echo $subject['subject_id']; ?>" class="btn btn-success btn-sm">Edit</a>
-                              </td> -->
                             </tr>
                           <?php
                           }
                         } else {
                           ?>
                           <tr>
-                            <td colspan="6" class="text-center">No Available Subject</td>
-                            <td class="d-none"></td>
-                            <td class="d-none"></td>
-                            <td class="d-none"></td>
+                            <td colspan="2" class="text-center">No Available Subject</td>
                             <td class="d-none"></td>
                           </tr>
                         <?php
@@ -117,10 +105,7 @@ $row = $stmtResult->fetch_assoc();
                       } else {
                         ?>
                         <tr>
-                          <td colspan="6" class="text-center">No Class Assign</td>
-                          <td class="d-none"></td>
-                          <td class="d-none"></td>
-                          <td class="d-none"></td>
+                          <td colspan="2" class="text-center">No Class Assign</td>
                           <td class="d-none"></td>
                         </tr>
                       <?php
@@ -128,10 +113,7 @@ $row = $stmtResult->fetch_assoc();
                     } else {
                       ?>
                       <tr>
-                        <td colspan="6" class="text-center">No Active School Year</td>
-                        <td class="d-none"></td>
-                        <td class="d-none"></td>
-                        <td class="d-none"></td>
+                        <td colspan="2" class="text-center">No Active School Year</td>
                         <td class="d-none"></td>
                       </tr>
                     <?php

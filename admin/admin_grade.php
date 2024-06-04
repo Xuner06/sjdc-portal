@@ -54,9 +54,7 @@ $row = $stmtResult->fetch_assoc();
                       <th>LRN Number</th>
                       <th>Name</th>
                       <th>Class</th>
-                      <th>View</th>
-                      <th>Edit</th>
-                      <th>Upload</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -84,11 +82,7 @@ $row = $stmtResult->fetch_assoc();
                             <td><?php echo $row['level'] . '-' . $row['strand'] . '-' . $row['section']; ?></td>
                             <td>
                               <a href="admin_view_grade.php?view=<?php echo $row['enroll_id']; ?>" class="btn btn-primary btn-sm">View</a>
-                            </td>
-                            <td>
                               <a href="admin_edit_grade.php?edit=<?php echo $row['enroll_id']; ?>" class="btn btn-success btn-sm">Edit</a>
-                            </td>
-                            <td>
                               <a href="admin_encode_grade.php?grade=<?php echo $row['enroll_id']; ?>" class="btn btn-primary btn-sm">Upload</a>
                             </td>
                           </tr>
