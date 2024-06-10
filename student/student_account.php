@@ -58,6 +58,31 @@ $row = $stmtResult->fetch_assoc();
     <?php
       unset($_SESSION['success-changePass']);
     }
+
+    if (isset($_SESSION['upload-picture-success'])) {
+    ?>
+      <script>
+        Swal.fire({
+          title: 'Success',
+          text: '<?php echo $_SESSION['upload-picture-success']; ?>',
+          icon: 'success',
+        })
+      </script>
+    <?php
+      unset($_SESSION['upload-picture-success']);
+    }
+    if (isset($_SESSION['invalid-file-type'])) {
+    ?>
+      <script>
+        Swal.fire({
+          title: 'Failed',
+          text: '<?php echo $_SESSION['invalid-file-type']; ?>',
+          icon: 'error',
+        })
+      </script>
+    <?php
+      unset($_SESSION['invalid-file-type']);
+    }
     ?>
     <div class="content-header">
       <div class="container-fluid">
@@ -71,8 +96,11 @@ $row = $stmtResult->fetch_assoc();
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
-                <h1 class="text-center">Student Account Information</h1>
+                <h1 class="text-center mb-3">Student Account Information</h1>
                 <div class="row">
+                  <div class="col-lg-4 d-flex justify-content-center">
+                    <a href="#upload-profile" data-toggle="modal"><img src="<?php echo $row['picture']; ?>" alt="" width="200" height="200"></a>
+                  </div>
                   <div class="col-lg-4">
                     <p><strong>LRN Number:</strong> <?php echo $row['lrn_number']; ?></p>
                     <p><strong>First Name:</strong> <?php echo $row['fname']; ?></p>
@@ -98,6 +126,8 @@ $row = $stmtResult->fetch_assoc();
                     }
                     ?>
                     <p><strong>Age:</strong> <?php echo $age; ?></p>
+                  </div>
+                  <div class="col-lg-4">
                     <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($row['birthday'])); ?></p>
                     <p><strong>Contact:</strong> <?php echo $row['contact']; ?></p>
                     <p><strong>Email:</strong> <?php echo $row['email']; ?></p>
@@ -105,10 +135,6 @@ $row = $stmtResult->fetch_assoc();
                     <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($row['reg_date'])); ?></p>
                     <a href="#change-pass" data-toggle="modal"><i class="fas fa-lock"></i> Change Password</a>
                   </div>
-                  <div class="col-lg-4 d-flex justify-content-center">
-                    <a href="#upload-profile" data-toggle="modal"><img src="../assests/image.png" alt="" width="200" height="200">
-                  </div>
-                  <div class="col-lg-4"></div>
                 </div>
               </div>
             </div>
@@ -149,6 +175,34 @@ $row = $stmtResult->fetch_assoc();
     </div>
   </div>
 
+  <div class="modal fade" id="upload-profile">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Profile</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="../actions/upload_picture.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="<?php echo $id; ?>">
+            <div class="form-group">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" name="profile_pic" id="customFile">
+                <label class="custom-file-label" for="customFile">Choose file</label>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary w-100" name="upload-picture">Upload</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- bs-custom-file-input -->
+  <script src="../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+
   <!-- jquery-validation -->
   <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
   <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
@@ -175,6 +229,11 @@ $row = $stmtResult->fetch_assoc();
       unhighlight: function(element, errorClass, validClass) {
         $(element).removeClass('is-invalid');
       }
+    });
+  </script>
+  <script>
+    $(document).ready(function() {
+      bsCustomFileInput.init();
     });
   </script>
 </body>

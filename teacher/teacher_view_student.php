@@ -71,36 +71,45 @@ if (isset($_GET['id'])) {
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
-                <h1 class="text-center">Student Account Information</h1>
-                <p><strong>LRN Number:</strong> <?php echo $rowStudent['lrn_number']; ?></p>
-                <p><strong>First Name:</strong> <?php echo $rowStudent['fname']; ?></p>
-                <p><strong>Middle Name:</strong> <?php echo $rowStudent['mname']; ?></p>
-                <p><strong>Last Name:</strong> <?php echo $rowStudent['lname']; ?></p>
-                <p><strong>Sex:</strong> <?php echo $rowStudent['gender']; ?></p>
-                <?php
-                $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
-                $bd = $rowStudent['birthday']; // Assuming 'birthday' is also in 'Y-m-d' format
+                <h1 class="text-center mb-3">Student Account Information</h1>
+                <div class="row">
+                  <div class="col-lg-4 col-12 d-flex justify-content-center">
+                    <img src="<?php echo $rowStudent['picture']; ?>" alt="" width="200" height="200">
+                  </div>
+                  <div class="col-lg-4">
+                    <p><strong>LRN Number:</strong> <?php echo $rowStudent['lrn_number']; ?></p>
+                    <p><strong>First Name:</strong> <?php echo $rowStudent['fname']; ?></p>
+                    <p><strong>Middle Name:</strong> <?php echo $rowStudent['mname']; ?></p>
+                    <p><strong>Last Name:</strong> <?php echo $rowStudent['lname']; ?></p>
+                    <p><strong>Sex:</strong> <?php echo $rowStudent['gender']; ?></p>
+                    <?php
+                    $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
+                    $bd = $rowStudent['birthday']; // Assuming 'birthday' is also in 'Y-m-d' format
 
-                // Calculate the age
-                $birthYear = date('Y', strtotime($bd)); // Extract the birth year from the birthday
-                $birthMonthDay = date('m-d', strtotime($bd)); // Extract the birth month and day
+                    // Calculate the age
+                    $birthYear = date('Y', strtotime($bd)); // Extract the birth year from the birthday
+                    $birthMonthDay = date('m-d', strtotime($bd)); // Extract the birth month and day
 
-                $currentYear = date('Y', strtotime($currentDate));
-                $currentMonthDay = date('m-d', strtotime($currentDate));
+                    $currentYear = date('Y', strtotime($currentDate));
+                    $currentMonthDay = date('m-d', strtotime($currentDate));
 
-                $age = $currentYear - $birthYear;
+                    $age = $currentYear - $birthYear;
 
-                // If the birthday hasn't occurred yet this year, subtract one from the age
-                if ($currentMonthDay < $birthMonthDay) {
-                  $age--;
-                }
-                ?>
-                <p><strong>Age:</strong> <?php echo $age; ?></p>
-                <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($rowStudent['birthday'])); ?></p>
-                <p><strong>Contact:</strong> <?php echo $rowStudent['contact']; ?></p>
-                <p><strong>Email:</strong> <?php echo $rowStudent['email']; ?></p>
-                <p><strong>Address:</strong> <?php echo $rowStudent['address']; ?></p>
-                <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($rowStudent['reg_date'])); ?></p>
+                    // If the birthday hasn't occurred yet this year, subtract one from the age
+                    if ($currentMonthDay < $birthMonthDay) {
+                      $age--;
+                    }
+                    ?>
+                    <p><strong>Age:</strong> <?php echo $age; ?></p>
+                  </div>
+                  <div class="col-lg-4">
+                    <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($rowStudent['birthday'])); ?></p>
+                    <p><strong>Contact:</strong> <?php echo $rowStudent['contact']; ?></p>
+                    <p><strong>Email:</strong> <?php echo $rowStudent['email']; ?></p>
+                    <p><strong>Address:</strong> <?php echo $rowStudent['address']; ?></p>
+                    <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($rowStudent['reg_date'])); ?></p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

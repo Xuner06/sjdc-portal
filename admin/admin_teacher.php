@@ -196,8 +196,8 @@ $row = $stmtResult->fetch_assoc();
                                         </div>
                                         <div class="col-sm-12 col-md-6">
                                           <div class="form-group">
-                                            <label for="edit-contact" class="form-label">Contact</label>
-                                            <input type="number" class="form-control" id="edit-contact" name="edit-contact" value="<?php echo $row['contact']; ?>" required>
+                                            <label for="edit_contact" class="form-label">Contact</label>
+                                            <input type="number" class="form-control" id="edit_contact" name="edit_contact" value="<?php echo $row['contact']; ?>" required>
                                           </div>
                                         </div>
                                       </div>
@@ -232,9 +232,7 @@ $row = $stmtResult->fetch_assoc();
                     } else {
                       ?>
                       <tr>
-                        <td colspan="7" class="text-center">No Teacher Please Add Teacher</td>
-                        <td class="d-none"></td>
-                        <td class="d-none"></td>
+                        <td colspan="5" class="text-center">No Teacher Please Add Teacher</td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
@@ -410,7 +408,7 @@ $row = $stmtResult->fetch_assoc();
           },
           title: '',
           message: '<h1 class="text-center">SJDC LIST OF TEACHERS</h1>',
-          
+
         }]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
@@ -428,6 +426,10 @@ $row = $stmtResult->fetch_assoc();
         birthday: {
           date: true,
           max: formattedCurrentDate
+        },
+        contact: {
+          minlength: 11,
+          maxlength: 11
         }
       },
       messages: {
@@ -436,7 +438,11 @@ $row = $stmtResult->fetch_assoc();
         },
         birthday: {
           max: "Birthday Is Invalid"
-        }
+        },
+        contact: {
+          minlength: "Contact Number Must Be 11 Digits",
+          maxlength: "Contact Number Must Be 11 Digits"
+        },
       },
       errorElement: 'span',
       errorPlacement: function(error, element) {
@@ -457,7 +463,11 @@ $row = $stmtResult->fetch_assoc();
           edit_birthday: {
             date: true,
             max: formattedCurrentDate
-          }
+          },
+          edit_contact: {
+            minlength: 11,
+            maxlength: 11
+          },
         },
         messages: {
           edit_email: {
@@ -465,7 +475,11 @@ $row = $stmtResult->fetch_assoc();
           },
           edit_birthday: {
             max: "Birthday Is Invalid"
-          }
+          },
+          edit_contact: {
+            minlength: "Contact Number Must Be 11 Digits",
+            maxlength: "Contact Number Must Be 11 Digits"
+          },
         },
         errorElement: 'span',
         errorPlacement: function(error, element) {

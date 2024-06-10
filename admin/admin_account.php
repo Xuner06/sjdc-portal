@@ -48,8 +48,7 @@ $row = $stmtResult->fetch_assoc();
     <?php
       unset($_SESSION['wrong-pass']);
     }
-    ?>
-    <?php
+
     if (isset($_SESSION['success-changePass'])) {
     ?>
       <script>
@@ -61,6 +60,31 @@ $row = $stmtResult->fetch_assoc();
       </script>
     <?php
       unset($_SESSION['success-changePass']);
+    }
+
+    if (isset($_SESSION['upload-picture-success'])) {
+    ?>
+      <script>
+        Swal.fire({
+          title: 'Success',
+          text: '<?php echo $_SESSION['upload-picture-success']; ?>',
+          icon: 'success',
+        })
+      </script>
+    <?php
+      unset($_SESSION['upload-picture-success']);
+    }
+    if (isset($_SESSION['invalid-file-type'])) {
+    ?>
+      <script>
+        Swal.fire({
+          title: 'Failed',
+          text: '<?php echo $_SESSION['invalid-file-type']; ?>',
+          icon: 'error',
+        })
+      </script>
+    <?php
+      unset($_SESSION['invalid-file-type']);
     }
     ?>
     <div class="content-header">
@@ -80,7 +104,7 @@ $row = $stmtResult->fetch_assoc();
                 <h1 class="text-center mb-3">Admin Account Information</h1>
                 <div class="row">
                   <div class="col-lg-4 col-12 d-flex justify-content-center">
-                    <a href="#upload-profile" data-toggle="modal"><img src="../assests/image.png" alt="" width="200" height="200">
+                    <a href="#upload-profile" data-toggle="modal"><img src="<?php echo $row['picture']; ?>" alt="" width="200" height="200">
                     </a>
                   </div>
                   <div class="col-lg-4 col-12">
@@ -169,15 +193,15 @@ $row = $stmtResult->fetch_assoc();
           </button>
         </div>
         <div class="modal-body">
-          <form action="#" method="post" id="" enctype="multipart/form-data">
+          <form action="../actions/upload_picture.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php echo $id; ?>">
             <div class="form-group">
               <div class="custom-file">
-                <input type="file" class="custom-file-input" name="file" id="customFile">
+                <input type="file" class="custom-file-input" name="profile_pic" id="customFile">
                 <label class="custom-file-label" for="customFile">Choose file</label>
               </div>
             </div>
-            <button type="submit" class="btn btn-sm btn-primary w-100" name="admin-change-password">Upload</button>
+            <button type="submit" class="btn btn-sm btn-primary w-100" name="upload-picture">Upload</button>
           </form>
         </div>
       </div>
