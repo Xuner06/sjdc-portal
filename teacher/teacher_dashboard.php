@@ -58,7 +58,7 @@ $row = $stmtResult->fetch_assoc();
       </div>
     </div>
 
-    <section class="content">
+    <!-- <section class="content">
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-3 col-12">
@@ -151,9 +151,9 @@ $row = $stmtResult->fetch_assoc();
               </div>
             </div>
           </div>
-          
+
           <div class="col-lg-3 col-12">
-            <div class="small-box bg-warning">
+            <div class="small-box bg-danger">
               <div class="inner">
                 <?php
                 $status = "Active";
@@ -167,7 +167,7 @@ $row = $stmtResult->fetch_assoc();
                   $startYear = $result['start_year'];
                   $endYear = $result['end_year'];
                   $semester = $result['semester'];
-                  echo '<h3>' . $startYear. '-' . $endYear . '</h3>';
+                  echo '<h3>' . $startYear . '-' . $endYear . '</h3>';
                   echo '<p>' . $semester . '</p>';
                 } else {
                   echo '<h3>No Active SY</h3>';
@@ -180,7 +180,97 @@ $row = $stmtResult->fetch_assoc();
             </div>
           </div>
         </div>
-        <!-- /.row -->
+
+      </div>
+    </section> -->
+
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-3 col-12">
+            <div class="small-box bg-info">
+              <div class="inner">
+                <?php
+                $status = "Active";
+                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $stmtSy->bind_param("s", $status);
+                $stmtSy->execute();
+                $stmtResultSy = $stmtSy->get_result();
+
+                if (mysqli_num_rows($stmtResultSy) > 0) {
+                  $result = $stmtResultSy->fetch_assoc();
+                  $start_year = $result['start_year'];
+                  $end_year = $result['end_year'];
+
+                  echo '<h3>' . $start_year . '-' . $end_year . '</h3>';
+                } else {
+                  echo '<h3>No Active SY</h3>';
+                }
+                ?>
+                <p>School Year</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-bag"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-12">
+            <div class="small-box bg-success">
+              <div class="inner">
+                <?php
+                $status = "Active";
+                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $stmtSy->bind_param("s", $status);
+                $stmtSy->execute();
+                $stmtResultSy = $stmtSy->get_result();
+                if (mysqli_num_rows($stmtResultSy) > 0) {
+                  $result = $stmtResultSy->fetch_assoc();
+                  $sem = $result['semester'];
+
+                  echo '<h3>' . (($sem == "First Semester") ? "1st Semester" : "2nd Semester") . '</h3>';
+                } else {
+                  echo '<h3>No Active SY</h3>';
+                }
+                ?>
+                <p>Semester</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-12">
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <?php
+                $status = "Active";
+                $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                $stmtSy->bind_param("s", $status);
+                $stmtSy->execute();
+                $stmtResultSy = $stmtSy->get_result();
+                if (mysqli_num_rows($stmtResultSy) > 0) {
+                  $result = $stmtResultSy->fetch_assoc();
+                  $sy = $result['sy_id'];
+                  $status = 0;
+                  $stmtStudent = $conn->prepare("SELECT * FROM enroll_student e LEFT JOIN class c ON e.class = c.class_id LEFT JOIN users u ON e.student_id = u.id WHERE c.adviser = ? AND e.sy = ? AND u.status = ?;");
+                  $stmtStudent->bind_param("iii", $id, $sy, $status);
+                  $stmtStudent->execute();
+                  $stmtResultStudent = $stmtStudent->get_result();
+
+                  echo '<h3>' . mysqli_num_rows($stmtResultStudent) . '</h3>';
+                } else {
+                  echo '<h3>No Active SY</h3>';
+                }
+                ?>
+                <p>Total Students</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+            </div>
+          </div>
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->

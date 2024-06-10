@@ -122,7 +122,8 @@ $row = $stmtResult->fetch_assoc();
                     } else {
                       ?>
                       <tr>
-                        <td colspan="7" class="text-center">No Student Please Add Student</td>
+                        <td colspan="8" class="text-center">No Student Please Add Student</td>
+                        <td class="d-none"></td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>

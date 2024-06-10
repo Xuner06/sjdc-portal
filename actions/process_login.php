@@ -30,7 +30,7 @@ if(isset($_POST['login'])) {
     elseif ($user['role'] == "student") {
       $_SESSION['student'] = $user['id'];
       $_SESSION['login-student'] = "Signed in successfully";
-      header("Location: ../student/student_account.php");
+      header("Location: ../student/student_home.php");
       exit();
     }
   } else {

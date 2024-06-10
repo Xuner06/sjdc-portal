@@ -289,12 +289,11 @@ $section = $rowClass['section'];
           extend: 'print',
           className: 'mr-2 rounded rounded-2',
           title: '',
-          message: "<?php echo '<h1>' . $level . '-' . $strands . '-' . $section . '</h1>'; ?>",
-          customize: function(win) {
-            $(win.document.body).prepend(
-                '<img src="http://datatables.net/media/images/logo-fade.png" style="position:absolute; top:0; left:0;" />'
-              );
+          messageTop: function() {
+            return "<div class='row'><div class='col-lg-6 bg-danger'>Hi</div><div class='col-lg-6'>Hello</div></div>";
           }
+
+
 
         }]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');

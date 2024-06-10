@@ -71,35 +71,42 @@ $row = $stmtResult->fetch_assoc();
             <div class="card">
               <div class="card-body">
                 <h1 class="text-center">Teacher Account Information</h1>
-                <p><strong>First Name:</strong> <?php echo $row['fname']; ?></p>
-                <p><strong>Middle Name:</strong> <?php echo $row['mname']; ?></p>
-                <p><strong>Last Name:</strong> <?php echo $row['lname']; ?></p>
-                <p><strong>Gender:</strong> <?php echo $row['gender']; ?></p>
-                <?php
-                $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
-                $bd = $row['birthday']; // Assuming 'birthday' is also in 'Y-m-d' format
+                <div class="row">
+                  <div class="col-lg-4">
+                    <p><strong>First Name:</strong> <?php echo $row['fname']; ?></p>
+                    <p><strong>Middle Name:</strong> <?php echo $row['mname']; ?></p>
+                    <p><strong>Last Name:</strong> <?php echo $row['lname']; ?></p>
+                    <p><strong>Gender:</strong> <?php echo $row['gender']; ?></p>
+                    <?php
+                    $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
+                    $bd = $row['birthday']; // Assuming 'birthday' is also in 'Y-m-d' format
 
-                // Calculate the age
-                $birthYear = date('Y', strtotime($bd)); // Extract the birth year from the birthday
-                $birthMonthDay = date('m-d', strtotime($bd)); // Extract the birth month and day
+                    // Calculate the age
+                    $birthYear = date('Y', strtotime($bd)); // Extract the birth year from the birthday
+                    $birthMonthDay = date('m-d', strtotime($bd)); // Extract the birth month and day
 
-                $currentYear = date('Y', strtotime($currentDate));
-                $currentMonthDay = date('m-d', strtotime($currentDate));
+                    $currentYear = date('Y', strtotime($currentDate));
+                    $currentMonthDay = date('m-d', strtotime($currentDate));
 
-                $age = $currentYear - $birthYear;
+                    $age = $currentYear - $birthYear;
 
-                // If the birthday hasn't occurred yet this year, subtract one from the age
-                if ($currentMonthDay < $birthMonthDay) {
-                  $age--;
-                }
-                ?>
-                <p><strong>Age:</strong> <?php echo $age; ?></p>
-                <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($row['birthday'])); ?></p>
-                <p><strong>Contact:</strong> <?php echo $row['contact']; ?></p>
-                <p><strong>Email:</strong> <?php echo $row['email']; ?></p>
-                <p><strong>Address:</strong> <?php echo $row['address']; ?></p>
-                <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($row['reg_date'])); ?></p>
-                <a href="#change-pass" data-toggle="modal"><i class="fas fa-lock"></i> Change Password</a>
+                    // If the birthday hasn't occurred yet this year, subtract one from the age
+                    if ($currentMonthDay < $birthMonthDay) {
+                      $age--;
+                    }
+                    ?>
+                    <p><strong>Age:</strong> <?php echo $age; ?></p>
+                    <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($row['birthday'])); ?></p>
+                    <p><strong>Contact:</strong> <?php echo $row['contact']; ?></p>
+                    <p><strong>Email:</strong> <?php echo $row['email']; ?></p>
+                    <p><strong>Address:</strong> <?php echo $row['address']; ?></p>
+                    <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($row['reg_date'])); ?></p>
+                    <a href="#change-pass" data-toggle="modal"><i class="fas fa-lock"></i> Change Password</a>
+                  </div>
+                  
+                  <div class="col-lg-4"></div>
+                </div>
+
               </div>
             </div>
           </div>

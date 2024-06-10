@@ -77,36 +77,49 @@ $row = $stmtResult->fetch_assoc();
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
-                <h1 class="text-center">Admin Account Information</h1>
-                <p><strong>First Name:</strong> <?php echo $row['fname']; ?></p>
-                <p><strong>Middle Name:</strong> <?php echo $row['mname']; ?></p>
-                <p><strong>Last Name:</strong> <?php echo $row['lname']; ?></p>
-                <p><strong>Gender:</strong> <?php echo $row['gender']; ?></p>
-                <?php
-                $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
-                $bd = $row['birthday']; // Assuming 'birthday' is also in 'Y-m-d' format
+                <h1 class="text-center mb-3">Admin Account Information</h1>
+                <div class="row">
+                  <div class="col-lg-4 col-12 d-flex justify-content-center">
+                    <a href="#upload-profile" data-toggle="modal"><img src="../assests/image.png" alt="" width="200" height="200">
+                    </a>
+                  </div>
+                  <div class="col-lg-4 col-12">
 
-                // Calculate the age
-                $birthYear = date('Y', strtotime($bd)); // Extract the birth year from the birthday
-                $birthMonthDay = date('m-d', strtotime($bd)); // Extract the birth month and day
+                    <p><strong>First Name:</strong> <?php echo $row['fname']; ?></p>
+                    <p><strong>Middle Name:</strong> <?php echo $row['mname']; ?></p>
+                    <p><strong>Last Name:</strong> <?php echo $row['lname']; ?></p>
+                    <p><strong>Gender:</strong> <?php echo $row['gender']; ?></p>
+                    <?php
+                    $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
+                    $bd = $row['birthday']; // Assuming 'birthday' is also in 'Y-m-d' format
 
-                $currentYear = date('Y', strtotime($currentDate));
-                $currentMonthDay = date('m-d', strtotime($currentDate));
+                    // Calculate the age
+                    $birthYear = date('Y', strtotime($bd)); // Extract the birth year from the birthday
+                    $birthMonthDay = date('m-d', strtotime($bd)); // Extract the birth month and day
 
-                $age = $currentYear - $birthYear;
+                    $currentYear = date('Y', strtotime($currentDate));
+                    $currentMonthDay = date('m-d', strtotime($currentDate));
 
-                // If the birthday hasn't occurred yet this year, subtract one from the age
-                if ($currentMonthDay < $birthMonthDay) {
-                  $age--;
-                }
-                ?>
-                <p><strong>Age:</strong> <?php echo $age; ?></p>
-                <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($row['birthday'])); ?></p>
-                <p><strong>Contact:</strong> <?php echo $row['contact']; ?></p>
-                <p><strong>Email:</strong> <?php echo $row['email']; ?></p>
-                <p><strong>Address:</strong> <?php echo $row['address']; ?></p>
-                <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($row['reg_date'])); ?></p>
-                <a href="#change-pass" data-toggle="modal"><i class="fas fa-lock"></i> Change Password</a>
+                    $age = $currentYear - $birthYear;
+
+                    // If the birthday hasn't occurred yet this year, subtract one from the age
+                    if ($currentMonthDay < $birthMonthDay) {
+                      $age--;
+                    }
+                    ?>
+                    <p><strong>Age:</strong> <?php echo $age; ?></p>
+                    <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($row['birthday'])); ?></p>
+                  </div>
+
+                  <div class="col-lg-4 col-12">
+                    <p><strong>Contact:</strong> <?php echo $row['contact']; ?></p>
+                    <p><strong>Email:</strong> <?php echo $row['email']; ?></p>
+                    <p><strong>Address:</strong> <?php echo $row['address']; ?></p>
+                    <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($row['reg_date'])); ?></p>
+                    <a href="#change-pass" data-toggle="modal"><i class="fas fa-lock"></i> Change Password</a>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -114,6 +127,7 @@ $row = $stmtResult->fetch_assoc();
       </div>
     </div>
   </div>
+
   <div class="modal fade" id="change-pass">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -145,6 +159,33 @@ $row = $stmtResult->fetch_assoc();
     </div>
   </div>
 
+  <div class="modal fade" id="upload-profile">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Profile</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="#" method="post" id="" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="<?php echo $id; ?>">
+            <div class="form-group">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" name="file" id="customFile">
+                <label class="custom-file-label" for="customFile">Choose file</label>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary w-100" name="admin-change-password">Upload</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- bs-custom-file-input -->
+  <script src="../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
   <!-- jquery-validation -->
   <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
   <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
@@ -171,6 +212,12 @@ $row = $stmtResult->fetch_assoc();
       unhighlight: function(element, errorClass, validClass) {
         $(element).removeClass('is-invalid');
       }
+    });
+  </script>
+
+  <script>
+    $(document).ready(function() {
+      bsCustomFileInput.init();
     });
   </script>
 </body>

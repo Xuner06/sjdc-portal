@@ -9,7 +9,7 @@ if (isset($_POST['update-student'])) {
   $mname = ucfirst($_POST['edit-mname']);
   $lname = ucfirst($_POST['edit-lname']);
   $gender = $_POST['edit-gender'];
-  $contact = $_POST['edit-contact'];
+  $contact = $_POST['edit_contact'];
   $email = $_POST['edit_email'];
   $birthday = $_POST['edit_birthday'];
   $address = $_POST['edit-address'];

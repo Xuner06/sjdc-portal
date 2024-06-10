@@ -51,6 +51,14 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+              <a href="../student/student_home.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'student_home.php') ? 'active' : ''; ?>">
+                <i class="nav-icon fas fa-home"></i>
+                <p>
+                  Home
+                </p>
+              </a>
+            </li>
             <li class="nav-item">
               <a href="../student/student_grade.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'student_grade.php' || basename($_SERVER['PHP_SELF']) == 'student_view_grade.php') ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-award"></i>

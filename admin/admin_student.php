@@ -192,7 +192,7 @@ $row = $stmtResult->fetch_assoc();
                           <td><?php echo $row['contact']; ?></td>
                           <td>
                             <a href="admin_view_student.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">View</a>
-                       
+
                             <!-- Edit Student Button Click -->
                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-student-<?php echo $row['id']; ?>">Edit</button>
                             <!-- Edit Student Modal -->
@@ -259,8 +259,8 @@ $row = $stmtResult->fetch_assoc();
                                       <div class="row">
                                         <div class="col-sm-12 col-md-6">
                                           <div class="form-group">
-                                            <label for="edit-contact" class="form-label">Contact</label>
-                                            <input type="number" class="form-control" id="edit-contact" name="edit-contact" value="<?php echo $row['contact']; ?>" required>
+                                            <label for="edit_contact" class="form-label">Contact</label>
+                                            <input type="number" class="form-control" id="edit_contact" name="edit_contact" value="<?php echo $row['contact']; ?>" required>
                                           </div>
                                         </div>
                                         <div class="col-sm-12 col-md-6">
@@ -284,7 +284,7 @@ $row = $stmtResult->fetch_assoc();
                                 </div>
                               </div>
                             </div>
-                          
+
                             <button type="button" class="btn btn-danger btn-sm" onclick="deleteStudent('<?php echo $row['id']; ?>')">Delete</button>
                             <form id="deleteForm-<?php echo $row['id']; ?>" action="../actions/admin_delete_student.php" method="post">
                               <input type="hidden" name="delete-id" value="<?php echo $row['id']; ?>">
@@ -476,15 +476,15 @@ $row = $stmtResult->fetch_assoc();
           className: 'mr-2 rounded rounded-2',
           exportOptions: {
             columns: [0, 1, 2, 3, 4, 5]
-          }
+          },
         }, {
           extend: 'print',
-          title: '',
-          message: '<h1 class="text-center">SJDC STUDENT LIST</h1>',
           className: 'mr-2 rounded rounded-2',
           exportOptions: {
             columns: [0, 1, 2, 3, 4, 5]
           },
+          title: '',
+          message: '<h1 class="text-center">SJDC LIST OF STUDENTS</h1>',
         }],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
@@ -506,6 +506,10 @@ $row = $stmtResult->fetch_assoc();
         birthday: {
           date: true,
           max: formattedCurrentDate
+        },
+        contact: {
+          minlength: 11,
+          maxlength: 11
         }
       },
       messages: {
@@ -515,6 +519,10 @@ $row = $stmtResult->fetch_assoc();
         lrnNumber: {
           minlength: "Lrn Number Must Be 12 Digits",
           maxlength: "Lrn Number Must Be 12 Digits"
+        },
+        contact: {
+          minlength: "Contact Number Must Be 11 Digits",
+          maxlength: "Contact Number Must Be 11 Digits"
         },
         birthday: {
           max: "Birthday Is Invalid"
@@ -543,7 +551,11 @@ $row = $stmtResult->fetch_assoc();
           edit_birthday: {
             date: true,
             max: formattedCurrentDate
-          }
+          },
+          edit_contact: {
+            minlength: 11,
+            maxlength: 11
+          },
         },
         messages: {
           edit_email: {
@@ -552,6 +564,10 @@ $row = $stmtResult->fetch_assoc();
           edit_lrn: {
             minlength: "Lrn Number Must Be 12 Digits",
             maxlength: "Lrn Number Must Be 12 Digits"
+          },
+          edit_contact: {
+            minlength: "Contact Number Must Be 11 Digits",
+            maxlength: "Contact Number Must Be 11 Digits"
           },
           edit_birthday: {
             max: "Birthday Is Invalid"

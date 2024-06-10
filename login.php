@@ -71,6 +71,19 @@ if (isset($_SESSION['teacher'])) {
             <?php
               unset($_SESSION['login-failed']);
             }
+            if (isset($_SESSION['success-recover'])) {
+              ?>
+                <script>
+                  Swal.fire({
+                    title: 'Success',
+                    text: '<?php echo $_SESSION['success-recover']; ?>',
+                    icon: 'success',
+                    position: 'top',
+                  })
+                </script>
+              <?php
+                unset($_SESSION['success-recover']);
+              }
             ?>
             <img src="./assests/bg1.png" alt="">
             <form action="./actions/process_login.php" method="post" autocomplete="off">
@@ -82,10 +95,19 @@ if (isset($_SESSION['teacher'])) {
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" name="password" id="password" required>
               </div>
-              <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="cpassword" onclick="showPassword()">
-                <label class="form-check-label" for="cpassword">Show Password</label>
+              <div class="row">
+                <div class="col">
+                  <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="cpassword" onclick="showPassword()">
+                    <label class="form-check-label" for="cpassword">Show Password</label>
+                  </div>
+                </div>
+                <div class="col d-flex justify-content-end">
+                  <a href="forgot_password.php" class="text-dark">Forgot Password</a>
+                </div>
               </div>
+
+
               <button type="submit" class="btn btn-success w-100" name="login">Login</button>
             </form>
           </div>
