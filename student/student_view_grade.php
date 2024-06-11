@@ -76,7 +76,7 @@ if (isset($_GET['view'])) {
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>Subject Code</th>
+
                       <th>Subject Name</th>
                       <th>Grade</th>
                     </tr>
@@ -98,20 +98,14 @@ if (isset($_GET['view'])) {
                       while ($rowResult = $stmtResultGrade->fetch_assoc()) {
                     ?>
                         <tr>
-                          <td><?php echo $rowResult['subject']; ?></td>
+
                           <td><?php echo $rowResult['name']; ?></td>
                           <td><?php echo $rowResult['grade']; ?></td>
                         </tr>
                       <?php
-                      } ?>
-                      <tr>
-                        <td colspan="2">GWA</td>
-                        <td class="d-none"></td>
-                        <td><?php echo $total; ?></td>
-                      </tr>
-                    <?php
+                      }
                     } else {
-                    ?>
+                      ?>
                       <tr>
                         <td colspan="3" class="text-center">Not Graded Yet</td>
                         <td class="d-none"></td>
@@ -121,6 +115,12 @@ if (isset($_GET['view'])) {
                     }
                     ?>
                   </tbody>
+                  <tfoot>
+                    <tr>
+                      <td>GWA</td>
+                      <td><?php echo $total; ?></td>
+                    </tr>
+                  </tfoot>
                 </table>
               </div>
             </div>

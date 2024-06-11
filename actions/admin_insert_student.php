@@ -16,6 +16,8 @@ if (isset($_POST['add-student'])) {
   $status = 0;
   $role = "student";
 
+  $password_hashed = password_hash($password, PASSWORD_DEFAULT);
+
   $stmtCheckEmail = $conn->prepare("SELECT * FROM users WHERE email = ?");
   $stmtCheckEmail->bind_param("s", $email);
   $stmtCheckEmail->execute();
@@ -38,7 +40,7 @@ if (isset($_POST['add-student'])) {
   } 
   else {
     $stmtInsertStudent = $conn->prepare("INSERT INTO users (role, lrn_number, fname, lname, mname, gender, birthday, contact, email, address, password, status, reg_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-    $stmtInsertStudent->bind_param("sssssssssssi", $role, $lrn_number, $fname, $lname, $mname, $gender, $birthday, $contact, $email, $address, $password, $status);
+    $stmtInsertStudent->bind_param("sssssssssssi", $role, $lrn_number, $fname, $lname, $mname, $gender, $birthday, $contact, $email, $address, $password_hashed, $status);
 
     if (mysqli_stmt_execute($stmtInsertStudent)) {
       $_SESSION['add-student'] = "Successfully Added Student";

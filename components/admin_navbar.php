@@ -107,8 +107,8 @@
                 </p>
               </a>
             </li>
-            <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_class.php' || basename($_SERVER['PHP_SELF']) == 'admin_strand.php') ? 'menu-open' : ''; ?>">
-              <a href="#" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_class.php' || basename($_SERVER['PHP_SELF']) == 'admin_strand.php') ? 'active' : ''; ?>">
+            <li class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_class.php' || basename($_SERVER['PHP_SELF']) == 'admin_strand.php') || basename($_SERVER['PHP_SELF']) == 'admin_view_class.php' ? 'menu-open' : ''; ?>">
+              <a href="#" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_class.php' || basename($_SERVER['PHP_SELF']) == 'admin_strand.php') || basename($_SERVER['PHP_SELF']) == 'admin_view_class.php' ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-university"></i>
                 <p>
                   Classes
@@ -117,7 +117,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="../admin/admin_class.php" class="nav-link text-dark <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_class.php') ? 'active' : ''; ?>">
+                  <a href="../admin/admin_class.php" class="nav-link text-dark <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_class.php') || basename($_SERVER['PHP_SELF']) == 'admin_view_class.php' ? 'active' : ''; ?>">
                     <i class="nav-icon fas fa-chalkboard-teacher"></i>
                     <p>Class List</p>
                   </a>

@@ -17,7 +17,7 @@ if(isset($_POST['change-password'])) {
       $fetchResult = $checkResult->fetch_assoc();
       $userId = $fetchResult['id'];
       $newPass = $conn->prepare("UPDATE users u SET u.password = ?, u.token = NULL, u.token_expiration = NULL WHERE u.id = ?");
-      $newPass->bind_param("si", $new_pass, $userId);
+      $newPass->bind_param("si", password_hash($new_pass, PASSWORD_DEFAULT), $userId);
       $newPass->execute();
 
       $_SESSION['success-recover'] = "Successfully Changed Password";
