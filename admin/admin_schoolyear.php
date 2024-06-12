@@ -142,7 +142,7 @@ $row = $stmtResult->fetch_assoc();
                                         <select class="form-control" name="edit-startYear" id="edit-startYear" required>
                                           <option value="<?php echo $row['start_year']; ?>" selected><?php echo $row['start_year']; ?></option>
                                           <?php
-                                          $startYear = date('Y');
+                                          $startYear = date('Y', strtotime('-1 year'));
                                           echo '<option value="' . $startYear . '">' . $startYear . '</option>'
                                           ?>
                                         </select>
@@ -151,7 +151,7 @@ $row = $stmtResult->fetch_assoc();
                                           <select class="form-control" name="edit-endYear" id="edit-endYear" required>
                                             <option value="<?php echo $row['end_year']; ?>" selected><?php echo $row['end_year']; ?></option>
                                             <?php
-                                            $endYear = date('Y', strtotime($currentYear . ' +1 year'));;
+                                            $endYear = date('Y');;
                                             echo '<option value="' . $endYear . '">' . $endYear . '</option>'
                                             ?>
                                           </select>
@@ -212,7 +212,7 @@ $row = $stmtResult->fetch_assoc();
               <select class="form-control" name="start_year" id="start_year" required>
                 <option value=""></option>
                 <?php
-                $startYear = date('Y');
+                $startYear = date('Y', strtotime('-1 year'));
                 echo '<option value="' . $startYear . '">' . $startYear . '</option>'
                 ?>
               </select>
@@ -222,7 +222,7 @@ $row = $stmtResult->fetch_assoc();
               <select class="form-control" name="end_year" id="end_year" required>
                 <option value=""></option>
                 <?php
-                $endYear = date('Y', strtotime($currentYear . ' +1 year'));;
+                $endYear = date('Y');
                 echo '<option value="' . $endYear . '">' . $endYear . '</option>'
                 ?>
               </select>

@@ -12,8 +12,8 @@ $row = $stmtResult->fetch_assoc();
 
 if (isset($_GET['view'])) {
   $enrollId = $_GET['view'];
-  $stmtEnroll = $conn->prepare("SELECT * FROM enroll_student WHERE enroll_id = ?");
-  $stmtEnroll->bind_param("i", $enrollId);
+  $stmtEnroll = $conn->prepare("SELECT * FROM enroll_student WHERE enroll_id = ? AND student_id = ?");
+  $stmtEnroll->bind_param("ii", $enrollId, $id);
   $stmtEnroll->execute();
   $stmtResultEnroll = $stmtEnroll->get_result();
   $resultEnroll = $stmtResultEnroll->fetch_assoc();
@@ -76,7 +76,6 @@ if (isset($_GET['view'])) {
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-
                       <th>Subject Name</th>
                       <th>Grade</th>
                     </tr>
@@ -88,17 +87,11 @@ if (isset($_GET['view'])) {
                     $stmtGrade->execute();
                     $stmtResultGrade = $stmtGrade->get_result();
 
-                    $stmtAverage = $conn->prepare("SELECT ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.student = ? AND g.sy = ?");
-                    $stmtAverage->bind_param("ii", $id, $sy);
-                    $stmtAverage->execute();
-                    $stmtResultAverage = $stmtAverage->get_result();
-                    $average = $stmtResultAverage->fetch_assoc();
-                    $total = $average['average'];
+
                     if (mysqli_num_rows($stmtResultGrade) > 0) {
                       while ($rowResult = $stmtResultGrade->fetch_assoc()) {
                     ?>
                         <tr>
-
                           <td><?php echo $rowResult['name']; ?></td>
                           <td><?php echo $rowResult['grade']; ?></td>
                         </tr>
@@ -114,12 +107,27 @@ if (isset($_GET['view'])) {
                     }
                     ?>
                   </tbody>
-                  <tfoot>
-                    <tr>
-                      <td><strong>GWA</strong></td>
-                      <td><strong><?php echo $total; ?></strong></td>
-                    </tr>
-                  </tfoot>
+                  <?php
+                  $stmtAverage = $conn->prepare("SELECT ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.student = ? AND g.sy = ?");
+                  $stmtAverage->bind_param("ii", $id, $sy);
+                  $stmtAverage->execute();
+                  $stmtResultAverage = $stmtAverage->get_result();
+
+                  if (mysqli_num_rows($stmtResultAverage) > 0) {
+                    $average = $stmtResultAverage->fetch_assoc();
+                    $total = $average['average'];
+                    if ($total !== null) {
+                  ?>
+                      <tfoot>
+                        <tr>
+                          <td><strong>GWA</strong></td>
+                          <td><strong><?php echo $total; ?></strong></td>
+                        </tr>
+                      </tfoot>
+                  <?php
+                    }
+                  }
+                  ?>
                 </table>
               </div>
             </div>
@@ -145,6 +153,7 @@ if (isset($_GET['view'])) {
 
   <script>
     $(function() {
+      var enrollId = <?php echo json_encode($enrollId); ?>;
       $("#example1").DataTable({
 
         "responsive": true,
@@ -165,13 +174,10 @@ if (isset($_GET['view'])) {
           extend: 'pdf',
           className: 'mr-2 rounded rounded-2',
         }, {
-          extend: 'print',
           className: 'mr-2 rounded rounded-2',
-        }, {
-          className: 'mr-2 rounded rounded-2',
-          text: 'Go to Link',
+          text: 'Print',
           action: function() {
-            window.open('student_print_grade.php', '_blank');
+            window.open('student_print_grade.php?view=' + enrollId, '_blank');
           }
         }]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');

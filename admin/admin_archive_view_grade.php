@@ -115,7 +115,7 @@ if (isset($_GET['view'])) {
                   $stmtAverage->bind_param("ii", $studentId, $sy);
                   $stmtAverage->execute();
                   $stmtResultAverage = $stmtAverage->get_result();
-                  
+
                   if (mysqli_num_rows($stmtResultAverage) > 0) {
                     $average = $stmtResultAverage->fetch_assoc();
                     $total = $average['average'];
@@ -156,6 +156,7 @@ if (isset($_GET['view'])) {
 
   <script>
     $(function() {
+      var enrollId = <?php echo json_encode($enrollId); ?>;
       $("#example1").DataTable({
         "responsive": true,
         "lengthChange": false,
@@ -179,9 +180,12 @@ if (isset($_GET['view'])) {
             className: 'mr-2 rounded rounded-2',
           },
           {
-            extend: 'print',
             className: 'mr-2 rounded rounded-2',
-          },
+            text: 'Print',
+            action: function() {
+              window.open('admin_print_grade.php?view=' + enrollId, '_blank');
+            }
+          }
         ],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 

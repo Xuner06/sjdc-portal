@@ -95,7 +95,7 @@ if (isset($_GET['subject_view'])) {
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
-                <h1 class="text-center">Student Grade</h1>
+                <h1 class="text-center mb-4 mt-4"><?php echo $resultSubject['name']; ?></h1>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -202,6 +202,10 @@ if (isset($_GET['subject_view'])) {
         }, {
           extend: 'print',
           className: 'mr-2 rounded rounded-2',
+          title: '',
+          messageTop: function() {
+            return '<h1 class="text-center mb-4"><?php echo $resultSubject['name']; ?></h1>';
+          }
         }],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 

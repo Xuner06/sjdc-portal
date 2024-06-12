@@ -136,7 +136,7 @@
             <div class="col-lg-12">
               <div class="card">
                 <div class="card-body">
-                  <h1 class="text-center">Student Upload Grade</h1>
+                  <h1 class="text-center mb-4 mt-4"><?php echo $resultSubject['name']; ?></h1>
                   <form action="../actions/teacher_insert_grade.php" method="post" id="insertGrade">
                     <table id="example1" class="table table-bordered table-striped">
                       <thead>

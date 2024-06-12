@@ -10,6 +10,27 @@ if (isset($_POST['update-schoolyear'])) {
   $semester = $_POST['edit-semester'];
   $statusActive = "Active";
 
+  // Retrieve the current school year data
+  $stmtCurrentSy = $conn->prepare("SELECT * FROM school_year WHERE sy_id = ?");
+  $stmtCurrentSy->bind_param("i", $id);
+  $stmtCurrentSy->execute();
+  $resultCurrentSy = $stmtCurrentSy->get_result();
+  $row = $resultCurrentSy->fetch_assoc();
+
+  // Check if there are changes in the school year data
+  if ($startYear != $row['start_year'] || $endYear != $row['end_year'] || $semester != $row['semester']) {
+    $stmtCheckDuplicate = $conn->prepare("SELECT * FROM school_year WHERE start_year = ? AND end_year = ? AND semester = ?");
+    $stmtCheckDuplicate->bind_param("sss", $startYear, $endYear, $semester);
+    $stmtCheckDuplicate->execute();
+    $resultDuplicate = $stmtCheckDuplicate->get_result();
+
+    if (mysqli_num_rows($resultDuplicate) > 0) {
+      $_SESSION['duplicate-sy'] = "School Year Already Exists";
+      header("Location: ../admin/admin_schoolyear.php");
+      exit();
+    }
+  }
+
   if ($status == "Active") {
     $statusInactive = "Inactive";
     $stmtUpdateStatus = $conn->prepare("UPDATE school_year SET status = ? WHERE status = ?");
@@ -41,3 +62,4 @@ if (isset($_POST['update-schoolyear'])) {
     }
   }
 }
+?>

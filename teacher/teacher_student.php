@@ -13,10 +13,19 @@ $class = $conn->prepare("SELECT * FROM class c LEFT JOIN strand s ON c.strand = 
 $class->bind_param("i", $id);
 $class->execute();
 $resultClass = $class->get_result();
-$rowClass = $resultClass->fetch_assoc();
-$finalClass = $rowClass['level'] . '-' . $rowClass['strand'] . '-' . $rowClass['section'];
-$finalAdviser = $rowClass['fname'] . ' ' . substr($rowClass['mname'], 0, 1) . '.' . ' ' . $rowClass['lname'];
-$finalSy = 'S.Y. ' . $rowClass['start_year'] . '-' . $rowClass['end_year'];
+if (mysqli_num_rows($resultClass) > 0) {
+  $rowClass = $resultClass->fetch_assoc();
+  $finalClass = $rowClass['level'] . '-' . $rowClass['strand'] . '-' . $rowClass['section'];
+  $finalAdviser = $rowClass['fname'] . ' ' . substr($rowClass['mname'], 0, 1) . '.' . ' ' . $rowClass['lname'];
+  $finalSy = 'S.Y. ' . $rowClass['start_year'] . '-' . $rowClass['end_year'];
+}
+else {
+  $finalClass = '';
+  $finalAdviser = '';
+  $finalSy = '';
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

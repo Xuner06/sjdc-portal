@@ -1,30 +1,30 @@
 <?php
 include("../database/database.php");
 include("../actions/session.php");
-sessionStudent();
+sessionAdmin();
 
-$id = $_SESSION['student'];
-$stmtStudent = $conn->prepare("SELECT * FROM users WHERE id = ?");
-$stmtStudent->bind_param("i", $id);
-$stmtStudent->execute();
-$stmtResult = $stmtStudent->get_result();
+$id = $_SESSION['admin'];
+$stmtAdmin = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmtAdmin->bind_param("i", $id);
+$stmtAdmin->execute();
+$stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 
 if (isset($_GET['view'])) {
   $enrollId = $_GET['view'];
 
-  $stmtEnroll = $conn->prepare("SELECT * FROM enroll_student e LEFT JOIN school_year sy ON e.sy = sy.sy_id LEFT JOIN class c ON e.class = c.class_id LEFT JOIN strand s ON c.strand = s.strand_id LEFT JOIN users u ON e.student_id = u.id WHERE e.enroll_id = ? AND e.student_id = ?");
-  $stmtEnroll->bind_param("ii", $enrollId, $id);
+  $stmtEnroll = $conn->prepare("SELECT * FROM enroll_student e LEFT JOIN school_year sy ON e.sy = sy.sy_id LEFT JOIN class c ON e.class = c.class_id LEFT JOIN strand s ON c.strand = s.strand_id LEFT JOIN users u ON e.student_id = u.id WHERE e.enroll_id = ?");
+  $stmtEnroll->bind_param("i", $enrollId);
   $stmtEnroll->execute();
   $stmtResultEnroll = $stmtEnroll->get_result();
   $result = $stmtResultEnroll->fetch_assoc();
 
   if (mysqli_num_rows($stmtResultEnroll) == 0) {
-    header("Location: student_grade.php");
+    header("Location: admin_grade.php");
     exit();
   }
 } else {
-  header("Location: student_grade.php");
+  header("Location: admin_grade.php");
   exit();
 }
 
