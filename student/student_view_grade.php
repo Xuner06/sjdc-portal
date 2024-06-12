@@ -107,8 +107,7 @@ if (isset($_GET['view'])) {
                     } else {
                       ?>
                       <tr>
-                        <td colspan="3" class="text-center">Not Graded Yet</td>
-                        <td class="d-none"></td>
+                        <td colspan="2" class="text-center">Not Graded Yet</td>
                         <td class="d-none"></td>
                       </tr>
                     <?php
@@ -117,8 +116,8 @@ if (isset($_GET['view'])) {
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td>GWA</td>
-                      <td><?php echo $total; ?></td>
+                      <td><strong>GWA</strong></td>
+                      <td><strong><?php echo $total; ?></strong></td>
                     </tr>
                   </tfoot>
                 </table>
@@ -168,6 +167,12 @@ if (isset($_GET['view'])) {
         }, {
           extend: 'print',
           className: 'mr-2 rounded rounded-2',
+        }, {
+          className: 'mr-2 rounded rounded-2',
+          text: 'Go to Link',
+          action: function() {
+            window.open('student_print_grade.php', '_blank');
+          }
         }]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });

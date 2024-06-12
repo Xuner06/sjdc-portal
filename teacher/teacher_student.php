@@ -9,6 +9,14 @@ $stmtTeacher->execute();
 $stmtResult = $stmtTeacher->get_result();
 $row = $stmtResult->fetch_assoc();
 
+$class = $conn->prepare("SELECT * FROM class c LEFT JOIN strand s ON c.strand = s.strand_id LEFT JOIN users u ON c.adviser = u.id LEFT JOIN school_year sy ON c.sy = sy.sy_id WHERE c.adviser = ?");
+$class->bind_param("i", $id);
+$class->execute();
+$resultClass = $class->get_result();
+$rowClass = $resultClass->fetch_assoc();
+$finalClass = $rowClass['level'] . '-' . $rowClass['strand'] . '-' . $rowClass['section'];
+$finalAdviser = $rowClass['fname'] . ' ' . substr($rowClass['mname'], 0, 1) . '.' . ' ' . $rowClass['lname'];
+$finalSy = 'S.Y. ' . $rowClass['start_year'] . '-' . $rowClass['end_year'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,7 +63,7 @@ $row = $stmtResult->fetch_assoc();
                 if (mysqli_num_rows($ResultSy) > 0) {
                   $result = $ResultSy->fetch_assoc();
                   $schoolyear = $result['sy_id'];
-  
+
                   $class = $conn->prepare("SELECT c.*, s.* FROM class c JOIN strand s ON c.strand = s.strand_id WHERE c.adviser = ? AND c.sy = ?");
                   $class->bind_param("ii", $id, $schoolyear);
                   $class->execute();
@@ -65,7 +73,7 @@ $row = $stmtResult->fetch_assoc();
                       echo '<h1>' . $rowClass['level'] . '-' . $rowClass['strand'] . '-' . $rowClass['section'] . '</h1>';
                     }
                   }
-                } 
+                }
                 ?>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
@@ -212,7 +220,9 @@ $row = $stmtResult->fetch_assoc();
             columns: [0, 1, 2, 3, 4]
           },
           title: '',
-          message: '<h1 class="text-center">STUDENT LIST</h1><br><h1>Hello</h1>',
+          messageTop: function() {
+            return '<h1 class="text-center"><?php echo $finalClass; ?></h1>' + '<h1 class="text-center"><?php echo $finalSy; ?></h1>' + '<h1 class="text-center mb-4"><?php echo $finalAdviser; ?></h1>';
+          }
         }],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });

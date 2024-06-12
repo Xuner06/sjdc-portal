@@ -25,14 +25,14 @@ if (isset($_GET['class'])) {
   header("Location: ../admin/admin_class.php");
   exit();
 }
-$Class = $conn->prepare("SELECT c.*, s.strand AS STRAND FROM class c JOIN strand s ON c.strand = s.strand_id WHERE class_id = ?");
-$Class->bind_param("i", $classId);
-$Class->execute();
-$ResultClass = $Class->get_result();
-$rowClass = $ResultClass->fetch_assoc();
-$level = $rowClass['level'];
-$strands = $rowClass['STRAND'];
-$section = $rowClass['section'];
+$class = $conn->prepare("SELECT * FROM class c LEFT JOIN strand s ON c.strand = s.strand_id LEFT JOIN users u ON c.adviser = u.id LEFT JOIN school_year sy ON c.sy = sy.sy_id WHERE c.class_id = ?");
+$class->bind_param("i", $classId);
+$class->execute();
+$resultClass = $class->get_result();
+$rowClass = $resultClass->fetch_assoc();
+$finalClass = $rowClass['level'] . '-' . $rowClass['strand'] . '-' . $rowClass['section'];
+$finalAdviser = $rowClass['fname'] . ' ' . substr($rowClass['mname'], 0, 1) . '.' . ' ' .$rowClass['lname'];
+$finalSy = 'S.Y. ' . $rowClass['start_year'] . '-' . $rowClass['end_year'];
 ?>
 
 <!DOCTYPE html>
@@ -58,7 +58,7 @@ $section = $rowClass['section'];
 </head>
 
 <body>
-  <?php include("../components/admin_navbar.php"); ?>
+  <?php include("../components/admin_navbar.php");  ?>
 
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -87,7 +87,7 @@ $section = $rowClass['section'];
               <div class="card-body">
                 <h1 class="text-center">Class List</h1>
                 <?php
-                echo '<h1>' . $level . '-' . $strands . '-' . $section . '</h1>'
+                echo '<h1>' . $finalClass .'</h1>'
                 ?>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
@@ -290,7 +290,7 @@ $section = $rowClass['section'];
           className: 'mr-2 rounded rounded-2',
           title: '',
           messageTop: function() {
-            return "<div class='row'><div class='col-lg-6 bg-danger'>Hi</div><div class='col-lg-6'>Hello</div></div>";
+            return '<h1 class="text-center"><?php echo $finalClass; ?></h1>' + '<h1 class="text-center"><?php echo $finalSy; ?></h1>' + '<h1 class="text-center mb-4"><?php echo $finalAdviser; ?></h1>';
           }
 
 

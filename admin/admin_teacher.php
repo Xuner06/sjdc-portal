@@ -407,8 +407,9 @@ $row = $stmtResult->fetch_assoc();
             columns: [0, 1, 2, 3]
           },
           title: '',
-          message: '<h1 class="text-center">SJDC LIST OF TEACHERS</h1>',
-
+          messageTop: function() {
+            return '<h1 class="text-center mb-4">SJDC LIST OF TEACHERS</h1>';
+          }
         }]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });

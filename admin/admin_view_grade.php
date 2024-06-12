@@ -84,7 +84,6 @@ if (isset($_GET['view'])) {
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>Subject Code</th>
                       <th>Subject Name</th>
                       <th>Grade</th>
                     </tr>
@@ -99,41 +98,46 @@ if (isset($_GET['view'])) {
                     $stmtGrade->execute();
                     $stmtResultGrade = $stmtGrade->get_result();
 
-                    $stmtAverage = $conn->prepare("SELECT ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.student = ? AND g.sy = ?");
-                    $stmtAverage->bind_param("ii", $studentId, $sy);
-                    $stmtAverage->execute();
-                    $stmtResultAverage = $stmtAverage->get_result();
-                    $average = $stmtResultAverage->fetch_assoc();
-                    $total = $average['average'];
-
                     if (mysqli_num_rows($stmtResultGrade) > 0) {
                       while ($grade = $stmtResultGrade->fetch_assoc()) {
                     ?>
                         <tr>
-                          <td><?php echo $grade['subject']; ?></td>
                           <td><?php echo $grade['name']; ?></td>
                           <td><?php echo $grade['grade']; ?></td>
                         </tr>
                       <?php
                       }
+                    } else {
                       ?>
                       <tr>
-                        <td colspan="2">Total</td>
-                        <td class="d-none"></td>
-                        <td><?php echo $total; ?></td>
-                      </tr>
-                    <?php
-                    } else {
-                    ?>
-                      <tr>
-                        <td colspan="3" class="text-center">Not Graded Yet</td>
-                        <td class="d-none"></td>
+                        <td colspan="2" class="text-center">Not Graded Yet</td>
                         <td class="d-none"></td>
                       </tr>
                     <?php
                     }
                     ?>
                   </tbody>
+                  <?php
+                  $stmtAverage = $conn->prepare("SELECT ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.student = ? AND g.sy = ?");
+                  $stmtAverage->bind_param("ii", $studentId, $sy);
+                  $stmtAverage->execute();
+                  $stmtResultAverage = $stmtAverage->get_result();
+
+                  if (mysqli_num_rows($stmtResultAverage) > 0) {
+                    $average = $stmtResultAverage->fetch_assoc();
+                    $total = $average['average'];
+                    if ($total !== null) {
+                  ?>
+                      <tfoot>
+                        <tr>
+                          <td><strong>GWA</strong></td>
+                          <td><strong><?php echo $total; ?></strong></td>
+                        </tr>
+                      </tfoot>
+                  <?php
+                    }
+                  }
+                  ?>
                 </table>
               </div>
             </div>
