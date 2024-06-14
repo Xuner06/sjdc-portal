@@ -179,10 +179,6 @@ if (isset($_GET['view'])) {
             className: 'mr-2 rounded rounded-2',
           },
           {
-            extend: 'excel',
-            className: 'mr-2 rounded rounded-2',
-          },
-          {
             extend: 'pdf',
             className: 'mr-2 rounded rounded-2',
           },

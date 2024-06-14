@@ -109,39 +109,39 @@ $row = $stmtResult->fetch_assoc();
                     if (mysqli_num_rows($queryStrand) > 0) {
                       while ($row = mysqli_fetch_assoc($queryStrand)) {
                     ?>
+                        <!-- Edit Strand Modal -->
+                        <div class="modal fade" id="edit-strand-<?php echo $row['strand_id']; ?>">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h4 class="modal-title">Edit Strand</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form action="../actions/update_strand.php" method="post" id="editForm-<?php echo $row['strand_id']; ?>">
+                                  <input type="hidden" name="edit-id" value="<?php echo $row['strand_id']; ?>">
+                                  <div class="form-group">
+                                    <label for="edit-strand" class="form-label">Strand</label>
+                                    <input type="text" class="form-control" name="edit-strand" id="edit-strand" value="<?php echo $row['strand']; ?>" required>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="edit-description" class="form-label">Description</label>
+                                    <input type="text" class="form-control" name="edit-description" id="edit-description" value="<?php echo $row['description']; ?>" required>
+                                  </div>
+                                  <button type="submit" class="btn btn-sm btn-success w-100" name="update-strand">Update Strand</button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         <tr>
                           <td><?php echo $row['strand']; ?></td>
                           <td><?php echo $row['description']; ?></td>
                           <td>
                             <!-- Edit Strand Button Click -->
                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-strand-<?php echo $row['strand_id']; ?>">Edit</button>
-                            <!-- Edit Strand Modal -->
-                            <div class="modal fade" id="edit-strand-<?php echo $row['strand_id']; ?>">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h4 class="modal-title">Edit Strand</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span>
-                                    </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <form action="../actions/update_strand.php" method="post" id="editForm-<?php echo $row['strand_id']; ?>">
-                                      <input type="hidden" name="edit-id" value="<?php echo $row['strand_id']; ?>">
-                                      <div class="form-group">
-                                        <label for="edit-strand" class="form-label">Strand</label>
-                                        <input type="text" class="form-control" name="edit-strand" id="edit-strand" value="<?php echo $row['strand']; ?>" required>
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="edit-description" class="form-label">Description</label>
-                                        <input type="text" class="form-control" name="edit-description" id="edit-description" value="<?php echo $row['description']; ?>" required>
-                                      </div>
-                                      <button type="submit" class="btn btn-sm btn-success w-100" name="update-strand">Update Strand</button>
-                                    </form>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
                           </td>
                         </tr>
                       <?php

@@ -91,6 +91,59 @@ $row = $stmtResult->fetch_assoc();
                     if (mysqli_num_rows($querySubject) > 0) {
                       while ($row = mysqli_fetch_assoc($querySubject)) {
                     ?>
+                        <!-- Edit Subject Modal -->
+                        <div class="modal fade" id="edit-subject-<?php echo $row['subject_id']; ?>">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h4 class="modal-title">Edit Subject</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form action="../actions/update_subject.php" method="post">
+                                  <input type="hidden" name="edit-id" value="<?php echo $row['subject_id']; ?>">
+                                  <div class="form-group">
+                                    <label for="edit-name" class="form-label">Subject Name</label>
+                                    <input type="text" class="form-control" name="edit-name" id="edit-name" value="<?php echo $row['name']; ?>" required>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="level" class="form-label">Grade Level</label>
+                                    <select class="form-control" id="level" name="edit-level" required>
+                                      <option value=""></option>
+                                      <option value="Grade 11" <?= ($row['level'] == "Grade 11") ? "selected" : "" ?>>Grade 11</option>
+                                      <option value="Grade 12" <?= ($row['level'] == "Grade 12") ? "selected" : "" ?>>Grade 12</option>
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="edit-strand" class="form-label">Strand</label>
+                                    <select class="form-control" name="edit-strand" id="edit-strand" required>
+                                      <option value=""></option>
+                                      <?php
+                                      $editSqlStrand = "SELECT * FROM strand";
+                                      $editQueryStrand = mysqli_query($conn, $editSqlStrand);
+                                      while ($rowStrand = mysqli_fetch_assoc($editQueryStrand)) {
+                                        $selected = ($rowStrand['strand_id'] == $row['strand']) ? "selected" : "";
+                                        echo '<option value="' . $rowStrand['strand_id'] . '" ' . $selected . '>' . $rowStrand['strand'] . '</option>';
+                                      }
+                                      ?>
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="level" class="form-label">Semester</label>
+                                    <select class="form-control" id="level" name="edit-semester" required>
+                                      <option value=""></option>
+                                      <option value="First Semester" <?= ($row['semester'] == "First Semester") ? "selected" : "" ?>>First Semester</option>
+                                      <option value="Second Semester" <?= ($row['semester'] == "Second Semester") ? "selected" : "" ?>>Second Semester</option>
+                                    </select>
+                                  </div>
+                                  <button type="submit" class="btn btn-sm btn-success w-100" name="update-subject">Update Subject</button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         <tr>
                           <td><?php echo $row['name']; ?></td>
                           <td><?php echo $row['level']; ?></td>
@@ -99,66 +152,12 @@ $row = $stmtResult->fetch_assoc();
                           <td>
                             <!-- Edit Subject Button Click -->
                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-subject-<?php echo $row['subject_id']; ?>">Edit</button>
-                            <!-- Edit Subject Modal -->
-                            <div class="modal fade" id="edit-subject-<?php echo $row['subject_id']; ?>">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h4 class="modal-title">Edit Subject</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span>
-                                    </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <form action="../actions/update_subject.php" method="post">
-                                      <input type="hidden" name="edit-id" value="<?php echo $row['subject_id']; ?>">
-                                      <div class="form-group">
-                                        <label for="edit-name" class="form-label">Subject Name</label>
-                                        <input type="text" class="form-control" name="edit-name" id="edit-name" value="<?php echo $row['name']; ?>" required>
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="level" class="form-label">Grade Level</label>
-                                        <select class="form-control" id="level" name="edit-level" required>
-                                          <option value=""></option>
-                                          <option value="Grade 11" <?= ($row['level'] == "Grade 11") ? "selected" : "" ?>>Grade 11</option>
-                                          <option value="Grade 12" <?= ($row['level'] == "Grade 12") ? "selected" : "" ?>>Grade 12</option>
-                                        </select>
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="edit-strand" class="form-label">Strand</label>
-                                        <select class="form-control" name="edit-strand" id="edit-strand" required>
-                                          <option value=""></option>
-                                          <?php
-                                          $editSqlStrand = "SELECT * FROM strand";
-                                          $editQueryStrand = mysqli_query($conn, $editSqlStrand);
-                                          while ($rowStrand = mysqli_fetch_assoc($editQueryStrand)) {
-                                            $selected = ($rowStrand['strand_id'] == $row['strand']) ? "selected" : "";
-                                            echo '<option value="' . $rowStrand['strand_id'] . '" ' . $selected . '>' . $rowStrand['strand'] . '</option>';
-                                          }
-                                          ?>
-                                        </select>
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="level" class="form-label">Semester</label>
-                                        <select class="form-control" id="level" name="edit-semester" required>
-                                          <option value=""></option>
-                                          <option value="First Semester" <?= ($row['semester'] == "First Semester") ? "selected" : "" ?>>First Semester</option>
-                                          <option value="Second Semester" <?= ($row['semester'] == "Second Semester") ? "selected" : "" ?>>Second Semester</option>
-                                        </select>
-                                      </div>
-                                      <button type="submit" class="btn btn-sm btn-success w-100" name="update-subject">Update Subject</button>
-                                    </form>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
                           </td>
                         </tr>
                       <?php
                       }
-                    } 
-                    else {
-                    ?>
+                    } else {
+                      ?>
                       <tr>
                         <td colspan="5" class="text-center">No Subject Please Add Subject</td>
                         <td class="d-none"></td>

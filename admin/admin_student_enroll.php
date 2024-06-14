@@ -212,9 +212,9 @@ if (isset($_GET['id'])) {
               <label class="form-label">LRN Number</label>
               <input type="number" class="form-control" value="<?php echo $resultStudent['lrn_number']; ?>" disabled>
             </div>
-            <div class="form-group">
+            <div class="form-group"><td>
               <label class="form-label">Name</label>
-              <input type="text" class="form-control" value="<?php echo $resultStudent['lname'] . ', ' . $resultStudent['fname'] . " " . substr($resultStudent['mname'], 0, 1) . "."; ?>" disabled>
+              <input type="text" class="form-control" value="<?php echo $resultStudent['lname'] . ', ' . $resultStudent['fname'] . " " . (!empty($resultStudent['mname']) ? substr($resultStudent['mname'], 0, 1) . "." : ""); ?>" disabled>
             </div>
             <div class="form-group">
               <label for="class" class="form-label">Class</label>

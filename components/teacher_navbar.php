@@ -25,6 +25,22 @@
         <li class="nav-item">
           <a class="nav-link text-white" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
+        <li class="nav-item">
+          <?php
+          $navStatus = "Active";
+          $navSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+          $navSy->bind_param("s", $navStatus);
+          $navSy->execute();
+          $navResultSy = $navSy->get_result();
+          if (mysqli_num_rows($navResultSy) > 0) {
+            $resultschoolyear = $navResultSy->fetch_assoc();
+            $navschoolyear = $resultschoolyear['start_year'] . "-" . $resultschoolyear['end_year'] . " " .  (($resultschoolyear['semester'] == "First Semester") ? "1st Sem" : "2nd Sem");
+          } else {
+            $navschoolyear = "No School Year";
+          }
+          ?>
+          <span class="nav-link text-white disabled"><?php echo $navschoolyear; ?></span>
+        </li>
       </ul>
 
       <!-- Right navbar links -->

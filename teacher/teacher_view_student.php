@@ -79,7 +79,7 @@ if (isset($_GET['id'])) {
                   <div class="col-lg-4">
                     <p><strong>LRN Number:</strong> <?php echo $rowStudent['lrn_number']; ?></p>
                     <p><strong>First Name:</strong> <?php echo $rowStudent['fname']; ?></p>
-                    <p><strong>Middle Name:</strong> <?php echo $rowStudent['mname']; ?></p>
+                    <p><strong>Middle Name:</strong> <?php echo (!empty($rowStudent['mname']) ? $rowStudent['mname'] : "N/A"); ?></p>
                     <p><strong>Last Name:</strong> <?php echo $rowStudent['lname']; ?></p>
                     <p><strong>Sex:</strong> <?php echo $rowStudent['gender']; ?></p>
                     <?php

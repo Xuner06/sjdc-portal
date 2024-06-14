@@ -31,7 +31,7 @@ $class->execute();
 $resultClass = $class->get_result();
 $rowClass = $resultClass->fetch_assoc();
 $finalClass = $rowClass['level'] . '-' . $rowClass['strand'] . '-' . $rowClass['section'];
-$finalAdviser = $rowClass['fname'] . ' ' . substr($rowClass['mname'], 0, 1) . '.' . ' ' .$rowClass['lname'];
+$finalAdviser = $rowClass['fname'] . ' ' . (!empty($rowClass['mname']) ? substr($rowClass['mname'], 0, 1) . '.' : '') . ' ' . $rowClass['lname'];
 $finalSy = 'S.Y. ' . $rowClass['start_year'] . '-' . $rowClass['end_year'];
 ?>
 
@@ -87,7 +87,7 @@ $finalSy = 'S.Y. ' . $rowClass['start_year'] . '-' . $rowClass['end_year'];
               <div class="card-body">
                 <h1 class="text-center">Class List</h1>
                 <?php
-                echo '<h1>' . $finalClass .'</h1>'
+                echo '<h1>' . $finalClass . '</h1>'
                 ?>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
@@ -118,7 +118,7 @@ $finalSy = 'S.Y. ' . $rowClass['start_year'] . '-' . $rowClass['end_year'];
                     ?>
                         <tr>
                           <td><?php echo $row['lrn_number']; ?></td>
-                          <td><?php echo $row['lname'] . ", " . $row['fname'] . " " . substr($row['mname'], 0, 1) . "."; ?></td>
+                          <td><?php echo $row['lname'] . ", " . $row['fname'] . " " . (!empty($row['mname']) ? substr($row['mname'], 0, 1) . "." : ""); ?></td>
                           <td><?php echo $row['gender']; ?></td>
                           <?php
                           $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
@@ -274,17 +274,14 @@ $finalSy = 'S.Y. ' . $rowClass['start_year'] . '-' . $rowClass['end_year'];
           extend: 'csv',
           className: 'mr-2 rounded rounded-2',
         }, {
-          extend: 'excel',
-          className: 'mr-2 rounded rounded-2',
-        }, {
           extend: 'pdf',
           className: 'mr-2 rounded rounded-2',
           title: '',
-          customize: function(win) {
-            $(win.document.body).prepend(
-              '<img src="../assets/bg4.jpg">'
-            )
-          },
+          // customize: function(win) {
+          //   $(win.document.body).prepend(
+          //     '<img src="../assets/bg4.jpg">'
+          //   )
+          // },
         }, {
           extend: 'print',
           className: 'mr-2 rounded rounded-2',

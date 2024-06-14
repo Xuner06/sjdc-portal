@@ -76,7 +76,7 @@ $row = $stmtResult->fetch_assoc();
                     ?>
                         <tr>
                           <td><?php echo $rowEnroll['lrn_number']; ?></td>
-                          <td><?php echo $rowEnroll['lname'] . ", " . $rowEnroll['fname'] . " " . substr($rowEnroll['mname'], 0, 1) . "."; ?></td>
+                          <td><?php echo $rowEnroll['lname'] . ", " . $rowEnroll['fname'] . " " . (!empty($rowEnroll['mname']) ? substr($rowEnroll['mname'], 0, 1) . "." : ""); ?></td>
                           <td><?php echo $rowEnroll['level'] . "-" . $rowEnroll['strand'] . "-" . $rowEnroll['section']; ?></td>
                           <td><?php echo $rowEnroll['semester']; ?></td>
                           <td>

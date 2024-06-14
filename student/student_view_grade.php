@@ -162,15 +162,6 @@ if (isset($_GET['view'])) {
         "info": false,
         "paging": false,
         "buttons": [{
-          extend: 'copy',
-          className: 'mr-2 rounded rounded-2',
-        }, {
-          extend: 'csv',
-          className: 'mr-2 rounded rounded-2',
-        }, {
-          extend: 'excel',
-          className: 'mr-2 rounded rounded-2',
-        }, {
           extend: 'pdf',
           className: 'mr-2 rounded rounded-2',
         }, {

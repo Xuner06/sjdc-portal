@@ -16,10 +16,9 @@ $resultClass = $class->get_result();
 if (mysqli_num_rows($resultClass) > 0) {
   $rowClass = $resultClass->fetch_assoc();
   $finalClass = $rowClass['level'] . '-' . $rowClass['strand'] . '-' . $rowClass['section'];
-  $finalAdviser = $rowClass['fname'] . ' ' . substr($rowClass['mname'], 0, 1) . '.' . ' ' . $rowClass['lname'];
+  $finalAdviser = $rowClass['fname'] . ' ' . (!empty($rowClass['mname']) ? substr($rowClass['mname'], 0, 1) . '.' : '') . ' ' . $rowClass['lname'];
   $finalSy = 'S.Y. ' . $rowClass['start_year'] . '-' . $rowClass['end_year'];
-}
-else {
+} else {
   $finalClass = '';
   $finalAdviser = '';
   $finalSy = '';
@@ -116,7 +115,7 @@ else {
                     ?>
                           <tr>
                             <td><?php echo $row['lrn_number']; ?></td>
-                            <td><?php echo $row['lname'] . ', ' . $row['fname'] . ' ' . substr($row['mname'], 0, 1) . '.'; ?></td>
+                            <td><?php echo $row['lname'] . ", " . $row['fname'] . " " . (!empty($row['mname']) ? substr($row['mname'], 0, 1) . "." : ""); ?></td>
                             <td><?php echo $row['gender']; ?></td>
                             <td><?php echo $row['email']; ?></td>
                             <td><?php echo $row['contact']; ?></td>
@@ -206,12 +205,6 @@ else {
           }
         }, {
           extend: 'csv',
-          className: 'mr-2 rounded rounded-2',
-          exportOptions: {
-            columns: [0, 1, 2, 3, 4]
-          }
-        }, {
-          extend: 'excel',
           className: 'mr-2 rounded rounded-2',
           exportOptions: {
             columns: [0, 1, 2, 3, 4]

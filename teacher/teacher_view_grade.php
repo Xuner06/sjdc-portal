@@ -125,7 +125,7 @@ if (isset($_GET['subject_view'])) {
                     ?>
                         <tr>
                           <td><?php echo $rowStudent['lrn_number']; ?></td>
-                          <td><?php echo $rowStudent['lname'] . ', ' . $rowStudent['fname'] . ' ' . substr($rowStudent['mname'], 0, 1) . '.'; ?></td>
+                          <td><?php echo $rowStudent['lname'] . ", " . $rowStudent['fname'] . " " . (!empty($rowStudent['mname']) ? substr($rowStudent['mname'], 0, 1) . "." : ""); ?></td>
                           <td>
                             <?php
                             $stmtGrade = $conn->prepare("SELECT * FROM grade WHERE student = ? AND subject = ? AND sy = ?");
@@ -192,9 +192,6 @@ if (isset($_GET['subject_view'])) {
           className: 'mr-2 rounded rounded-2',
         }, {
           extend: 'csv',
-          className: 'mr-2 rounded rounded-2',
-        }, {
-          extend: 'excel',
           className: 'mr-2 rounded rounded-2',
         }, {
           extend: 'pdf',

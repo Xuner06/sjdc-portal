@@ -131,84 +131,84 @@ $row = $stmtResult->fetch_assoc();
                       if (mysqli_num_rows($stmtResultClass) > 0) {
                         while ($row = $stmtResultClass->fetch_assoc()) {
                     ?>
+                          <!-- Edit Class Modal -->
+                          <div class="modal fade" id="edit-class-<?php echo $row['class_id']; ?>">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h4 class="modal-title">Edit Class</h4>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <form action="../actions/update_class.php" method="post" id="editForm-<?php echo $row['class_id']; ?>">
+                                    <input type="hidden" name="edit-id" value="<?php echo $row['class_id']; ?>">
+                                    <div class="form-group">
+                                      <label for="level" class="form-label">Grade Level</label>
+                                      <select class="form-control" id="level" name="edit-level" required>
+                                        <option value=""></option>
+                                        <option value="Grade 11" <?= ($row['level'] == "Grade 11") ? "selected" : "" ?>>Grade 11</option>
+                                        <option value="Grade 12" <?= ($row['level'] == "Grade 12") ? "selected" : "" ?>>Grade 12</option>
+                                      </select>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="edit-strand" class="form-label">Strand</label>
+                                      <select class="form-control" name="edit-strand" id="edit-strand" required>
+                                        <option value=""></option>
+                                        <?php
+                                        $sqlEditStrand = "SELECT * FROM strand";
+                                        $queryEditStrand = mysqli_query($conn, $sqlEditStrand);
+                                        while ($rowStrand = mysqli_fetch_assoc($queryEditStrand)) {
+                                          $selected = ($rowStrand['strand_id'] == $row['strand_id']) ? "selected" : "";
+                                          echo '<option value="' . $rowStrand['strand_id'] . '" ' . $selected . '>' . $rowStrand['strand'] . '</option>';
+                                        }
+                                        ?>
+                                      </select>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="section" class="form-label">Section</label>
+                                      <input type="number" class="form-control" id="section" name="edit-section" value="<?php echo $row['section']; ?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="edit-adviser" class="form-label">Adviser</label>
+                                      <select class="form-control" name="edit-adviser" id="edit-adviser" required>
+                                        <option value=""></option>
+                                        <option value="<?php echo $row['id']; ?>" selected><?php echo $row['lname'] . ', ' . $row['fname'] . ' ' . (!empty($row['mname']) ? substr($row['mname'], 0, 1) . '.' : ''); ?></option>
+                                        <?php
+                                        $statustTeacher = 0;
+                                        $role = "teacher";
+                                        $stmtEditTeacher = $conn->prepare("SELECT * FROM users WHERE status = ? AND role = ? AND id NOT IN (SELECT adviser FROM class WHERE sy = ?)");
+                                        $stmtEditTeacher->bind_param("isi", $statustTeacher, $role, $sy);
+                                        $stmtEditTeacher->execute();
+                                        $stmtResultEditTeacher = $stmtEditTeacher->get_result();
+
+                                        if (mysqli_num_rows($stmtResultEditTeacher) > 0) {
+                                          while ($rowTeacher = $stmtResultEditTeacher->fetch_assoc()) {
+                                            echo '<option value="' . $rowTeacher['id'] . '">' . $rowTeacher['lname'] . ', ' . $rowTeacher['fname'] . ' ' . (!empty($rowTeacher['mname']) ? substr($rowTeacher['mname'], 0, 1) . '.' : '') . '</option>';
+                                          }
+                                        } else {
+                                          echo '<option value="" disabled>No Teacher Available (Please Add Teacher)</option>';
+                                        }
+                                        ?>
+                                      </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-success w-100" name="update-class">Update Class</button>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                           <tr>
                             <td><?php echo $row['level']; ?></td>
                             <td><?php echo $row['strand']; ?></td>
                             <td><?php echo $row['section']; ?></td>
                             <td><?php echo $row['start_year'] . '-' . $row['end_year'] . ' ' . $row['semester']; ?></td>
-                            <td><?php echo $row['lname'] . ", " . $row['fname'] . " " . substr($row['mname'], 0, 1) . "."; ?></td>
+                            <td><?php echo $row['lname'] . ", " . $row['fname'] . " " . (!empty($row['mname']) ? substr($row['mname'], 0, 1) . "." : ""); ?></td>
                             <td>
                               <a href="admin_view_class.php?class=<?php echo $row['class_id']; ?>" class="btn btn-primary btn-sm">View</a>
                               <!-- Edit Class Button Click -->
                               <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-class-<?php echo $row['class_id']; ?>">Edit</button>
-                              <!-- Edit Class Modal -->
-                              <div class="modal fade" id="edit-class-<?php echo $row['class_id']; ?>">
-                                <div class="modal-dialog">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h4 class="modal-title">Edit Class</h4>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <form action="../actions/update_class.php" method="post" id="editForm-<?php echo $row['class_id']; ?>">
-                                        <input type="hidden" name="edit-id" value="<?php echo $row['class_id']; ?>">
-                                        <div class="form-group">
-                                          <label for="level" class="form-label">Grade Level</label>
-                                          <select class="form-control" id="level" name="edit-level" required>
-                                            <option value=""></option>
-                                            <option value="Grade 11" <?= ($row['level'] == "Grade 11") ? "selected" : "" ?>>Grade 11</option>
-                                            <option value="Grade 12" <?= ($row['level'] == "Grade 12") ? "selected" : "" ?>>Grade 12</option>
-                                          </select>
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="edit-strand" class="form-label">Strand</label>
-                                          <select class="form-control" name="edit-strand" id="edit-strand" required>
-                                            <option value=""></option>
-                                            <?php
-                                            $sqlEditStrand = "SELECT * FROM strand";
-                                            $queryEditStrand = mysqli_query($conn, $sqlEditStrand);
-                                            while ($rowStrand = mysqli_fetch_assoc($queryEditStrand)) {
-                                              $selected = ($rowStrand['strand_id'] == $row['strand_id']) ? "selected" : "";
-                                              echo '<option value="' . $rowStrand['strand_id'] . '" ' . $selected . '>' . $rowStrand['strand'] . '</option>';
-                                            }
-                                            ?>
-                                          </select>
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="section" class="form-label">Section</label>
-                                          <input type="number" class="form-control" id="section" name="edit-section" value="<?php echo $row['section']; ?>" required>
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="edit-adviser" class="form-label">Adviser</label>
-                                          <select class="form-control" name="edit-adviser" id="edit-adviser" required>
-                                            <option value=""></option>
-                                            <option value="<?php echo $row['id']; ?>" selected><?php echo $row['lname'] . ', ' . $row['fname'] . ' ' . substr($row['mname'], 0, 1) . '.'; ?></option>
-                                            <?php
-                                            $statustTeacher = 0;
-                                            $role = "teacher";
-                                            $stmtEditTeacher = $conn->prepare("SELECT * FROM users WHERE status = ? AND role = ? AND id NOT IN (SELECT adviser FROM class WHERE sy = ?)");
-                                            $stmtEditTeacher->bind_param("isi", $statustTeacher, $role, $sy);
-                                            $stmtEditTeacher->execute();
-                                            $stmtResultEditTeacher = $stmtEditTeacher->get_result();
-
-                                            if (mysqli_num_rows($stmtResultEditTeacher) > 0) {
-                                              while ($rowTeacher = $stmtResultEditTeacher->fetch_assoc()) {
-                                                echo '<option value="' . $rowTeacher['id'] . '">' . $rowTeacher['lname'] . ', ' . $rowTeacher['fname'] . ' ' . substr($rowTeacher['mname'], 0, 1) . '.' . '</option>';
-                                              }
-                                            } else {
-                                              echo '<option value="" disabled>No Teacher Available (Please Add Teacher)</option>';
-                                            }
-                                            ?>
-                                          </select>
-                                        </div>
-                                        <button type="submit" class="btn btn-sm btn-success w-100" name="update-class">Update Class</button>
-                                      </form>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
                             </td>
                           </tr>
                         <?php
@@ -310,7 +310,7 @@ $row = $stmtResult->fetch_assoc();
                   $stmtResultInsertTeacher = $stmtInsertTeacher->get_result();
                   if (mysqli_num_rows($stmtResultInsertTeacher) > 0) {
                     while ($teacher = $stmtResultInsertTeacher->fetch_assoc()) {
-                      echo '<option value="' . $teacher['id'] . '">' . $teacher['lname'] . ', ' . $teacher['fname'] . ' ' . substr($teacher['mname'], 0, 1) . '.' . '</option>';
+                      echo '<option value="' . $teacher['id'] . '">' . $teacher['lname'] . ', ' . $teacher['fname'] . ' ' . (!empty($teacher['mname']) ? substr($teacher['mname'], 0, 1) . '.' : '') . '</option>';
                     }
                   } else {
                     echo '<option value="" disabled>No Teacher Available (Please Add Teacher)</option>';

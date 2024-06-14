@@ -74,7 +74,7 @@ if (isset($_GET['id'])) {
                   </div>
                   <div class="col-lg-4 col-12">
                     <p><strong>First Name:</strong> <?php echo $rowTeacher['fname']; ?></p>
-                    <p><strong>Middle Name:</strong> <?php echo $rowTeacher['mname']; ?></p>
+                    <p><strong>Middle Name:</strong> <?php echo (!empty($rowTeacher['mname']) ? $rowTeacher['mname'] : "N/A"); ?></p>
                     <p><strong>Last Name:</strong> <?php echo $rowTeacher['lname']; ?></p>
                     <p><strong>Sex:</strong> <?php echo $rowTeacher['gender']; ?></p>
                     <?php

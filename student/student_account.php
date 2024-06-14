@@ -104,7 +104,7 @@ $row = $stmtResult->fetch_assoc();
                   <div class="col-lg-4">
                     <p><strong>LRN Number:</strong> <?php echo $row['lrn_number']; ?></p>
                     <p><strong>First Name:</strong> <?php echo $row['fname']; ?></p>
-                    <p><strong>Middle Name:</strong> <?php echo $row['mname']; ?></p>
+                    <p><strong>Middle Name:</strong> <?php echo (!empty($row['mname']) ? $row['mname'] : "N/A"); ?></p>
                     <p><strong>Last Name:</strong> <?php echo $row['lname']; ?></p>
                     <p><strong>Gender:</strong> <?php echo $row['gender']; ?></p>
                     <?php

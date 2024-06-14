@@ -10,6 +10,7 @@ $stmtAdmin->execute();
 $stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
 
+
 ?>
 
 <!DOCTYPE html>
@@ -110,6 +111,59 @@ $row = $stmtResult->fetch_assoc();
                     if (mysqli_num_rows($querySchoolyear) > 0) {
                       while ($row = mysqli_fetch_assoc($querySchoolyear)) {
                     ?>
+                        <div class="modal fade" id="edit-schoolyear-<?php echo $row['sy_id']; ?>">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h4 class="modal-title">Edit School Year</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form action="../actions/update_schoolyear.php" method="post" id="editForm-<?php echo $row['sy_id']; ?>">
+                                  <input type="hidden" name="edit-id" value="<?php echo $row['sy_id']; ?>">
+                                  <div class="form-group">
+                                    <label for="edit-status" class="form-label">Status</label>
+                                    <select class="form-control" name="edit-status" id="edit-status" value="<?php echo $row['status']; ?>" required>
+                                      <option value=""></option>
+                                      <option value="Active" <?php echo ($row['status'] == "Active") ? "selected" : "" ?>>Active</option>
+                                      <option value="Inactive" <?php echo ($row['status'] == "Inactive") ? "selected" : "" ?>>Inactive</option>
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="edit-startYear" class="form-label">Start Year</label>
+                                    <select class="form-control" name="edit-startYear" id="edit-startYear" required>
+                                      <option value="<?php echo $row['start_year']; ?>" selected><?php echo $row['start_year']; ?></option>
+                                      <?php
+                                      $startYear = date('Y', strtotime('-1 year'));
+                                      echo '<option value="' . $startYear . '">' . $startYear . '</option>'
+                                      ?>
+                                    </select>
+                                    <div class="form-group">
+                                      <label for="edit-endYear" class="form-label">End Year</label>
+                                      <select class="form-control" name="edit-endYear" id="edit-endYear" required>
+                                        <option value="<?php echo $row['end_year']; ?>" selected><?php echo $row['end_year']; ?></option>
+                                        <?php
+                                        $endYear = date('Y');;
+                                        echo '<option value="' . $endYear . '">' . $endYear . '</option>'
+                                        ?>
+                                      </select>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="edit-semester" class="form-label">Semester</label>
+                                      <select class="form-control" name="edit-semester" id="edit-semester" required>
+                                        <option value=""></option>
+                                        <option value="First Semester" <?php echo ($row['semester'] == "First Semester") ? "selected" : "" ?>>First Semester</option>
+                                        <option value="Second Semester" <?php echo ($row['semester'] == "Second Semester") ? "selected" : "" ?>>Second Semester</option>
+                                      </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-success w-100" name="update-schoolyear">Update School Year</button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         <tr>
                           <td><?php echo $row['start_year'] . "-" . $row['end_year']; ?></td>
                           <td><?php echo $row['semester']; ?></td>
@@ -117,59 +171,7 @@ $row = $stmtResult->fetch_assoc();
                           <td>
                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-schoolyear-<?php echo $row['sy_id']; ?>">Edit</button>
                             <!-- Edit School Year Modal -->
-                            <div class="modal fade" id="edit-schoolyear-<?php echo $row['sy_id']; ?>">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h4 class="modal-title">Edit School Year</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span>
-                                    </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <form action="../actions/update_schoolyear.php" method="post" id="editForm-<?php echo $row['sy_id']; ?>">
-                                      <input type="hidden" name="edit-id" value="<?php echo $row['sy_id']; ?>">
-                                      <div class="form-group">
-                                        <label for="edit-status" class="form-label">Status</label>
-                                        <select class="form-control" name="edit-status" id="edit-status" value="<?php echo $row['status']; ?>" required>
-                                          <option value=""></option>
-                                          <option value="Active" <?php echo ($row['status'] == "Active") ? "selected" : "" ?>>Active</option>
-                                          <option value="Inactive" <?php echo ($row['status'] == "Inactive") ? "selected" : "" ?>>Inactive</option>
-                                        </select>
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="edit-startYear" class="form-label">Start Year</label>
-                                        <select class="form-control" name="edit-startYear" id="edit-startYear" required>
-                                          <option value="<?php echo $row['start_year']; ?>" selected><?php echo $row['start_year']; ?></option>
-                                          <?php
-                                          $startYear = date('Y', strtotime('-1 year'));
-                                          echo '<option value="' . $startYear . '">' . $startYear . '</option>'
-                                          ?>
-                                        </select>
-                                        <div class="form-group">
-                                          <label for="edit-endYear" class="form-label">End Year</label>
-                                          <select class="form-control" name="edit-endYear" id="edit-endYear" required>
-                                            <option value="<?php echo $row['end_year']; ?>" selected><?php echo $row['end_year']; ?></option>
-                                            <?php
-                                            $endYear = date('Y');;
-                                            echo '<option value="' . $endYear . '">' . $endYear . '</option>'
-                                            ?>
-                                          </select>
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="edit-semester" class="form-label">Semester</label>
-                                          <select class="form-control" name="edit-semester" id="edit-semester" required>
-                                            <option value=""></option>
-                                            <option value="First Semester" <?php echo ($row['semester'] == "First Semester") ? "selected" : "" ?>>First Semester</option>
-                                            <option value="Second Semester" <?php echo ($row['semester'] == "Second Semester") ? "selected" : "" ?>>Second Semester</option>
-                                          </select>
-                                        </div>
-                                        <button type="submit" class="btn btn-sm btn-success w-100" name="update-schoolyear">Update School Year</button>
-                                    </form>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                          </td>
                         </tr>
                       <?php
                       }
@@ -215,6 +217,7 @@ $row = $stmtResult->fetch_assoc();
                 $startYear = date('Y', strtotime('-1 year'));
                 echo '<option value="' . $startYear . '">' . $startYear . '</option>'
                 ?>
+            
               </select>
             </div>
             <div class="form-group">

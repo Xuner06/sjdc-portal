@@ -133,94 +133,94 @@ $row = $stmtResult->fetch_assoc();
                     if (mysqli_num_rows($stmtResultTeacher) > 0) {
                       while ($row = $stmtResultTeacher->fetch_assoc()) {
                     ?>
+                        <!-- Edit Teacher Modal -->
+                        <div class="modal fade" id="edit-teacher-<?php echo $row['id']; ?>">
+                          <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h4 class="modal-title">Edit Teacher</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form action="../actions/update_teacher.php" method="post" id="editForm-<?php echo $row['id']; ?>">
+                                  <input type="hidden" name="edit-id" value="<?php echo $row['id']; ?>">
+                                  <div class="row">
+                                    <div class="col-sm-12 col-md-6">
+                                      <div class="form-group">
+                                        <label for="edit-fname" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="edit-fname" name="edit-fname" value="<?php echo $row['fname']; ?>" required>
+                                      </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                      <div class="form-group">
+                                        <label for="edit-mname" class="form-label">Middle Name</label>
+                                        <input type="text" class="form-control" id="edit-mname" name="edit-mname" value="<?php echo $row['mname']; ?>">
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="row">
+                                    <div class="col-sm-12 col-md-6">
+                                      <div class="form-group">
+                                        <label for="edit-lname" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="edit-lname" name="edit-lname" value="<?php echo $row['lname']; ?>" required>
+                                      </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                      <div class="form-group">
+                                        <label for="edit-gender" class="form-label">Gender</label>
+                                        <select class="form-control" id="edit-gender" name="edit-gender" required>
+                                          <option value=""></option>
+                                          <option value="Male" <?= ($row['gender'] == "Male") ? "selected" : "" ?>>Male</option>
+                                          <option value="Female" <?= ($row['gender'] == "Female") ? "selected" : "" ?>>Female</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-sm-12 col-md-6">
+                                      <div class="form-group">
+                                        <label for="edit_birthday" class="form-label">Birthday</label>
+                                        <input type="date" class="form-control" id="edit_birthday" name="edit_birthday" value="<?php echo $row['birthday']; ?>" required>
+                                      </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                      <div class="form-group">
+                                        <label for="edit_contact" class="form-label">Contact</label>
+                                        <input type="number" class="form-control" id="edit_contact" name="edit_contact" value="<?php echo $row['contact']; ?>" required>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-sm-12 col-md-6">
+                                      <div class="form-group">
+                                        <label for="edit_email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="edit_email" name="edit_email" value="<?php echo $row['email']; ?>" required>
+                                      </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                      <div class="form-group">
+                                        <label for="edit-address" class="form-label">Address</label>
+                                        <input type="text" class="form-control" id="edit-address" name="edit-address" value="<?php echo $row['address']; ?>" required>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <button type="submit" class="btn btn-success btn-sm w-100" name="update-teacher">Update Teacher</button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         <tr>
-                          <td><?php echo $row['lname'] . ", " . $row['fname'] . " " . substr($row['mname'], 0, 1) . "."; ?></td>
+                          <td><?php echo $row['lname'] . ", " . $row['fname'] . " " . (!empty($row['mname']) ? substr($row['mname'], 0, 1) . "." : ""); ?></td>
                           <td><?php echo $row['gender']; ?></td>
                           <td><?php echo $row['email']; ?></td>
                           <td><?php echo $row['contact']; ?></td>
                           <td>
                             <a href="admin_view_teacher.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">View</a>
                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-teacher-<?php echo $row['id']; ?>">Edit</button>
-                            <!-- Edit Teacher Modal -->
-                            <div class="modal fade" id="edit-teacher-<?php echo $row['id']; ?>">
-                              <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h4 class="modal-title">Edit Teacher</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span>
-                                    </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <form action="../actions/update_teacher.php" method="post" id="editForm-<?php echo $row['id']; ?>">
-                                      <input type="hidden" name="edit-id" value="<?php echo $row['id']; ?>">
-                                      <div class="row">
-                                        <div class="col-sm-12 col-md-6">
-                                          <div class="form-group">
-                                            <label for="edit-fname" class="form-label">First Name</label>
-                                            <input type="text" class="form-control" id="edit-fname" name="edit-fname" value="<?php echo $row['fname']; ?>" required>
-                                          </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6">
-                                          <div class="form-group">
-                                            <label for="edit-mname" class="form-label">Middle Name</label>
-                                            <input type="text" class="form-control" id="edit-mname" name="edit-mname" value="<?php echo $row['mname']; ?>" required>
-                                          </div>
-                                        </div>
-                                      </div>
-
-                                      <div class="row">
-                                        <div class="col-sm-12 col-md-6">
-                                          <div class="form-group">
-                                            <label for="edit-lname" class="form-label">Last Name</label>
-                                            <input type="text" class="form-control" id="edit-lname" name="edit-lname" value="<?php echo $row['lname']; ?>" required>
-                                          </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6">
-                                          <div class="form-group">
-                                            <label for="edit-gender" class="form-label">Gender</label>
-                                            <select class="form-control" id="edit-gender" name="edit-gender" required>
-                                              <option value=""></option>
-                                              <option value="Male" <?= ($row['gender'] == "Male") ? "selected" : "" ?>>Male</option>
-                                              <option value="Female" <?= ($row['gender'] == "Female") ? "selected" : "" ?>>Female</option>
-                                            </select>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="row">
-                                        <div class="col-sm-12 col-md-6">
-                                          <div class="form-group">
-                                            <label for="edit_birthday" class="form-label">Birthday</label>
-                                            <input type="date" class="form-control" id="edit_birthday" name="edit_birthday" value="<?php echo $row['birthday']; ?>" required>
-                                          </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6">
-                                          <div class="form-group">
-                                            <label for="edit_contact" class="form-label">Contact</label>
-                                            <input type="number" class="form-control" id="edit_contact" name="edit_contact" value="<?php echo $row['contact']; ?>" required>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="row">
-                                        <div class="col-sm-12 col-md-6">
-                                          <div class="form-group">
-                                            <label for="edit_email" class="form-label">Email</label>
-                                            <input type="email" class="form-control" id="edit_email" name="edit_email" value="<?php echo $row['email']; ?>" required>
-                                          </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6">
-                                          <div class="form-group">
-                                            <label for="edit-address" class="form-label">Address</label>
-                                            <input type="text" class="form-control" id="edit-address" name="edit-address" value="<?php echo $row['address']; ?>" required>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <button type="submit" class="btn btn-success btn-sm w-100" name="update-teacher">Update Teacher</button>
-                                    </form>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
                             <button type="button" class="btn btn-danger btn-sm" onclick="deleteTeacher('<?php echo $row['id']; ?>')">Delete</button>
                             <form id="deleteForm-<?php echo $row['id']; ?>" action="../actions/delete_teacher.php" method="post">
                               <input type="hidden" name="delete-id" value="<?php echo $row['id']; ?>">
@@ -290,7 +290,7 @@ $row = $stmtResult->fetch_assoc();
               <div class="col-sm-12 col-md-6">
                 <div class="form-group">
                   <label for="mname" class="form-label">Middle Name</label>
-                  <input type="text" class="form-control" id="mname" name="mname" required>
+                  <input type="text" class="form-control" id="mname" name="mname">
                 </div>
               </div>
             </div>
@@ -384,12 +384,6 @@ $row = $stmtResult->fetch_assoc();
           }
         }, {
           extend: 'csv',
-          className: 'mr-2 rounded rounded-2',
-          exportOptions: {
-            columns: [0, 1, 2, 3]
-          }
-        }, {
-          extend: 'excel',
           className: 'mr-2 rounded rounded-2',
           exportOptions: {
             columns: [0, 1, 2, 3]
