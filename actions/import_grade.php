@@ -24,22 +24,23 @@ if (isset($_POST['import-grade'])) {
       // Parse data from CSV file line by line
       while (($line = fgetcsv($csvFile)) !== FALSE) {
         // Get row data
-        $lrn = $line[0];
-        $grade = $line[1];
+        $lrn = trim($line[0], "'");
+        $grade = $line[2];
         if (isset($line[0])) {
-          $lrn = $line[0];
+          $lrn = trim($line[0], "'");
         } else {
           header("Location: ../teacher/teacher_encode_grade.php?subject=$subject");
           exit();
         }
 
-        if (isset($line[1])) {
-          $grade = $line[1];
+        if (isset($line[2])) {
+          $grade = $line[2];
         } else {
           header("Location: ../teacher/teacher_encode_grade.php?subject=$subject");
           exit();
         }
 
+        echo $lrn;
         // Check whether member already exists in the database with the same email
         $stmtSelect = $conn->prepare("SELECT * FROM users WHERE lrn_number = ?");
         $stmtSelect->bind_param("s", $lrn);

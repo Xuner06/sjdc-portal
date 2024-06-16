@@ -447,6 +447,9 @@ $row = $stmtResult->fetch_assoc();
         "lengthChange": false,
         "autoWidth": false,
         "searching": true,
+        "order": [
+          [1, "asc"]
+        ],
         "buttons": [{
           className: 'mr-2 rounded rounded-2',
           text: 'Add Student',
@@ -464,7 +467,8 @@ $row = $stmtResult->fetch_assoc();
           extend: 'csv',
           className: 'mr-2 rounded rounded-2',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4, 5]
+            columns: [0, 1, 2, 3, 4, 5],
+            
           }
         }, {
           extend: 'pdf',

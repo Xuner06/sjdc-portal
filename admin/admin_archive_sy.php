@@ -165,6 +165,9 @@ $row = $stmtResult->fetch_assoc();
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
+        "order": [
+          [1, "asc"]
+        ],
         "buttons": [{
           text: 'Select School Year',
           action: function() {

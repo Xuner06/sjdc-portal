@@ -226,7 +226,7 @@ $row = $stmtResult->fetch_assoc();
         "autoWidth": false,
         "paging": true,
         "order": [
-          [1, "asc"]
+          [2, "asc"]
         ],
         "buttons": [{
           text: 'Multiple Enroll',

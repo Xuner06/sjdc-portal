@@ -268,6 +268,9 @@
           "responsive": true,
           "lengthChange": false,
           "autoWidth": false,
+          "order": [
+            [1, "asc"]
+          ],
           "buttons": [{
             className: 'mr-2 rounded rounded-2',
             text: 'Upload Grades',

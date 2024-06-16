@@ -187,12 +187,23 @@ if (isset($_GET['subject_view'])) {
         "autoWidth": false,
         "info": false,
         "paging": true,
+        "order": [
+          [1, "asc"]
+        ],
         "buttons": [{
           extend: 'copy',
           className: 'mr-2 rounded rounded-2',
         }, {
           extend: 'csv',
           className: 'mr-2 rounded rounded-2',
+          exportOptions: {
+            format: {
+              body: function(data, row, column, node) {
+                // Apply single quotation marks for columns 0 and 3
+                return column === 0 ? "'" + data + "'" : data;
+              }
+            }
+          }
         }, {
           extend: 'pdf',
           className: 'mr-2 rounded rounded-2',

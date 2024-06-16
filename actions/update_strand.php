@@ -5,6 +5,7 @@ session_start();
 if (isset($_POST['update-strand'])) {
   $id = $_POST['edit-id'];
   $strand = strtoupper($_POST['edit-strand']);
+  $track = $_POST['edit-track'];
   $description = $_POST['edit-description'];
 
   $stmtOriginalStrand = $conn->prepare("SELECT strand FROM strand WHERE strand_id = ?");
@@ -26,8 +27,8 @@ if (isset($_POST['update-strand'])) {
       exit();
     } 
     else {
-      $stmtUpdateStrand = $conn->prepare("UPDATE strand SET strand = ?, description = ? WHERE strand_id = ?");
-      $stmtUpdateStrand->bind_param("ssi", $strand, $description, $id);
+      $stmtUpdateStrand = $conn->prepare("UPDATE strand SET track = ?, strand = ?, description = ? WHERE strand_id = ?");
+      $stmtUpdateStrand->bind_param("sssi", $track, $strand, $description, $id);
 
       if(mysqli_stmt_execute($stmtUpdateStrand)) {
         $_SESSION['update-strand'] = "Successfully Updated Strand";
@@ -41,8 +42,8 @@ if (isset($_POST['update-strand'])) {
     }
   } 
   else {
-    $stmtUpdateStrand = $conn->prepare("UPDATE strand SET strand = ?, description = ? WHERE strand_id = ?");
-    $stmtUpdateStrand->bind_param("ssi", $strand, $description, $id);
+    $stmtUpdateStrand = $conn->prepare("UPDATE strand SET track = ?, strand = ?, description = ? WHERE strand_id = ?");
+    $stmtUpdateStrand->bind_param("sssi", $track, $strand, $description, $id);
 
     if(mysqli_stmt_execute($stmtUpdateStrand)) {
       $_SESSION['update-strand'] = "Successfully Updated Strand";

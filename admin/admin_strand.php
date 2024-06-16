@@ -96,6 +96,7 @@ $row = $stmtResult->fetch_assoc();
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
+                      <th>Track</th>
                       <th>Strand</th>
                       <th>Description</th>
                       <th>Action</th>
@@ -107,49 +108,64 @@ $row = $stmtResult->fetch_assoc();
                     $queryStrand = mysqli_query($conn, $sqlStrand);
 
                     if (mysqli_num_rows($queryStrand) > 0) {
-                      while ($row = mysqli_fetch_assoc($queryStrand)) {
+                      while ($rowStrand = mysqli_fetch_assoc($queryStrand)) {
+
                     ?>
-                        <!-- Edit Strand Modal -->
-                        <div class="modal fade" id="edit-strand-<?php echo $row['strand_id']; ?>">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h4 class="modal-title">Edit Strand</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <div class="modal-body">
-                                <form action="../actions/update_strand.php" method="post" id="editForm-<?php echo $row['strand_id']; ?>">
-                                  <input type="hidden" name="edit-id" value="<?php echo $row['strand_id']; ?>">
-                                  <div class="form-group">
-                                    <label for="edit-strand" class="form-label">Strand</label>
-                                    <input type="text" class="form-control" name="edit-strand" id="edit-strand" value="<?php echo $row['strand']; ?>" required>
+                        <tr>
+                          <td><?php echo $rowStrand['track']; ?></td>
+                          <td><?php echo $rowStrand['strand']; ?></td>
+                          <td><?php echo $rowStrand['description']; ?></td>
+                          <td>
+
+                            <!-- Edit Strand Button Click -->
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-strand-<?php echo $rowStrand['strand_id']; ?>">Edit</button>
+                            <!-- Edit Strand Modal -->
+                            <div class="modal fade" id="edit-strand-<?php echo $rowStrand['strand_id']; ?>">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h4 class="modal-title">Edit Strand</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
                                   </div>
-                                  <div class="form-group">
-                                    <label for="edit-description" class="form-label">Description</label>
-                                    <input type="text" class="form-control" name="edit-description" id="edit-description" value="<?php echo $row['description']; ?>" required>
+                                  <div class="modal-body">
+                                    <form action="../actions/update_strand.php" method="post" id="editForm-<?php echo $rowStrand['strand_id']; ?>">
+                                      <input type="hidden" name="edit-id" value="<?php echo $rowStrand['strand_id']; ?>">
+                                      <div class="form-group">
+                                        <label for="edit-track-<?php echo $rowStrand['strand_id']; ?>" class="form-label">Track</label>
+                                        <select class="form-control" name="edit-track" id="edit-track-<?php echo $rowStrand['strand_id']; ?>" required>
+                                          <option value=""></option>
+                                          <option value="Academic Track" <?php echo ($rowStrand['track'] == "Academic Track" ? "selected" : "") ?>>Academic Track</option>
+                                          <option value="Arts and Design Track" <?php echo ($rowStrand['track'] == "Arts and Design Track" ? "selected" : "") ?>>Arts and Design Track</option>
+                                          <option value="Sports Track" <?php echo ($rowStrand['track'] == "Sports Track" ? "selected" : "") ?>>Sports Track</option>
+                                          <option value="Technical-Vocational-Livelihood Track" <?php echo ($rowStrand['track'] == "Technical-Vocational-Livelihood Track" ? "selected" : "") ?>>Technical-Vocational-Livelihood Track</option>
+                                        </select>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="edit-strand-<?php echo $rowStrand['strand_id']; ?>" class="form-label">Strand</label>
+                                        <input type="text" class="form-control" name="edit-strand" id="edit-strand-<?php echo $rowStrand['strand_id']; ?>" value="<?php echo $rowStrand['strand']; ?>" required>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="edit-description-<?php echo $rowStrand['strand_id']; ?>" class="form-label">Description</label>
+                                        <input type="text" class="form-control" name="edit-description" id="edit-description-<?php echo $rowStrand['strand_id']; ?>" value="<?php echo $rowStrand['description']; ?>" required>
+                                      </div>
+                                      <button type="submit" class="btn btn-sm btn-success w-100" name="update-strand">Update Strand</button>
+                                    </form>
                                   </div>
-                                  <button type="submit" class="btn btn-sm btn-success w-100" name="update-strand">Update Strand</button>
-                                </form>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                        <tr>
-                          <td><?php echo $row['strand']; ?></td>
-                          <td><?php echo $row['description']; ?></td>
-                          <td>
-                            <!-- Edit Strand Button Click -->
-                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-strand-<?php echo $row['strand_id']; ?>">Edit</button>
                           </td>
                         </tr>
+
                       <?php
                       }
                     } else {
                       ?>
                       <tr>
-                        <td colspan="3" class="text-center">No Strand Please Add Strand</td>
+                        <td colspan="4" class="text-center">No Strand Please Add Strand</td>
+                        <td class="d-none"></td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
                       </tr>
@@ -179,6 +195,16 @@ $row = $stmtResult->fetch_assoc();
         <div class="modal-body">
           <form action="../actions/insert_strand.php" method="post" id="insertForm">
             <div class="form-group">
+              <label for="track" class="form-label">Track</label>
+              <select class="form-control" name="track" id="track" required>
+                <option value=""></option>
+                <option value="Academic Track">Academic Track</option>
+                <option value="Arts and Design Track">Arts and Design Track</option>
+                <option value="Sports Track">Sports Track</option>
+                <option value="Technical-Vocational-Livelihood Track">Technical-Vocational-Livelihood Track</option>
+              </select>
+            </div>
+            <div class="form-group">
               <label for="strand" class="form-label">Strand</label>
               <input type="text" class="form-control" name="strand" id="strand" required>
             </div>
@@ -196,7 +222,6 @@ $row = $stmtResult->fetch_assoc();
   <!-- jquery-validation -->
   <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
   <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
-
   <!-- DataTables  & Plugins -->
   <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -212,11 +237,20 @@ $row = $stmtResult->fetch_assoc();
   <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
   <script>
-    $(function() {
+    $(document).ready(function() {
       $("#example1").DataTable({
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
+        "search": true,
+        "columns": [
+          null, // Ikalawang kolom
+          null, // Ikatlong kolom
+          null, // Atbp.
+          {
+            "searchable": false
+          }, // Unang kolom (searchable property set to false)
+        ],
         "buttons": [{
           text: 'Add Strand',
           action: function() {
@@ -226,7 +260,9 @@ $row = $stmtResult->fetch_assoc();
         }, ]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
+  </script>
 
+  <script>
     $('#insertForm').validate({
       errorElement: 'span',
       errorPlacement: function(error, element) {
@@ -240,7 +276,8 @@ $row = $stmtResult->fetch_assoc();
         $(element).removeClass('is-invalid');
       }
     });
-
+  </script>
+  <script>
     $('form[id^="editForm-"]').each(function() {
       $(this).validate({
         errorElement: 'span',
@@ -257,8 +294,6 @@ $row = $stmtResult->fetch_assoc();
       });
     });
   </script>
-
-
 </body>
 
 </html>

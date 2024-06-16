@@ -167,6 +167,9 @@ $row = $stmtResult->fetch_assoc();
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
+        "order": [
+          [1, "asc"]
+        ],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
       $('#example2').DataTable({
         "paging": true,

@@ -4,6 +4,7 @@ session_start();
 
 if (isset($_POST['add-strand'])) {
   $strand = strtoupper($_POST['strand']);
+  $track = $_POST['track'];
   $description = $_POST['description'];
 
   $stmtCheckStrand = $conn->prepare("SELECT strand FROM strand WHERE strand = ?");
@@ -17,8 +18,8 @@ if (isset($_POST['add-strand'])) {
     exit();
   } 
   else {
-    $stmtInsertStrand = $conn->prepare("INSERT INTO strand (strand, description, date_created) VALUES (?, ?, NOW())");
-    $stmtInsertStrand->bind_param("ss", $strand, $description);
+    $stmtInsertStrand = $conn->prepare("INSERT INTO strand (track, strand, description, date_created) VALUES (?, ?, ?, NOW())");
+    $stmtInsertStrand->bind_param("sss", $track, $strand, $description);
 
     if (mysqli_stmt_execute($stmtInsertStrand)) {
       $_SESSION['add-strand'] = "Successfully Added Strand";

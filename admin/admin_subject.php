@@ -89,69 +89,71 @@ $row = $stmtResult->fetch_assoc();
                     $sqlSubject = "SELECT su.*, st.strand AS strands FROM subject su JOIN strand st ON su.strand = st.strand_id";
                     $querySubject = mysqli_query($conn, $sqlSubject);
                     if (mysqli_num_rows($querySubject) > 0) {
-                      while ($row = mysqli_fetch_assoc($querySubject)) {
+                      while ($rowSubject = mysqli_fetch_assoc($querySubject)) {
+
                     ?>
-                        <!-- Edit Subject Modal -->
-                        <div class="modal fade" id="edit-subject-<?php echo $row['subject_id']; ?>">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h4 class="modal-title">Edit Subject</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <div class="modal-body">
-                                <form action="../actions/update_subject.php" method="post">
-                                  <input type="hidden" name="edit-id" value="<?php echo $row['subject_id']; ?>">
-                                  <div class="form-group">
-                                    <label for="edit-name" class="form-label">Subject Name</label>
-                                    <input type="text" class="form-control" name="edit-name" id="edit-name" value="<?php echo $row['name']; ?>" required>
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="level" class="form-label">Grade Level</label>
-                                    <select class="form-control" id="level" name="edit-level" required>
-                                      <option value=""></option>
-                                      <option value="Grade 11" <?= ($row['level'] == "Grade 11") ? "selected" : "" ?>>Grade 11</option>
-                                      <option value="Grade 12" <?= ($row['level'] == "Grade 12") ? "selected" : "" ?>>Grade 12</option>
-                                    </select>
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="edit-strand" class="form-label">Strand</label>
-                                    <select class="form-control" name="edit-strand" id="edit-strand" required>
-                                      <option value=""></option>
-                                      <?php
-                                      $editSqlStrand = "SELECT * FROM strand";
-                                      $editQueryStrand = mysqli_query($conn, $editSqlStrand);
-                                      while ($rowStrand = mysqli_fetch_assoc($editQueryStrand)) {
-                                        $selected = ($rowStrand['strand_id'] == $row['strand']) ? "selected" : "";
-                                        echo '<option value="' . $rowStrand['strand_id'] . '" ' . $selected . '>' . $rowStrand['strand'] . '</option>';
-                                      }
-                                      ?>
-                                    </select>
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="level" class="form-label">Semester</label>
-                                    <select class="form-control" id="level" name="edit-semester" required>
-                                      <option value=""></option>
-                                      <option value="First Semester" <?= ($row['semester'] == "First Semester") ? "selected" : "" ?>>First Semester</option>
-                                      <option value="Second Semester" <?= ($row['semester'] == "Second Semester") ? "selected" : "" ?>>Second Semester</option>
-                                    </select>
-                                  </div>
-                                  <button type="submit" class="btn btn-sm btn-success w-100" name="update-subject">Update Subject</button>
-                                </form>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+
                         <tr>
-                          <td><?php echo $row['name']; ?></td>
-                          <td><?php echo $row['level']; ?></td>
-                          <td><?php echo $row['strands']; ?></td>
-                          <td><?php echo $row['semester']; ?></td>
+                          <td><?php echo $rowSubject['name']; ?></td>
+                          <td><?php echo $rowSubject['level']; ?></td>
+                          <td><?php echo $rowSubject['strands']; ?></td>
+                          <td><?php echo $rowSubject['semester']; ?></td>
                           <td>
                             <!-- Edit Subject Button Click -->
-                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-subject-<?php echo $row['subject_id']; ?>">Edit</button>
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit-subject-<?php echo $rowSubject['subject_id']; ?>">Edit</button>
+                            <!-- Edit Subject Modal -->
+                            <div class="modal fade" id="edit-subject-<?php echo $rowSubject['subject_id']; ?>">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h4 class="modal-title">Edit Subject</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form action="../actions/update_subject.php" method="post" id="editForm-<?php echo $rowSubject['subject_id']; ?>">
+                                      <input type="hidden" name="edit-id" value="<?php echo $rowSubject['subject_id']; ?>">
+                                      <div class="form-group">
+                                        <label for="edit-name" class="form-label">Subject Name</label>
+                                        <input type="text" class="form-control" name="edit-name" id="edit-name" value="<?php echo $rowSubject['name']; ?>" required>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="level" class="form-label">Grade Level</label>
+                                        <select class="form-control" id="level" name="edit-level" required>
+                                          <option value=""></option>
+                                          <option value="Grade 11" <?= ($rowSubject['level'] == "Grade 11") ? "selected" : "" ?>>Grade 11</option>
+                                          <option value="Grade 12" <?= ($rowSubject['level'] == "Grade 12") ? "selected" : "" ?>>Grade 12</option>
+                                        </select>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="edit-strand" class="form-label">Strand</label>
+                                        <select class="form-control" name="edit-strand" id="edit-strand" required>
+                                          <option value=""></option>
+                                          <?php
+                                          $editSqlStrand = "SELECT * FROM strand";
+                                          $editQueryStrand = mysqli_query($conn, $editSqlStrand);
+                                          while ($rowStrand = mysqli_fetch_assoc($editQueryStrand)) {
+                                            $selected = ($rowStrand['strand_id'] == $rowSubject['strand']) ? "selected" : "";
+                                            echo '<option value="' . $rowStrand['strand_id'] . '" ' . $selected . '>' . $rowStrand['strand'] . '</option>';
+                                          }
+                                          ?>
+                                        </select>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="level" class="form-label">Semester</label>
+                                        <select class="form-control" id="level" name="edit-semester" required>
+                                          <option value=""></option>
+                                          <option value="First Semester" <?= ($rowSubject['semester'] == "First Semester") ? "selected" : "" ?>>First Semester</option>
+                                          <option value="Second Semester" <?= ($rowSubject['semester'] == "Second Semester") ? "selected" : "" ?>>Second Semester</option>
+                                        </select>
+                                      </div>
+                                      <button type="submit" class="btn btn-sm btn-success w-100" name="update-subject">Update Subject</button>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </td>
                         </tr>
                       <?php
@@ -189,7 +191,7 @@ $row = $stmtResult->fetch_assoc();
           </button>
         </div>
         <div class="modal-body">
-          <form action="../actions/insert_subject.php" method="post">
+          <form action="../actions/insert_subject.php" method="post" id="insertForm">
             <div class="form-group">
               <label for="name" class="form-label">Subject Name</label>
               <input type="text" class="form-control" name="name" id="name" required>
@@ -234,6 +236,10 @@ $row = $stmtResult->fetch_assoc();
     </div>
   </div>
 
+  <!-- jquery-validation -->
+  <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
+  <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
+
   <!-- DataTables  & Plugins -->
   <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -249,11 +255,20 @@ $row = $stmtResult->fetch_assoc();
   <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
   <script>
-    $(function() {
+    $(document).ready(function() {
       $("#example1").DataTable({
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
+        "columns": [
+          null, // Ikalawang kolom
+          null, // Ikatlong kolom
+          null, // Atbp.
+          null, // Atbp.
+          {
+            "searchable": false
+          }, // Unang kolom (searchable property set to false)
+        ],
         "buttons": [{
           text: 'Add Subject',
           action: function() {
@@ -262,6 +277,40 @@ $row = $stmtResult->fetch_assoc();
           }
         }, ]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+  </script>
+
+  <script>
+    $('#insertForm').validate({
+      errorElement: 'span',
+      errorPlacement: function(error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      }
+    });
+  </script>
+
+  <script>
+    $('form[id^="editForm-"]').each(function() {
+      $(this).validate({
+        errorElement: 'span',
+        errorPlacement: function(error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function(element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        }
+      });
     });
   </script>
 

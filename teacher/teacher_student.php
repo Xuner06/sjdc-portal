@@ -197,35 +197,52 @@ if (mysqli_num_rows($resultClass) > 0) {
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
+        "order": [
+          [1, "asc"]
+        ],
         "buttons": [{
-          extend: 'copy',
-          className: 'mr-2 rounded rounded-2',
-          exportOptions: {
-            columns: [0, 1, 2, 3, 4]
-          }
-        }, {
-          extend: 'csv',
-          className: 'mr-2 rounded rounded-2',
-          exportOptions: {
-            columns: [0, 1, 2, 3, 4]
-          }
-        }, {
-          extend: 'pdf',
-          className: 'mr-2 rounded rounded-2',
-          exportOptions: {
-            columns: [0, 1, 2, 3, 4]
-          }
-        }, {
-          extend: 'print',
-          className: 'mr-2 rounded rounded-2',
-          exportOptions: {
-            columns: [0, 1, 2, 3, 4]
+            extend: 'copy',
+            className: 'mr-2 rounded rounded-2',
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4]
+            }
+          }, {
+            extend: 'csv',
+            className: 'mr-2 rounded rounded-2',
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4],
+              format: {
+                body: function(data, row, column, node) {
+                  // Apply single quotation marks for columns 0 and 3
+                  if (column === 0 || column === 4) {
+                    return "'" + data + "'";
+                  } else {
+                    return data;
+                  }
+                }
+              }
+            },
           },
-          title: '',
-          messageTop: function() {
-            return '<h1 class="text-center"><?php echo $finalClass; ?></h1>' + '<h1 class="text-center"><?php echo $finalSy; ?></h1>' + '<h1 class="text-center mb-4"><?php echo $finalAdviser; ?></h1>';
+
+          {
+            extend: 'pdf',
+            className: 'mr-2 rounded rounded-2',
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4]
+            }
+          },
+          {
+            extend: 'print',
+            className: 'mr-2 rounded rounded-2',
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4]
+            },
+            title: '',
+            messageTop: function() {
+              return '<h1 class="text-center"><?php echo $finalClass; ?></h1>' + '<h1 class="text-center"><?php echo $finalSy; ?></h1>' + '<h1 class="text-center mb-4"><?php echo $finalAdviser; ?></h1>';
+            }
           }
-        }],
+        ],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
   </script>
