@@ -126,13 +126,40 @@ $row = $stmtResult->fetch_assoc();
                     }
                     ?>
                     <p><strong>Age:</strong> <?php echo $age; ?></p>
+                    <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($row['birthday'])); ?></p>
                   </div>
                   <div class="col-lg-4">
-                    <p><strong>Birthday:</strong> <?php echo date("F d, Y", strtotime($row['birthday'])); ?></p>
                     <p><strong>Contact:</strong> <?php echo $row['contact']; ?></p>
                     <p><strong>Email:</strong> <?php echo $row['email']; ?></p>
                     <p><strong>Address:</strong> <?php echo $row['address']; ?></p>
                     <p><strong>Account Created:</strong> <?php echo date("F d, Y", strtotime($row['reg_date'])); ?></p>
+                    <?php
+                    $getStatus = "Active";
+                    $getSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                    $getSy->bind_param("s", $getStatus);
+                    $getSy->execute();
+                    $getResultSy = $getSy->get_result();
+
+                    if (mysqli_num_rows($getResultSy) > 0) {
+                      $resultSy = $getResultSy->fetch_assoc();
+                      $schoolYear = $resultSy['sy_id'];
+
+                      $class = $conn->prepare("SELECT * FROM enroll_student e JOIN class c ON e.class = c.class_id LEFT JOIN strand s ON c.strand = s.strand_id WHERE e.student_id = ? AND e.sy = ?");
+                      $class->bind_param("ii", $id, $schoolYear);
+                      $class->execute();
+                      $stmtResultClass = $class->get_result();
+                      if (mysqli_num_rows($stmtResultClass) > 0) {
+                        $resultClass = $stmtResultClass->fetch_assoc();
+                        $finalCLass = $resultClass['level'] . '-' . $resultClass['strand'] . '-' . $resultClass['section'];
+                      } else {
+                        $finalCLass = "N/A";
+                      }
+                    } else {
+                      $finalCLass = "No Active School Year";
+                    }
+
+                    ?>
+                    <p><strong>Class:</strong> <?php echo $finalCLass; ?></p>
                     <a href="#change-pass" data-toggle="modal"><i class="fas fa-lock"></i> Change Password</a>
                   </div>
                 </div>

@@ -106,6 +106,7 @@ $row = $stmtResult->fetch_assoc();
                   <thead>
                     <tr>
                       <th>Grade Level</th>
+                      <th>Track</th>
                       <th>Strand</th>
                       <th>Section</th>
                       <th>School Year</th>
@@ -201,6 +202,7 @@ $row = $stmtResult->fetch_assoc();
                           </div>
                           <tr>
                             <td><?php echo $row['level']; ?></td>
+                            <td><?php echo $row['track']; ?></td>
                             <td><?php echo $row['strand']; ?></td>
                             <td><?php echo $row['section']; ?></td>
                             <td><?php echo $row['start_year'] . '-' . $row['end_year'] . ' ' . $row['semester']; ?></td>
@@ -216,7 +218,8 @@ $row = $stmtResult->fetch_assoc();
                       } else {
                         ?>
                         <tr>
-                          <td colspan="6" class="text-center">No Class Please Add Class</td>
+                          <td colspan="7" class="text-center">No Class Please Add Class</td>
+                          <td class="d-none"></td>
                           <td class="d-none"></td>
                           <td class="d-none"></td>
                           <td class="d-none"></td>
@@ -228,7 +231,8 @@ $row = $stmtResult->fetch_assoc();
                     } else {
                       ?>
                       <tr>
-                        <td colspan="6" class="text-center">No Active School Year</td>
+                        <td colspan="7" class="text-center">No Active School Year</td>
+                        <td class="d-none"></td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>
                         <td class="d-none"></td>

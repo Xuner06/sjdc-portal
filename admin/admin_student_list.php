@@ -114,7 +114,7 @@ $row = $stmtResult->fetch_assoc();
                           <td><?php echo $row['email']; ?></td>
                           <td><?php echo $row['contact']; ?></td>
                           <td>
-                            <a href="admin_student_enroll.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">Enroll</a>
+                            <a href="admin_student_enroll.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">Assign</a>
                           </td>
                         </tr>
                       <?php
@@ -229,7 +229,7 @@ $row = $stmtResult->fetch_assoc();
           [2, "asc"]
         ],
         "buttons": [{
-          text: 'Multiple Enroll',
+          text: 'Multiple Assign',
           action: function() {
             var tables = $('#example1').DataTable();
             var checkedItems = tables.rows({

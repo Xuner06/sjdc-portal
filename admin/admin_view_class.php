@@ -32,7 +32,7 @@ $resultClass = $class->get_result();
 $rowClass = $resultClass->fetch_assoc();
 $finalClass = $rowClass['level'] . '-' . $rowClass['strand'] . '-' . $rowClass['section'];
 $finalAdviser = $rowClass['fname'] . ' ' . (!empty($rowClass['mname']) ? substr($rowClass['mname'], 0, 1) . '.' : '') . ' ' . $rowClass['lname'];
-$finalSy = 'S.Y. ' . $rowClass['start_year'] . '-' . $rowClass['end_year'];
+$finalSy = $rowClass['start_year'] . '-' . $rowClass['end_year'] . ' ' . ($rowClass['semester'] == "First Semester" ? "1st Sem" : "2nd Sem");
 ?>
 
 <!DOCTYPE html>
@@ -273,25 +273,14 @@ $finalSy = 'S.Y. ' . $rowClass['start_year'] . '-' . $rowClass['end_year'];
         }, {
           extend: 'csv',
           className: 'mr-2 rounded rounded-2',
-        }, {
-          extend: 'pdf',
-          className: 'mr-2 rounded rounded-2',
-          title: '',
-          // customize: function(win) {
-          //   $(win.document.body).prepend(
-          //     '<img src="../assets/bg4.jpg">'
-          //   )
-          // },
-        }, {
+        }, 
+        {
           extend: 'print',
           className: 'mr-2 rounded rounded-2',
           title: '',
           messageTop: function() {
-            return '<h1 class="text-center"><?php echo $finalClass; ?></h1>' + '<h1 class="text-center"><?php echo $finalSy; ?></h1>' + '<h1 class="text-center mb-4"><?php echo $finalAdviser; ?></h1>';
+            return '<img src="../assests/header.png" class="mx-auto d-block">' + '<h1 class="text-center"><?php echo $finalClass; ?></h1>' + '<h1 class="text-center"><?php echo $finalAdviser; ?></h1>' + '<h1 class="text-center mb-4"><?php echo $finalSy; ?></h1>';
           }
-
-
-
         }]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
