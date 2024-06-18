@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 18, 2024 at 07:16 AM
+-- Generation Time: Jun 18, 2024 at 10:01 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -51,7 +51,7 @@ INSERT INTO `class` (`class_id`, `level`, `strand`, `section`, `sy`, `adviser`, 
 (150, 'Grade 11', 20, '1', 85, 288, '2024-06-13'),
 (151, 'Grade 12', 21, '2', 85, 286, '2024-06-14'),
 (152, 'Grade 11', 16, '21', 85, 289, '2024-06-14'),
-(153, 'Grade 12', 17, '1000', 85, 290, '2024-06-14'),
+(153, 'Grade 12', 17, '2', 85, 290, '2024-06-14'),
 (154, 'Grade 12', 21, '1', 87, 280, '2024-06-14'),
 (155, 'Grade 12', 21, '2', 87, 284, '2024-06-14'),
 (156, 'Grade 11', 21, '1', 87, 277, '2024-06-14'),
@@ -327,7 +327,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `lrn_number`, `role`, `fname`, `lname`, `mname`, `gender`, `birthday`, `contact`, `email`, `address`, `password`, `status`, `reg_date`, `picture`, `token`, `token_expiration`) VALUES
-(229, 'N/A', 'admin', 'Khufra', 'Hylos', 'Atlas', 'Male', '1122-12-12', '12323233233', 'admin@gmail.com', 'Tanza, Cavite', '$2y$10$U4000mPsBSymVmvaaPLOQeiLNkm2LP2982rIJJKfsLBMHnBT40UZW', 0, '2024-06-12', '../image/image.png', NULL, NULL),
+(229, 'N/A', 'admin', 'Jason', 'Penol', 'Dales', 'Male', '1122-12-12', '12323233233', 'admin@gmail.com', 'Tanza, Cavite', '$2y$10$U4000mPsBSymVmvaaPLOQeiLNkm2LP2982rIJJKfsLBMHnBT40UZW', 0, '2024-06-12', '../image/image.png', NULL, NULL),
 (233, '201915079101', 'student', 'Lynett', 'Hoyer', '', 'Female', '1999-03-13', '09882918067', 'lynetthoyer@gmail.com', '5333 Mendota Terrace', '$2y$10$E3P30jdHRTC5HY6a.hs1D.sr8tWbjGl9OiAFyG6YWOykLz0ycaVKi', 0, '2020-12-25', '../image/image.png', NULL, NULL),
 (234, '201915079102', 'student', 'Gillie', 'Johnson', 'Cattroll', 'Female', '1995-12-14', '09729552723', 'gilliejohnson@gmail.com', '01247 Moulton Crossing', '$2y$10$kYWVfb4xlolHiLkXPjeRM.7G3OCnsUymnOlJD.elMOQZQfi.7Xm8e', 0, '2023-12-23', '../image/image.png', NULL, NULL),
 (235, '201915079103', 'student', 'Jordana', 'Eliff', 'Cheers', 'Female', '1999-01-30', '09698666904', 'jordanaeliff@gmail.com', '286 Bunting Hill', '$2y$10$C6WsOlCxe6HzlmTuvhE5Vu83mxPNmoYOhaueGyTMR5Rdd14bYqmea', 0, '2022-06-08', '../image/image.png', NULL, NULL),
@@ -388,8 +388,8 @@ INSERT INTO `users` (`id`, `lrn_number`, `role`, `fname`, `lname`, `mname`, `gen
 (290, 'N/A', 'teacher', 'Huey', 'Franklyn', 'McCaughey', 'Male', '1995-06-16', '09332040995', 'hueyfranklyn@gmail.com', '900 Mesta Trail', '$2y$10$d5SpQYaHAUziRFDMBxN64u35QwNIs9q0OTmyTtcephsRrg0b2azPG', 0, '2021-09-20', '../image/image.png', NULL, NULL),
 (291, 'N/A', 'teacher', 'Rollie', 'Duce', 'Leetham', 'Male', '1998-08-10', '09186859403', 'rollieduce@gmail.com', '1528 Oakridge Way', '$2y$10$pWlAAD.UlypTJGzLPkj6U..rnVh04qj4Ono72g3hGqBFp.dnWEjVi', 0, '2020-11-20', '../image/image.png', NULL, NULL),
 (292, 'N/A', 'teacher', 'Zebulon', 'Creber', 'Espela', 'Male', '1995-11-06', '09448530468', 'zebuloncreber@gmail.com', '295 Roxbury Way', '$2y$10$trBq9rttiEcIbmBb0ywRquXqnAS0SF0WVW0kVDCeMsv5OE9qriAXi', 0, '2023-02-11', '../image/image.png', NULL, NULL),
-(295, '123123123221', 'student', 'Jeshua', 'Bay', 'Espela', 'Male', '1999-12-06', '09284310661', 'jeshuabay@gmail.com', 'Tanza, Cavite', '$2y$10$jQVCYNlIAn1iqDkWjHU8B.tPwNSU2y.UOpMB3z65f5xov0ZuopmSG', 0, '2024-06-14', '../image/image.png', NULL, NULL),
-(305, '555555555555', 'student', 'Roi', 'Badayos', 'Espela', 'Male', '1999-12-06', '09284310661', 'roibadayos@gmail.com', 'Tanza, Cavite', '$2y$10$jh8cMSsXsTp/bNwzCm8nOOaAgbeGKlUUWWZIJSbAQgAGGZUZBRANK', 0, '2024-06-18', '../image/image.png', NULL, NULL);
+(295, '201915079141', 'student', 'Jeshua', 'Bay', 'Espela', 'Male', '1999-12-06', '09284310661', 'jeshuabay@gmail.com', 'Tanza, Cavite', '$2y$10$jQVCYNlIAn1iqDkWjHU8B.tPwNSU2y.UOpMB3z65f5xov0ZuopmSG', 0, '2024-06-14', '../image/image.png', NULL, NULL),
+(305, '201915079142', 'student', 'Roi', 'Badayos', 'Espela', 'Male', '1999-12-06', '09284310661', 'roibadayos@gmail.com', 'Tanza, Cavite', '$2y$10$jh8cMSsXsTp/bNwzCm8nOOaAgbeGKlUUWWZIJSbAQgAGGZUZBRANK', 0, '2024-06-18', '../image/image.png', NULL, NULL);
 
 --
 -- Indexes for dumped tables

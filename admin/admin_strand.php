@@ -96,7 +96,7 @@ $row = $stmtResult->fetch_assoc();
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>Track</th>
+                      <!-- <th>Track</th> -->
                       <th>Strand</th>
                       <th>Description</th>
                       <th>Action</th>
@@ -112,8 +112,8 @@ $row = $stmtResult->fetch_assoc();
 
                     ?>
                         <tr>
-                          <td><?php echo $rowStrand['track']; ?></td>
-                          <td><?php echo $rowStrand['strand']; ?></td>
+                          <!-- <td><?php echo $rowStrand['track']; ?></td> -->
+                          <td><?php echo ($rowStrand['track'] == "Technical-Vocational-Livelihood Track" ? "TVL-" : "") . $rowStrand['strand']; ?></td>
                           <td><?php echo $rowStrand['description']; ?></td>
                           <td>
 
@@ -244,7 +244,6 @@ $row = $stmtResult->fetch_assoc();
         "autoWidth": false,
         "search": true,
         "columns": [
-          null, // Ikalawang kolom
           null, // Ikatlong kolom
           null, // Atbp.
           {

@@ -106,7 +106,7 @@ $row = $stmtResult->fetch_assoc();
                     <p><strong>First Name:</strong> <?php echo $row['fname']; ?></p>
                     <p><strong>Middle Name:</strong> <?php echo (!empty($row['mname']) ? $row['mname'] : "N/A"); ?></p>
                     <p><strong>Last Name:</strong> <?php echo $row['lname']; ?></p>
-                    <p><strong>Gender:</strong> <?php echo $row['gender']; ?></p>
+                    <p><strong>Sex:</strong> <?php echo $row['gender']; ?></p>
                     <?php
                     $currentDate = date('Y-m-d'); // Current date in 'Y-m-d' format
                     $bd = $row['birthday']; // Assuming 'birthday' is also in 'Y-m-d' format

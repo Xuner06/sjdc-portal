@@ -146,9 +146,9 @@ $row = $stmtResult->fetch_assoc();
                       <th>LRN Number</th>
                       <th>Name</th>
                       <th>Sex</th>
-                      <th>Age</th>
                       <th>Email</th>
                       <th>Contact</th>
+                      <th class="d-none">Age</th>
                       <th class="d-none">Address</th>
                       <th class="d-none">Register Date</th>
                       <th>Action</th>
@@ -188,9 +188,9 @@ $row = $stmtResult->fetch_assoc();
                             $age--;
                           }
                           ?>
-                          <td><?php echo $age; ?></td>
                           <td><?php echo $row['email']; ?></td>
                           <td><?php echo $row['contact']; ?></td>
+                          <td class="d-none"><?php echo $age; ?></td>
                           <td class="d-none"><?php echo $row['address']; ?></td>
                           <td class="d-none"><?php echo $row['reg_date']; ?></td>
                           <td>
@@ -355,8 +355,14 @@ $row = $stmtResult->fetch_assoc();
             $STMTSY->bind_param("s", $STATUS);
             $STMTSY->execute();
             $STMTRESULTSY = $STMTSY->get_result();
-            $FETCHSY = $STMTRESULTSY->fetch_assoc();
-            $SCHOOLYEAR = $FETCHSY['sy_id'];
+
+            if(mysqli_num_rows($STMTRESULTSY) > 0) {
+              $FETCHSY = $STMTRESULTSY->fetch_assoc();
+              $SCHOOLYEAR = $FETCHSY['sy_id'];
+            }
+            else {
+              $SCHOOLYEAR = '';
+            }
             ?>
             <input type="hidden" name="sy" value="<?php echo $SCHOOLYEAR; ?>">
             <div class="row">
@@ -499,9 +505,7 @@ $row = $stmtResult->fetch_assoc();
           null, // Ikatlong kolom
           null, // Atbp.
           null, // Atbp.
-          {
-            "searchable": false
-          }, // Unang kolom (searchable property set to false)
+          null, 
           {
             "searchable": false
           }, //Ikalawang kolom
@@ -538,7 +542,7 @@ $row = $stmtResult->fetch_assoc();
             format: {
               body: function(data, row, column, node) {
                 // Apply single quotation marks for columns 0 and 3
-                return column === 0 || column == 5 || column == 7 ? "'" + data + "'" : data;
+                return column === 0 || column == 4 || column == 7 ? "'" + data + "'" : data;
               }
             },
             columns: [0, 1, 2, 3, 4, 5, 6, 7]
@@ -548,7 +552,7 @@ $row = $stmtResult->fetch_assoc();
           extend: 'print',
           className: 'mr-2 rounded rounded-2',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4, 5]
+            columns: [0, 1, 2, 3, 4]
           },
           title: '',
           messageTop: function() {
