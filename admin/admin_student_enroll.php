@@ -280,7 +280,7 @@ if (isset($_GET['id'])) {
         "lengthChange": false,
         "autoWidth": false,
         "buttons": [{
-          text: 'Enroll Student',
+          text: 'Assign Student',
           action: function() {
             // Open your modal or perform any action when the "Add Student" button is clicked
             $('#add-student').modal('show');

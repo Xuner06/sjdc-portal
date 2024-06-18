@@ -349,6 +349,16 @@ $row = $stmtResult->fetch_assoc();
         </div>
         <div class="modal-body">
           <form action="../actions/admin_insert_student.php" method="post" id="insertForm">
+            <?php
+            $STATUS = "Active";
+            $STMTSY = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+            $STMTSY->bind_param("s", $STATUS);
+            $STMTSY->execute();
+            $STMTRESULTSY = $STMTSY->get_result();
+            $FETCHSY = $STMTRESULTSY->fetch_assoc();
+            $SCHOOLYEAR = $FETCHSY['sy_id'];
+            ?>
+            <input type="hidden" name="sy" value="<?php echo $SCHOOLYEAR; ?>">
             <div class="row">
               <div class="col-sm-12 col-md-6">
                 <div class="form-group">
@@ -414,6 +424,42 @@ $row = $stmtResult->fetch_assoc();
                 <div class="form-group">
                   <label for="address" class="form-label">Address</label>
                   <input type="text" class="form-control" id="address" name="address" required>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="class" class="form-label">Class</label>
+                  <select class="form-control" name="class" id="class" required>
+                    <option value=""></option>
+                    <?php
+                    $statusSy = "Active";
+                    $stmtSy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+                    $stmtSy->bind_param("s", $statusSy);
+                    $stmtSy->execute();
+                    $stmtResultSy = $stmtSy->get_result();
+
+                    if (mysqli_num_rows($stmtResultSy) > 0) {
+                      $result = $stmtResultSy->fetch_assoc();
+                      $sy = $result['sy_id'];
+                      $stmtClass = $conn->prepare("SELECT c.*, s.* FROM class c JOIN strand s ON c.strand = s.strand_id WHERE sy = ? ORDER BY c.level, s.strand");
+                      $stmtClass->bind_param("i", $sy);
+                      $stmtClass->execute();
+                      $stmtResultClass = $stmtClass->get_result();
+
+                      if (mysqli_num_rows($stmtResultClass) > 0) {
+                        while ($class = $stmtResultClass->fetch_assoc()) {
+                          echo '<option value="' . $class['class_id'] . '">' . $class['level'] . '-' . $class['strand'] . '-' . $class['section'] . '</option>';
+                        }
+                      } else {
+                        echo '<option value="" disabled>No Class Available (Please Add Class)</option>';
+                      }
+                    } else {
+                      echo '<option value="" disabled>No Active School Year (Please Set School Year)</option>';
+                    }
+                    ?>
+                  </select>
                 </div>
               </div>
             </div>
