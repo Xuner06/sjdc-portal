@@ -107,34 +107,53 @@ if (isset($_GET['edit'])) {
                     <tbody>
                       <?php
                       $studentId = $result['student_id'];
+                      $level = $result['level'];
+                      $strand = $result['strand'];
+                      $semester = $result['semester'];
                       $sy = $result['sy'];
-                      $stmtGrade = $conn->prepare("SELECT g.*, s.* FROM grade g JOIN subject s ON g.subject = s.subject_id WHERE g.student = ? AND g.sy = ?");
-                      $stmtGrade->bind_param("ii", $studentId, $sy);
-                      $stmtGrade->execute();
-                      $stmtResultGrade = $stmtGrade->get_result();
 
-                      if (mysqli_num_rows($stmtResultGrade) > 0) {
-                        while ($row = $stmtResultGrade->fetch_assoc()) {
+                      $stmtSubject = $conn->prepare("SELECT * FROM subject WHERE level = ? AND FIND_IN_SET(?, strand) > 0 AND semester = ?");
+                      $stmtSubject->bind_param("sss", $level, $strand, $semester);
+                      $stmtSubject->execute();
+                      $stmtResultSubject = $stmtSubject->get_result();
+
+                      if (mysqli_num_rows($stmtResultSubject) > 0) {
+                        while ($rowSubject = mysqli_fetch_assoc($stmtResultSubject)) {
                       ?>
                           <tr>
-                            <td><?php echo $row['name']; ?></td>
+                            <td><?php echo $rowSubject['name']; ?></td>
                             <td>
-                              <select class="form-control" name="grade[<?php echo $row['subject_id']; ?>]" required>
-                                <?php
-                                for ($i = 50; $i <= 100; $i++) {
-                                  $selected = ($i == $row['grade']) ? 'selected' : '';
-                                  echo '<option value="' . $i . '" class="text-center"' . $selected . '>' . $i . '</option>';
+                              <?php
+                              $stmtCheckGrade = $conn->prepare("SELECT * FROM grade WHERE student = ? AND subject = ?");
+                              $stmtCheckGrade->bind_param("ii", $studentId, $rowSubject['subject_id']);
+                              $stmtCheckGrade->execute();
+                              $stmtResultGrade = $stmtCheckGrade->get_result();
+
+                              if (mysqli_num_rows($stmtResultGrade) > 0) {
+                                while ($rowGrade = $stmtResultGrade->fetch_assoc()) {
+                              ?>
+                                  <select class="form-control" name="grade[<?php echo $rowGrade['subject']; ?>]">
+                                    <?php
+                                    for ($i = 50; $i <= 100; $i++) {
+                                      $selected = ($i == $rowGrade['grade']) ? 'selected' : '';
+                                      echo '<option value="' . $i . '" class="text-center"' . $selected . '>' . $i . '</option>';
+                                    }
+                                    ?>
+                                  </select>
+                              <?php
                                 }
-                                ?>
-                              </select>
+                              } else {
+                                echo "N/A";
+                              }
+                              ?>
                             </td>
                           </tr>
                         <?php
                         }
                       } else {
                         ?>
-                        <tr class="no-grade">
-                          <td colspan="2" class="text-center">No Grade Yet</td>
+                        <tr class="no-subject">
+                          <td colspan="2" class="text-center">No Subject Available</td>
                           <td class="d-none"></td>
                         </tr>
                       <?php

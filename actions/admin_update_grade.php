@@ -5,7 +5,6 @@ session_start();
 if (($_SERVER["REQUEST_METHOD"] == "POST")) {
   $student = $_POST['student-id'];
   $enroll = $_POST['enroll-id'];
-  $sy = $_POST['sy'];
 
   foreach ($_POST['grade'] as $subjectId => $grade) {
 

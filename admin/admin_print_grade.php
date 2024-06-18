@@ -51,16 +51,16 @@ if (isset($_GET['view'])) {
 
 <body>
   <div class="container">
-    <h1 class="text-center">REPORT CARD</h1>
     <div class="d-flex justify-content-center">
-      <img src="../assests/bg1.png" height="200" width="200" opacity="0.5" style="opacity: 0.90;">
+      <img src="../assests/header.png" alt="">
     </div>
+    <h1 class="text-center mb-5">REPORT OF GRADES</h1>
     <div class="row">
       <div class="col d-flex justify-content-start">
         <p>Lrn Number: <?php echo $result['lrn_number']; ?></p>
       </div>
       <div class="col d-flex justify-content-end">
-        <p>School Year: <?php echo $result['start_year'] . '-' . $result['end_year']; ?></p>
+        <p>S.Y: <?php echo $result['start_year'] . '-' . $result['end_year'] . ' ' . ($result['semester'] == "First Semester" ? "1st Sem" : "2nd Sem"); ?></p>
 
       </div>
     </div>
@@ -82,26 +82,44 @@ if (isset($_GET['view'])) {
       <tbody>
         <?php
         $studentId = $result['student_id'];
+        $level = $result['level'];
+        $strand = $result['strand_id'];
+        $semester = $result['semester'];
         $sy = $result['sy'];
 
-        $stmtGrade = $conn->prepare("SELECT * FROM grade g JOIN subject s ON g.subject = s.subject_id WHERE g.student = ? AND g.sy = ?");
-        $stmtGrade->bind_param("ii", $studentId, $sy);
-        $stmtGrade->execute();
-        $stmtResultGrade = $stmtGrade->get_result();
 
-        if (mysqli_num_rows($stmtResultGrade) > 0) {
-          while ($grade = $stmtResultGrade->fetch_assoc()) {
+        $stmtSubject = $conn->prepare("SELECT * FROM subject WHERE level = ? AND FIND_IN_SET(?, strand) > 0 AND semester = ? ORDER BY name");
+        $stmtSubject->bind_param("sss", $level, $strand, $semester);
+        $stmtSubject->execute();
+        $stmtResultSubject = $stmtSubject->get_result();
+        if (mysqli_num_rows($stmtResultSubject) > 0) {
+          while ($rowSubject = mysqli_fetch_assoc($stmtResultSubject)) {
         ?>
             <tr>
-              <td><?php echo $grade['name']; ?></td>
-              <td><?php echo $grade['grade']; ?></td>
+              <td><?php echo $rowSubject['name']; ?></td>
+              <td>
+                <?php
+                $stmtCheckGrade = $conn->prepare("SELECT * FROM grade WHERE student = ? AND subject = ?");
+                $stmtCheckGrade->bind_param("ii", $studentId, $rowSubject['subject_id']);
+                $stmtCheckGrade->execute();
+                $stmtResultGrade = $stmtCheckGrade->get_result();
+
+                if (mysqli_num_rows($stmtResultGrade) > 0) {
+                  $resultGrade = $stmtResultGrade->fetch_assoc();
+                  $grade = $resultGrade['grade'];
+                  echo $grade;
+                } else {
+                  echo "N/A";
+                }
+                ?>
+              </td>
             </tr>
           <?php
           }
         } else {
           ?>
-          <tr>
-            <td colspan="2" class="text-center">Not Graded Yet</td>
+          <tr class="no-subject">
+            <td colspan="2" class="text-center">No Subject Available</td>
             <td class="d-none"></td>
           </tr>
         <?php
@@ -109,23 +127,38 @@ if (isset($_GET['view'])) {
         ?>
       </tbody>
       <?php
-      $stmtAverage = $conn->prepare("SELECT ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.student = ? AND g.sy = ?");
-      $stmtAverage->bind_param("ii", $studentId, $sy);
-      $stmtAverage->execute();
-      $stmtResultAverage = $stmtAverage->get_result();
+      $stmtCheckSubject = $conn->prepare("SELECT * FROM subject WHERE level = ? AND FIND_IN_SET(?, strand) > 0 AND semester = ?");
+      $stmtCheckSubject->bind_param("sss", $level, $strand, $semester);
+      $stmtCheckSubject->execute();
+      $stmtResultCheckSubject = $stmtCheckSubject->get_result();
+      if (mysqli_num_rows($stmtResultCheckSubject) > 0) {
+        $stmtAverage = $conn->prepare("SELECT ROUND(AVG(g.grade)) AS average FROM grade g WHERE g.student = ? AND g.sy = ?");
+        $stmtAverage->bind_param("ii", $studentId, $sy);
+        $stmtAverage->execute();
+        $stmtResultAverage = $stmtAverage->get_result();
 
-      if (mysqli_num_rows($stmtResultAverage) > 0) {
-        $average = $stmtResultAverage->fetch_assoc();
-        $total = $average['average'];
-        if ($total !== null) {
+        if (mysqli_num_rows($stmtResultAverage) > 0) {
+          $average = $stmtResultAverage->fetch_assoc();
+          $total = $average['average'];
+          if ($total !== null) {
       ?>
-          <tfoot>
-            <tr>
-              <td><strong>GWA</strong></td>
-              <td><strong><?php echo $total; ?></strong></td>
-            </tr>
-          </tfoot>
+            <tfoot>
+              <tr>
+                <td><strong>GWA</strong></td>
+                <td><strong><?php echo $total; ?></strong></td>
+              </tr>
+            </tfoot>
+          <?php
+          } else {
+          ?>
+            <tfoot>
+              <tr>
+                <td><strong>GWA</strong></td>
+                <td><strong><?php echo "N/A"; ?></strong></td>
+              </tr>
+            </tfoot>
       <?php
+          }
         }
       }
       ?>

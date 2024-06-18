@@ -1,30 +1,30 @@
 <?php
 include("../database/database.php");
 include("../actions/session.php");
-sessionStudent();
+sessionTeacher();
 
-$id = $_SESSION['student'];
-$stmtStudent = $conn->prepare("SELECT * FROM users WHERE id = ?");
-$stmtStudent->bind_param("i", $id);
-$stmtStudent->execute();
-$stmtResult = $stmtStudent->get_result();
+$id = $_SESSION['teacher'];
+$stmtTeacher = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
 $row = $stmtResult->fetch_assoc();
 
 if (isset($_GET['view'])) {
   $enrollId = $_GET['view'];
 
-  $stmtEnroll = $conn->prepare("SELECT * FROM enroll_student e LEFT JOIN school_year sy ON e.sy = sy.sy_id LEFT JOIN class c ON e.class = c.class_id LEFT JOIN strand s ON c.strand = s.strand_id LEFT JOIN users u ON e.student_id = u.id WHERE e.enroll_id = ? AND e.student_id = ?");
+  $stmtEnroll = $conn->prepare("SELECT * FROM enroll_student e LEFT JOIN school_year sy ON e.sy = sy.sy_id LEFT JOIN class c ON e.class = c.class_id LEFT JOIN strand s ON c.strand = s.strand_id LEFT JOIN users u ON e.student_id = u.id WHERE e.enroll_id = ? AND c.adviser = ?");
   $stmtEnroll->bind_param("ii", $enrollId, $id);
   $stmtEnroll->execute();
   $stmtResultEnroll = $stmtEnroll->get_result();
   $result = $stmtResultEnroll->fetch_assoc();
 
   if (mysqli_num_rows($stmtResultEnroll) == 0) {
-    header("Location: student_grade.php");
+    header("Location: teacher_report.php");
     exit();
   }
 } else {
-  header("Location: student_grade.php");
+  header("Location: teacher_report.php");
   exit();
 }
 
@@ -61,6 +61,7 @@ if (isset($_GET['view'])) {
       </div>
       <div class="col d-flex justify-content-end">
         <p>S.Y: <?php echo $result['start_year'] . '-' . $result['end_year'] . ' ' . ($result['semester'] == "First Semester" ? "1st Sem" : "2nd Sem"); ?></p>
+
       </div>
     </div>
     <div class="row">
@@ -85,6 +86,7 @@ if (isset($_GET['view'])) {
         $strand = $result['strand_id'];
         $semester = $result['semester'];
         $sy = $result['sy'];
+
 
         $stmtSubject = $conn->prepare("SELECT * FROM subject WHERE level = ? AND FIND_IN_SET(?, strand) > 0 AND semester = ? ORDER BY name");
         $stmtSubject->bind_param("sss", $level, $strand, $semester);

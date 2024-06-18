@@ -41,7 +41,9 @@ if (isset($_GET['subject_view'])) {
   $subjectStrand = $resultSubject['strand'];
   $subjectSemester = $resultSubject['semester'];
 
-  if ($level != $subjectLevel || $strand != $subjectStrand || $semester != $subjectSemester) {
+  $subjectStrandArray = explode(',', $subjectStrand);
+
+  if ($level != $subjectLevel || !in_array($strand, $subjectStrandArray) || $semester != $subjectSemester) {
     header("Location: teacher_grade.php");
     exit();
   }
@@ -191,30 +193,30 @@ if (isset($_GET['subject_view'])) {
           [1, "asc"]
         ],
         "buttons": [{
-          extend: 'copy',
-          className: 'mr-2 rounded rounded-2',
-        }, {
-          extend: 'csv',
-          className: 'mr-2 rounded rounded-2',
-          exportOptions: {
-            format: {
-              body: function(data, row, column, node) {
-                // Apply single quotation marks for columns 0 and 3
-                return column === 0 ? "'" + data + "'" : data;
+            extend: 'copy',
+            className: 'mr-2 rounded rounded-2',
+          },
+          {
+            extend: 'csv',
+            className: 'mr-2 rounded rounded-2',
+            exportOptions: {
+              format: {
+                body: function(data, row, column, node) {
+                  // Apply single quotation marks for columns 0 and 3
+                  return column === 0 ? "'" + data + "'" : data;
+                }
               }
             }
+          },
+          {
+            extend: 'print',
+            className: 'mr-2 rounded rounded-2',
+            title: '',
+            messageTop: function() {
+              return '<img src="../assests/header.png" class="mx-auto d-block">' + '<h1 class="text-center mb-4"><?php echo $resultSubject['name']; ?></h1>';
+            }
           }
-        }, {
-          extend: 'pdf',
-          className: 'mr-2 rounded rounded-2',
-        }, {
-          extend: 'print',
-          className: 'mr-2 rounded rounded-2',
-          title: '',
-          messageTop: function() {
-            return '<h1 class="text-center mb-4"><?php echo $resultSubject['name']; ?></h1>';
-          }
-        }],
+        ],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
     });

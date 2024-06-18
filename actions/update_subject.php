@@ -6,7 +6,7 @@ if(isset($_POST['update-subject'])) {
   $id = $_POST['edit-id'];
   $name = $_POST['edit-name'];
   $level = $_POST['edit-level'];
-  $strand = $_POST['edit-strand'];
+  $strand = implode(',', $_POST['edit-strand']);
   $semester = $_POST['edit-semester'];
 
   $stmtUpdateSubject = $conn->prepare("UPDATE subject SET name = ?, level = ?, strand = ?, semester = ? WHERE subject_id = ?");

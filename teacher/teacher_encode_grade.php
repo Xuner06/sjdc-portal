@@ -42,7 +42,9 @@
     $subjectStrand = $resultSubject['strand'];
     $subjectSemester = $resultSubject['semester'];
 
-    if ($level != $subjectLevel || $strand != $subjectStrand || $semester != $subjectSemester) {
+    $subjectStrandArray = explode(',', $subjectStrand);
+ 
+    if ($level != $subjectLevel || !in_array($strand, $subjectStrandArray) || $semester != $subjectSemester) {
       header("Location: teacher_grade.php");
       exit();
     }

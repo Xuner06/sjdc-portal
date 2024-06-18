@@ -94,6 +94,14 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="../teacher/teacher_report.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'teacher_report.php' || basename($_SERVER['PHP_SELF']) == 'teacher_view_report.php') ? 'active' : ''; ?>">
+                <i class="nav-icon fas fa-file-alt"></i>
+                <p>
+                  Report
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="../teacher/teacher_account.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'teacher_account.php') ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-user-tie"></i>
                 <p>

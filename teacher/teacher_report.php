@@ -62,28 +62,6 @@ if (mysqli_num_rows($resultClass) > 0) {
             <div class="card">
               <div class="card-body">
                 <h1 class="text-center">Student List</h1>
-                <?php
-                $stat = "Active";
-                $Sy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
-                $Sy->bind_param("s", $stat);
-                $Sy->execute();
-                $ResultSy = $Sy->get_result();
-
-                if (mysqli_num_rows($ResultSy) > 0) {
-                  $result = $ResultSy->fetch_assoc();
-                  $schoolyear = $result['sy_id'];
-
-                  $class = $conn->prepare("SELECT c.*, s.* FROM class c JOIN strand s ON c.strand = s.strand_id WHERE c.adviser = ? AND c.sy = ?");
-                  $class->bind_param("ii", $id, $schoolyear);
-                  $class->execute();
-                  $stmtResultClass = $class->get_result();
-                  if (mysqli_num_rows($stmtResultClass) > 0) {
-                    while ($rowClass = $stmtResultClass->fetch_assoc()) {
-                      echo '<h1>' . $rowClass['level'] . '-' . $rowClass['strand'] . '-' . $rowClass['section'] . '</h1>';
-                    }
-                  }
-                }
-                ?>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -121,7 +99,7 @@ if (mysqli_num_rows($resultClass) > 0) {
                             <td><?php echo $row['email']; ?></td>
                             <td><?php echo $row['contact']; ?></td>
                             <td>
-                              <a href="teacher_view_student.php?id=<?php echo $row['student_id']; ?>" class="btn btn-primary btn-sm">View</a>
+                              <a href="teacher_view_report.php?view=<?php echo $row['enroll_id']; ?>" class="btn btn-primary btn-sm">View Grade</a>
                             </td>
                           </tr>
                         <?php
@@ -160,6 +138,23 @@ if (mysqli_num_rows($resultClass) > 0) {
       </div>
     </div>
   </div>
+  <script>
+    function deleteStudent(studenId) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById("deleteForm-" + studenId).submit();
+        }
+      });
+    }
+  </script>
 
   <!-- DataTables  & Plugins -->
   <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
@@ -183,49 +178,6 @@ if (mysqli_num_rows($resultClass) > 0) {
         "autoWidth": false,
         "order": [
           [1, "asc"]
-        ],
-        "buttons": [{
-            extend: 'copy',
-            className: 'mr-2 rounded rounded-2',
-            exportOptions: {
-              columns: [0, 1, 2, 3, 4]
-            }
-          }, {
-            extend: 'csv',
-            className: 'mr-2 rounded rounded-2',
-            exportOptions: {
-              columns: [0, 1, 2, 3, 4],
-              format: {
-                body: function(data, row, column, node) {
-                  // Apply single quotation marks for columns 0 and 3
-                  if (column === 0 || column === 4) {
-                    return "'" + data + "'";
-                  } else {
-                    return data;
-                  }
-                }
-              }
-            },
-          },
-
-          {
-            extend: 'pdf',
-            className: 'mr-2 rounded rounded-2',
-            exportOptions: {
-              columns: [0, 1, 2, 3, 4]
-            }
-          },
-          {
-            extend: 'print',
-            className: 'mr-2 rounded rounded-2',
-            exportOptions: {
-              columns: [0, 1, 2, 3, 4]
-            },
-            title: '',
-            messageTop: function() {
-              return '<h1 class="text-center"><?php echo $finalClass; ?></h1>' + '<h1 class="text-center"><?php echo $finalSy; ?></h1>' + '<h1 class="text-center mb-4"><?php echo $finalAdviser; ?></h1>';
-            }
-          }
         ],
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });

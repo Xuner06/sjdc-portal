@@ -1,13 +1,13 @@
 <?php
 include("../database/database.php");
 include("../actions/session.php");
-sessionAdmin();
+sessionTeacher();
 
-$id = $_SESSION['admin'];
-$stmtAdmin = $conn->prepare("SELECT * FROM users WHERE id = ?");
-$stmtAdmin->bind_param("i", $id);
-$stmtAdmin->execute();
-$stmtResult = $stmtAdmin->get_result();
+$id = $_SESSION['teacher'];
+$stmtTeacher = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmtTeacher->bind_param("i", $id);
+$stmtTeacher->execute();
+$stmtResult = $stmtTeacher->get_result();
 $row = $stmtResult->fetch_assoc();
 
 if (isset($_GET['view'])) {
@@ -20,18 +20,18 @@ if (isset($_GET['view'])) {
   $result = $stmtResultSy->fetch_assoc();
   $sy = $result['sy_id'];
 
-  $stmtEnroll = $conn->prepare("SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = ? AND e.sy = ?");
-  $stmtEnroll->bind_param("ii", $enrollId, $sy);
+  $stmtEnroll = $conn->prepare("SELECT e.*, sy.*, c.* FROM enroll_student e JOIN school_year sy ON e.sy = sy.sy_id JOIN class c ON e.class = c.class_id WHERE e.enroll_id = ? AND e.sy = ? AND c.adviser = ?");
+  $stmtEnroll->bind_param("iii", $enrollId, $sy, $id);
   $stmtEnroll->execute();
   $stmtResultEnroll = $stmtEnroll->get_result();
   $result = $stmtResultEnroll->fetch_assoc();
 
   if (mysqli_num_rows($stmtResultEnroll) == 0) {
-    header("Location: admin_grade.php");
+    header("Location: teacher_report.php");
     exit();
   }
 } else {
-  header("Location: admin_grade.php");
+  header("Location: teacher_report.php");
   exit();
 }
 
@@ -56,7 +56,7 @@ if (isset($_GET['view'])) {
 </head>
 
 <body>
-  <?php include("../components/admin_navbar.php"); ?>
+  <?php include("../components/teacher_navbar.php"); ?>
   <div class="content-wrapper">
 
     <div class="content-header">
@@ -67,7 +67,7 @@ if (isset($_GET['view'])) {
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <a href="admin_grade.php" class="btn btn-primary btn-sm">Back</a>
+              <a href="teacher_report.php" class="btn btn-primary btn-sm">Back</a>
             </ol>
           </div>
         </div>
@@ -214,7 +214,7 @@ if (isset($_GET['view'])) {
             className: 'mr-2 rounded rounded-2',
             text: 'Print',
             action: function() {
-              window.open('admin_print_grade.php?view=' + enrollId, '_blank');
+              window.open('teacher_print_grade.php?view=' + enrollId, '_blank');
             }
           }
         ],

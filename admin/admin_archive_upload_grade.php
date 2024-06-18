@@ -88,6 +88,10 @@ if (isset($_GET['grade'])) {
               <div class="card-body">
                 <h1 class="text-center">Student Upload Grade</h1>
                 <form action="../actions/admin_upload_archive_grade.php" method="post" id="insertGrade">
+                  <input type="hidden" value="<?php echo $result['student_id']; ?>" name="student-id">
+                  <input type="hidden" value="<?php echo $result['enroll_id']; ?>" name="enroll-id">
+                  <input type="hidden" value="<?php echo $result['sy']; ?>" name="sy">
+                  <input type="hidden" value="<?php echo $result['class']; ?>" name="class">
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -102,22 +106,17 @@ if (isset($_GET['grade'])) {
                       $level = $result['level'];
                       $strand = $result['strand'];
                       $semester = $result['semester'];
-                      $stmtSubject = $conn->prepare("SELECT * FROM subject WHERE level = ? AND strand = ? AND semester = ?");
-                      $stmtSubject->bind_param("sis", $level, $strand, $semester);
+                      $stmtSubject = $conn->prepare("SELECT * FROM subject WHERE level = ? AND FIND_IN_SET(?, strand) > 0 AND semester = ?");
+                      $stmtSubject->bind_param("sss", $level, $strand, $semester);
                       $stmtSubject->execute();
                       $stmtResultSubject = $stmtSubject->get_result();
 
                       if (mysqli_num_rows($stmtResultSubject) > 0) {
-                        while ($rowSubject = $stmtResultSubject->fetch_assoc()) {
+                        while ($rowSubject = mysqli_fetch_assoc($stmtResultSubject)) {
                       ?>
                           <tr>
                             <td><?php echo $rowSubject['name']; ?></td>
                             <td>
-                              <input type="hidden" name="enroll-id" value="<?php echo $result['enroll_id']; ?>">
-                              <input type="hidden" name="student-id" value="<?php echo $studentId; ?>">
-                              <input type="hidden" name="class" value="<?php echo $result['class']; ?>">
-                              <input type="hidden" name="sy" value="<?php echo $sy; ?>">
-                              <input type="hidden" name="subject" value="<?php echo $subject; ?>">
                               <?php
                               $stmtCheckGrade = $conn->prepare("SELECT * FROM grade WHERE student = ? AND subject = ? AND sy = ?");
                               $stmtCheckGrade->bind_param("iii", $studentId, $rowSubject['subject_id'], $sy);

@@ -9,6 +9,14 @@ $stmtAdmin->bind_param("i", $id);
 $stmtAdmin->execute();
 $stmtResult = $stmtAdmin->get_result();
 $row = $stmtResult->fetch_assoc();
+
+$sql = "SELECT * FROM strand";
+$query = mysqli_query($conn, $sql);
+
+$strands = [];
+while ($rowStrand = mysqli_fetch_assoc($query)) {
+  $strands[$rowStrand['strand_id']] = $rowStrand['strand'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -61,6 +69,20 @@ $row = $stmtResult->fetch_assoc();
       unset($_SESSION['update-subject']);
     }
     ?>
+    <?php
+    if (isset($_SESSION['no-active-sy'])) {
+    ?>
+      <script>
+        Swal.fire({
+          title: 'Failed',
+          text: '<?php echo $_SESSION['no-active-sy']; ?>',
+          icon: 'error',
+        })
+      </script>
+    <?php
+      unset($_SESSION['no-active-sy']);
+    }
+    ?>
     <div class="content-header">
       <div class="container-fluid">
         <h1 class="m-0">Subject List</h1>
@@ -86,17 +108,22 @@ $row = $stmtResult->fetch_assoc();
                   </thead>
                   <tbody>
                     <?php
-                    $sqlSubject = "SELECT su.*, st.strand AS strands FROM subject su JOIN strand st ON su.strand = st.strand_id";
+                    $sqlSubject = "SELECT * FROM subject";
                     $querySubject = mysqli_query($conn, $sqlSubject);
                     if (mysqli_num_rows($querySubject) > 0) {
                       while ($rowSubject = mysqli_fetch_assoc($querySubject)) {
-
+                        $subjectStrands = explode(',', $rowSubject['strand']);
+                        $strandNames = [];
+                        foreach ($subjectStrands as $strandId) {
+                          if (isset($strands[$strandId])) {
+                            $strandNames[] = $strands[$strandId];
+                          }
+                        }
                     ?>
-
                         <tr>
                           <td><?php echo $rowSubject['name']; ?></td>
                           <td><?php echo $rowSubject['level']; ?></td>
-                          <td><?php echo $rowSubject['strands']; ?></td>
+                          <td><?php echo implode(', ', $strandNames); ?></td>
                           <td><?php echo $rowSubject['semester']; ?></td>
                           <td>
                             <!-- Edit Subject Button Click -->
@@ -126,7 +153,7 @@ $row = $stmtResult->fetch_assoc();
                                           <option value="Grade 12" <?= ($rowSubject['level'] == "Grade 12") ? "selected" : "" ?>>Grade 12</option>
                                         </select>
                                       </div>
-                                      <div class="form-group">
+                                      <!-- <div class="form-group">
                                         <label for="edit-strand" class="form-label">Strand</label>
                                         <select class="form-control" name="edit-strand" id="edit-strand" required>
                                           <option value=""></option>
@@ -139,6 +166,26 @@ $row = $stmtResult->fetch_assoc();
                                           }
                                           ?>
                                         </select>
+                                      </div> -->
+                                      <div>
+                                        <label class="form-label">Strand:</label>
+                                      </div>
+                                      <div class="form-group form-check">
+                                        <?php
+                                        $subjectStrands = explode(',', $rowSubject['strand']);
+                                        $sqlEditStrand = "SELECT * FROM strand";
+                                        $queryEditStrand = mysqli_query($conn, $sqlEditStrand);
+
+                                        while ($rowStrand = mysqli_fetch_assoc($queryEditStrand)) {
+                                          $isChecked = in_array($rowStrand['strand_id'], $subjectStrands) ? "checked" : "";
+
+                                        ?>
+                                          <input class="form-check-input" type="checkbox" name="edit-strand[]" value="<?php echo $rowStrand['strand_id'] ?>" <?php echo $isChecked; ?>>
+                                          <label class="form-check-label" for=""><?php echo $rowStrand['strand']; ?></label>
+                                          <br>
+                                        <?php
+                                        }
+                                        ?>
                                       </div>
                                       <div class="form-group">
                                         <label for="level" class="form-label">Semester</label>
@@ -192,6 +239,21 @@ $row = $stmtResult->fetch_assoc();
         </div>
         <div class="modal-body">
           <form action="../actions/insert_subject.php" method="post" id="insertForm">
+            <?php
+            $stat = "Active";
+            $Sy = $conn->prepare("SELECT * FROM school_year WHERE status = ?");
+            $Sy->bind_param("s", $stat);
+            $Sy->execute();
+            $ResultSy = $Sy->get_result();
+            if(mysqli_num_rows($ResultSy) > 0) {
+              $schoolYear = $ResultSy->fetch_assoc();
+              $finalSy = $schoolYear['semester'];
+            }
+            else {
+              $finalSy = '';
+            }
+            ?>
+            <input type="hidden" name="semester" value="<?php echo $finalSy; ?>">
             <div class="form-group">
               <label for="name" class="form-label">Subject Name</label>
               <input type="text" class="form-control" name="name" id="name" required>
@@ -204,30 +266,21 @@ $row = $stmtResult->fetch_assoc();
                 <option value="Grade 12">Grade 12</option>
               </select>
             </div>
-            <div class="form-group">
-              <label for="strand" class="form-label">Strand</label>
-              <select class="form-control" name="strand" id="strand" required>
-                <option value=""></option>
-                <?php
-                $sqlInsertStrand = "SELECT * FROM strand";
-                $queryInsertStrand = mysqli_query($conn, $sqlInsertStrand);
-                if (mysqli_num_rows($queryInsertStrand) > 0) {
-                  while ($strand = mysqli_fetch_assoc($queryInsertStrand)) {
-                    echo '<option value="' . $strand['strand_id'] . '">' . $strand['strand'] . '</option>';
-                  }
-                } else {
-                  echo '<option value="" disabled>No Strand Available (Please Add Strand)</option>';
-                }
-                ?>
-              </select>
+            <div>
+              <label class="form-label">Strand:</label>
             </div>
-            <div class="form-group">
-              <label for="semester" class="form-label">Semester</label>
-              <select class="form-control" name="semester" id="semester" required>
-                <option value=""></option>
-                <option value="First Semester">First Semester</option>
-                <option value="Second Semester">Second Semester</option>
-              </select>
+            <div class="form-group form-check">
+              <?php
+              $sqlInsertStrand = "SELECT * FROM strand";
+              $queryInsertStrand = mysqli_query($conn, $sqlInsertStrand);
+              while ($rowStrands = mysqli_fetch_assoc($queryInsertStrand)) {
+              ?>
+                <input class="form-check-input" type="checkbox" name="strand[]" value="<?php echo $rowStrands['strand_id'] ?>">
+                <label class="form-check-label" for=""><?php echo $rowStrands['strand']; ?></label>
+                <br>
+              <?php
+              }
+              ?>
             </div>
             <button type="submit" class="btn btn-sm btn-primary w-100" name="add-subject">Add Subject</button>
           </form>
@@ -282,6 +335,17 @@ $row = $stmtResult->fetch_assoc();
 
   <script>
     $('#insertForm').validate({
+      rules: {
+        'strand[]': {
+          required: true,
+          minlength: 1
+        }
+      },
+      messages: {
+        'strand[]': {
+          required: "Please select at least one strand."
+        }
+      },
       errorElement: 'span',
       errorPlacement: function(error, element) {
         error.addClass('invalid-feedback');

@@ -44,7 +44,7 @@ $row = $stmtResult->fetch_assoc();
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
-                <h1 class="text-center">Student Grade</h1>
+                <h1 class="text-center">List Of Subjects</h1>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -76,8 +76,8 @@ $row = $stmtResult->fetch_assoc();
                         $strand = $class['strand'];
                         $semester = $class['semester'];
 
-                        $stmtSubject = $conn->prepare("SELECT * FROM subject WHERE strand = ? AND level = ? AND semester = ?");
-                        $stmtSubject->bind_param("iss", $strand, $level, $semester);
+                        $stmtSubject = $conn->prepare("SELECT * FROM subject WHERE FIND_IN_SET(?, strand) > 0 AND level = ? AND semester = ?");
+                        $stmtSubject->bind_param("sss", $strand, $level, $semester);
                         $stmtSubject->execute();
                         $stmtResultSubject = $stmtSubject->get_result();
 
@@ -128,23 +128,6 @@ $row = $stmtResult->fetch_assoc();
       </div>
     </div>
   </div>
-  <script>
-    function deleteStudent(studenId) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          document.getElementById("deleteForm-" + studenId).submit();
-        }
-      });
-    }
-  </script>
 
   <!-- DataTables  & Plugins -->
   <script src="../plugins/datatables/jquery.dataTables.min.js"></script>

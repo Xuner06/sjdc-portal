@@ -112,13 +112,13 @@ if (isset($_GET['grade'])) {
                       $level = $result['level'];
                       $strand = $result['strand'];
                       $semester = $result['semester'];
-                      $stmtSubject = $conn->prepare("SELECT * FROM subject WHERE level = ? AND strand = ? AND semester = ?");
-                      $stmtSubject->bind_param("sis", $level, $strand, $semester);
+                      $stmtSubject = $conn->prepare("SELECT * FROM subject WHERE level = ? AND FIND_IN_SET(?, strand) > 0 AND semester = ?");
+                      $stmtSubject->bind_param("sss", $level, $strand, $semester);
                       $stmtSubject->execute();
                       $stmtResultSubject = $stmtSubject->get_result();
 
                       if (mysqli_num_rows($stmtResultSubject) > 0) {
-                        while ($rowSubject = $stmtResultSubject->fetch_assoc()) {
+                        while ($rowSubject = mysqli_fetch_assoc($stmtResultSubject)) {
                       ?>
                           <tr>
                             <td><?php echo $rowSubject['name']; ?></td>
