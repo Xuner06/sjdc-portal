@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 12, 2024 at 10:32 PM
+-- Generation Time: Jun 18, 2024 at 07:16 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -42,13 +42,21 @@ CREATE TABLE `class` (
 --
 
 INSERT INTO `class` (`class_id`, `level`, `strand`, `section`, `sy`, `adviser`, `created_at`) VALUES
-(144, 'Grade 11', 19, '1', 85, 273, '2024-06-12'),
+(144, 'Grade 11', 19, '12', 85, 273, '2024-06-12'),
 (145, 'Grade 11', 21, '1', 85, 277, '2024-06-12'),
-(146, 'Grade 11', 21, '1', 86, 277, '2024-06-13'),
-(147, 'Grade 11', 19, '1', 86, 274, '2024-06-13'),
+(146, 'Grade 11', 21, '1', 86, 287, '2024-06-13'),
+(147, 'Grade 11', 19, '1', 86, 290, '2024-06-13'),
 (148, 'Grade 11', 17, '1', 85, 284, '2024-06-13'),
 (149, 'Grade 11', 18, '1', 85, 292, '2024-06-13'),
-(150, 'Grade 11', 20, '1', 85, 288, '2024-06-13');
+(150, 'Grade 11', 20, '1', 85, 288, '2024-06-13'),
+(151, 'Grade 12', 21, '2', 85, 286, '2024-06-14'),
+(152, 'Grade 11', 16, '21', 85, 289, '2024-06-14'),
+(153, 'Grade 12', 17, '1000', 85, 290, '2024-06-14'),
+(154, 'Grade 12', 21, '1', 87, 280, '2024-06-14'),
+(155, 'Grade 12', 21, '2', 87, 284, '2024-06-14'),
+(156, 'Grade 11', 21, '1', 87, 277, '2024-06-14'),
+(157, 'Grade 12', 18, '1', 87, 291, '2024-06-17'),
+(158, 'Grade 11', 21, '2', 85, 275, '2024-06-18');
 
 -- --------------------------------------------------------
 
@@ -69,56 +77,48 @@ CREATE TABLE `enroll_student` (
 --
 
 INSERT INTO `enroll_student` (`enroll_id`, `student_id`, `class`, `sy`, `enroll_date`) VALUES
-(661, 233, 145, 85, '2024-06-13'),
-(662, 234, 145, 85, '2024-06-13'),
-(663, 235, 145, 85, '2024-06-13'),
-(664, 236, 145, 85, '2024-06-13'),
-(665, 237, 145, 85, '2024-06-13'),
-(666, 238, 145, 85, '2024-06-13'),
-(667, 239, 145, 85, '2024-06-13'),
-(668, 240, 145, 85, '2024-06-13'),
-(669, 241, 145, 85, '2024-06-13'),
-(670, 242, 145, 85, '2024-06-13'),
-(671, 243, 144, 85, '2024-06-13'),
-(672, 244, 144, 85, '2024-06-13'),
-(673, 245, 144, 85, '2024-06-13'),
-(674, 246, 144, 85, '2024-06-13'),
-(675, 247, 144, 85, '2024-06-13'),
-(676, 248, 144, 85, '2024-06-13'),
-(677, 249, 144, 85, '2024-06-13'),
-(678, 250, 144, 85, '2024-06-13'),
-(679, 251, 144, 85, '2024-06-13'),
-(680, 252, 144, 85, '2024-06-13'),
-(681, 253, 148, 85, '2024-06-13'),
-(682, 254, 148, 85, '2024-06-13'),
-(683, 255, 148, 85, '2024-06-13'),
-(684, 256, 148, 85, '2024-06-13'),
-(685, 257, 148, 85, '2024-06-13'),
-(686, 258, 149, 85, '2024-06-13'),
-(687, 259, 149, 85, '2024-06-13'),
-(688, 260, 149, 85, '2024-06-13'),
-(689, 261, 149, 85, '2024-06-13'),
-(690, 262, 149, 85, '2024-06-13'),
-(691, 263, 150, 85, '2024-06-13'),
-(692, 264, 150, 85, '2024-06-13'),
-(693, 265, 150, 85, '2024-06-13'),
-(694, 266, 150, 85, '2024-06-13'),
-(695, 267, 150, 85, '2024-06-13'),
-(696, 268, 150, 85, '2024-06-13'),
-(697, 269, 150, 85, '2024-06-13'),
-(698, 270, 150, 85, '2024-06-13'),
-(699, 271, 150, 85, '2024-06-13'),
-(700, 272, 150, 85, '2024-06-13'),
-(701, 233, 146, 86, '2024-06-13'),
-(702, 234, 146, 86, '2024-06-13'),
-(703, 235, 146, 86, '2024-06-13'),
-(704, 236, 146, 86, '2024-06-13'),
-(705, 237, 146, 86, '2024-06-13'),
-(706, 238, 146, 86, '2024-06-13'),
-(707, 239, 146, 86, '2024-06-13'),
-(708, 240, 146, 86, '2024-06-13'),
-(709, 241, 146, 86, '2024-06-13'),
-(710, 242, 146, 86, '2024-06-13');
+(762, 305, 145, 85, '2024-06-18'),
+(763, 295, 145, 85, '2024-06-18'),
+(764, 264, 145, 85, '2024-06-18'),
+(765, 263, 145, 85, '2024-06-18'),
+(766, 250, 145, 85, '2024-06-18'),
+(767, 271, 145, 85, '2024-06-18'),
+(768, 251, 145, 85, '2024-06-18'),
+(769, 244, 145, 85, '2024-06-18'),
+(770, 260, 145, 85, '2024-06-18'),
+(771, 245, 145, 85, '2024-06-18'),
+(772, 235, 145, 85, '2024-06-18'),
+(773, 240, 145, 85, '2024-06-18'),
+(774, 241, 145, 85, '2024-06-18'),
+(775, 258, 145, 85, '2024-06-18'),
+(776, 253, 145, 85, '2024-06-18'),
+(777, 268, 145, 85, '2024-06-18'),
+(778, 237, 145, 85, '2024-06-18'),
+(779, 267, 145, 85, '2024-06-18'),
+(780, 257, 145, 85, '2024-06-18'),
+(781, 233, 145, 85, '2024-06-18'),
+(782, 261, 145, 85, '2024-06-18'),
+(783, 239, 145, 85, '2024-06-18'),
+(784, 234, 145, 85, '2024-06-18'),
+(785, 269, 145, 85, '2024-06-18'),
+(786, 249, 145, 85, '2024-06-18'),
+(787, 254, 145, 85, '2024-06-18'),
+(788, 236, 145, 85, '2024-06-18'),
+(789, 238, 145, 85, '2024-06-18'),
+(790, 259, 145, 85, '2024-06-18'),
+(791, 265, 145, 85, '2024-06-18'),
+(792, 266, 145, 85, '2024-06-18'),
+(793, 243, 145, 85, '2024-06-18'),
+(794, 247, 145, 85, '2024-06-18'),
+(795, 246, 145, 85, '2024-06-18'),
+(796, 270, 145, 85, '2024-06-18'),
+(797, 252, 145, 85, '2024-06-18'),
+(798, 255, 145, 85, '2024-06-18'),
+(799, 242, 145, 85, '2024-06-18'),
+(800, 256, 145, 85, '2024-06-18'),
+(801, 248, 145, 85, '2024-06-18'),
+(802, 262, 145, 85, '2024-06-18'),
+(803, 272, 145, 85, '2024-06-18');
 
 -- --------------------------------------------------------
 
@@ -140,66 +140,10 @@ CREATE TABLE `grade` (
 --
 
 INSERT INTO `grade` (`id`, `student`, `sy`, `subject`, `grade`, `class`) VALUES
-(316, 233, 85, 1032, 80, 145),
-(317, 234, 85, 1032, 90, 145),
-(318, 235, 85, 1032, 78, 145),
-(319, 236, 85, 1032, 90, 145),
-(320, 237, 85, 1032, 90, 145),
-(321, 238, 85, 1032, 96, 145),
-(322, 239, 85, 1032, 78, 145),
-(323, 240, 85, 1032, 80, 145),
-(324, 241, 85, 1032, 89, 145),
-(325, 242, 85, 1032, 79, 145),
-(326, 233, 85, 1034, 81, 145),
-(327, 234, 85, 1034, 83, 145),
-(328, 235, 85, 1034, 83, 145),
-(329, 236, 85, 1034, 92, 145),
-(330, 237, 85, 1034, 76, 145),
-(331, 238, 85, 1034, 92, 145),
-(332, 239, 85, 1034, 76, 145),
-(333, 240, 85, 1034, 77, 145),
-(334, 241, 85, 1034, 92, 145),
-(335, 242, 85, 1034, 93, 145),
-(336, 233, 85, 1047, 98, 145),
-(337, 234, 85, 1047, 95, 145),
-(338, 235, 85, 1047, 78, 145),
-(339, 236, 85, 1047, 87, 145),
-(340, 237, 85, 1047, 83, 145),
-(341, 238, 85, 1047, 94, 145),
-(342, 239, 85, 1047, 95, 145),
-(343, 240, 85, 1047, 96, 145),
-(344, 241, 85, 1047, 78, 145),
-(345, 242, 85, 1047, 86, 145),
-(346, 233, 85, 1033, 98, 145),
-(347, 234, 85, 1033, 98, 145),
-(348, 235, 85, 1033, 98, 145),
-(349, 236, 85, 1033, 89, 145),
-(350, 237, 85, 1033, 81, 145),
-(351, 238, 85, 1033, 81, 145),
-(352, 239, 85, 1033, 98, 145),
-(353, 240, 85, 1033, 81, 145),
-(354, 241, 85, 1033, 89, 145),
-(355, 242, 85, 1033, 98, 145),
-(356, 233, 85, 1031, 98, 145),
-(357, 234, 85, 1031, 97, 145),
-(358, 235, 85, 1031, 91, 145),
-(359, 236, 85, 1031, 93, 145),
-(360, 237, 85, 1031, 95, 145),
-(361, 238, 85, 1031, 95, 145),
-(362, 239, 85, 1031, 95, 145),
-(363, 240, 85, 1031, 97, 145),
-(364, 241, 85, 1031, 91, 145),
-(365, 242, 85, 1031, 99, 145),
-(366, 233, 85, 1030, 95, 145),
-(367, 234, 85, 1030, 97, 145),
-(368, 235, 85, 1030, 81, 145),
-(369, 236, 85, 1030, 86, 145),
-(370, 237, 85, 1030, 85, 145),
-(371, 238, 85, 1030, 88, 145),
-(372, 239, 85, 1030, 87, 145),
-(373, 240, 85, 1030, 85, 145),
-(374, 241, 85, 1030, 83, 145),
-(375, 242, 85, 1030, 84, 145);
+(606, 305, 85, 1276, 99, 145),
+(607, 295, 85, 1276, 99, 145),
+(608, 264, 85, 1276, 99, 145),
+(609, 263, 85, 1276, 99, 145);
 
 -- --------------------------------------------------------
 
@@ -221,8 +165,9 @@ CREATE TABLE `school_year` (
 --
 
 INSERT INTO `school_year` (`sy_id`, `start_year`, `end_year`, `semester`, `status`, `created_at`) VALUES
-(85, 2023, 2024, 'First Semester', 'Inactive', '2024-05-14 02:28:03'),
-(86, 2023, 2024, 'Second Semester', 'Active', '2024-05-14 02:28:18');
+(85, 2024, 2025, 'First Semester', 'Active', '2024-05-14 02:28:03'),
+(86, 2023, 2024, 'First Semester', 'Inactive', '2024-05-14 02:28:18'),
+(87, 2024, 2025, 'Second Semester', 'Inactive', '2024-06-14 10:58:22');
 
 -- --------------------------------------------------------
 
@@ -232,6 +177,7 @@ INSERT INTO `school_year` (`sy_id`, `start_year`, `end_year`, `semester`, `statu
 
 CREATE TABLE `strand` (
   `strand_id` int(11) NOT NULL,
+  `track` varchar(255) NOT NULL,
   `strand` varchar(10) NOT NULL,
   `description` varchar(100) NOT NULL,
   `date_created` date NOT NULL
@@ -241,14 +187,14 @@ CREATE TABLE `strand` (
 -- Dumping data for table `strand`
 --
 
-INSERT INTO `strand` (`strand_id`, `strand`, `description`, `date_created`) VALUES
-(16, 'HK', 'Housekeeping', '2024-03-14'),
-(17, 'GAS', 'General Academic Strand', '2024-03-14'),
-(18, 'ABM', 'Accountancy, Business and Management Strand', '2024-03-18'),
-(19, 'STEM', 'Science, Technology, Engineering, and Mathematics Strand', '2024-03-18'),
-(20, 'HUMMS', 'Humanities and Social Science Strand', '2024-03-18'),
-(21, 'ICT', 'Information and Communication Technology', '2024-03-18'),
-(27, 'CK', 'Cookery', '2024-06-06');
+INSERT INTO `strand` (`strand_id`, `track`, `strand`, `description`, `date_created`) VALUES
+(16, 'Academic Track', 'HK', 'Housekeeping', '2024-03-14'),
+(17, 'Academic Track', 'GAS', 'General Academic Strand', '2024-03-14'),
+(18, 'Academic Track', 'ABM', 'Accountancy, Business and Management Strand', '2024-03-18'),
+(19, 'Academic Track', 'STEM', 'Science, Technology, Engineering, and Mathematics Strand', '2024-03-18'),
+(20, 'Academic Track', 'HUMMS', 'Humanities and Social Science Strand', '2024-03-18'),
+(21, 'Technical-Vocational-Livelihood Track', 'ICT', 'Information and Communication Technology', '2024-03-18'),
+(27, 'Technical-Vocational-Livelihood Track', 'CK', 'Cookery', '2024-06-06');
 
 -- --------------------------------------------------------
 
@@ -258,243 +204,97 @@ INSERT INTO `strand` (`strand_id`, `strand`, `description`, `date_created`) VALU
 
 CREATE TABLE `subject` (
   `subject_id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `level` varchar(20) NOT NULL,
-  `strand` int(11) NOT NULL,
-  `semester` varchar(20) NOT NULL,
-  `created_at` datetime NOT NULL
+  `strand` varchar(255) NOT NULL,
+  `semester` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `subject`
 --
 
-INSERT INTO `subject` (`subject_id`, `name`, `level`, `strand`, `semester`, `created_at`) VALUES
-(1030, 'Oral Communication', 'Grade 11', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1031, 'Komunikasyon at Pananaliksik sa Wika at Kulturang Pilipino', 'Grade 11', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1032, '21st Century Literature from the Philippines and the World', 'Grade 11', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1033, 'General Mathematics', 'Grade 11', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1034, 'Earth and Life Science', 'Grade 11', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1035, 'Personal Development/Pansariling Kaunlaran', 'Grade 11', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1036, 'Understanding Culture, Society and Politics', 'Grade 11', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1037, 'Physical Education and Health', 'Grade 11', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1038, 'Oral Communication', 'Grade 11', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1039, 'Komunikasyon at Pananaliksik sa Wika at Kulturang Pilipino', 'Grade 11', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1040, '21st Century Literature from the Philippines and the World', 'Grade 11', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1041, 'General Mathematics', 'Grade 11', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1042, 'Earth and Life Science', 'Grade 11', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1043, 'Personal Development/Pansariling Kaunlaran', 'Grade 11', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1044, 'Understanding Culture, Society and Politics', 'Grade 11', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1045, 'Physical Education and Health', 'Grade 11', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1046, 'English for Academic and Professional Purposes', 'Grade 11', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1047, 'English for Academic and Professional Purposes', 'Grade 11', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1050, 'Oral Communication', 'Grade 11', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1051, 'Komunikasyon at Pananaliksik sa Wika at Kulturang Pilipino', 'Grade 11', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1052, 'General Mathematics', 'Grade 11', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1053, 'Earth Science', 'Grade 11', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1054, 'Personal Development/Pansariling Kaunlaran', 'Grade 11', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1055, 'Understanding Culture, Society and Politics', 'Grade 11', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1056, 'Physical Education and Health', 'Grade 11', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1057, 'Pre-Calculus', 'Grade 11', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1058, 'General Biology 1', 'Grade 11', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1059, 'Oral Communication', 'Grade 11', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1060, 'Komunikasyon at Pananaliksik sa Wika at Kulturang Pilipino', 'Grade 11', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1061, '21st Century Literature from the Philippines and the World', 'Grade 11', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1062, 'General Mathematics', 'Grade 11', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1063, 'Earth and Life Science', 'Grade 11', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1064, 'Personal Development/Pansariling Kaunlaran', 'Grade 11', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1065, 'Understanding Culture, Society and Politics', 'Grade 11', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1066, 'Physical Education and Health', 'Grade 11', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1067, 'English for Academic and Professional Purposes', 'Grade 11', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1068, 'Oral Communication', 'Grade 11', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1069, 'Komunikasyon at Pananaliksik sa Wika at Kulturang Pilipino', 'Grade 11', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1070, '21st Century Literature from the Philippines and the World', 'Grade 11', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1071, 'General Mathematics', 'Grade 11', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1072, 'Earth and Life Science', 'Grade 11', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1073, 'Personal Development/Pansariling Kaunlaran', 'Grade 11', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1074, 'Understanding Culture, Society and Politics', 'Grade 11', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1075, 'Physical Education and Health', 'Grade 11', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1076, 'English for Academic and Professional Purposes', 'Grade 11', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1077, 'Oral Communication	', 'Grade 11', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1078, 'Komunikasyon at Pananaliksik sa Wika at Kulturang Pilipino', 'Grade 11', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1079, '21st Century Literature from the Philippines and the World\n', 'Grade 11', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1080, 'General Mathematics', 'Grade 11', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1081, 'Earth and Life Science', 'Grade 11', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1082, 'Personal Development/Pansariling Kaunlaran', 'Grade 11', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1083, 'Understanding Culture, Society and Politics', 'Grade 11', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1084, 'Physical Education and Health', 'Grade 11', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1085, 'English for Academic and Professional Purposes', 'Grade 11', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1086, 'Oral Communication', 'Grade 11', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1087, 'Komunikasyon at Pananaliksik sa Wika at Kulturang Pilipino', 'Grade 11', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1088, '21st Century Literature from the Philippines and the World', 'Grade 11', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1089, 'General Mathematics', 'Grade 11', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1090, 'Earth and Life Science', 'Grade 11', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1091, 'Personal Development/Pansariling Kaunlaran', 'Grade 11', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1092, 'Understanding Culture, Society and Politics', 'Grade 11', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1093, 'Physical Education and Health', 'Grade 11', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1094, 'English for Academic and Professional Purposes', 'Grade 11', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1095, 'Read and Writing', 'Grade 11', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1096, 'Physical Science', 'Grade 11', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1097, 'Statistics and Probability', 'Grade 11', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1098, 'Media and Information Literacy', 'Grade 11', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1099, 'Physical Education and Health', 'Grade 11', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1100, 'Practical Research 1', 'Grade 11', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1101, 'Organization and Management', 'Grade 11', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1102, 'Applied Economics', 'Grade 11', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1103, 'Fundamentals of Accountancy, Business and Management 1', 'Grade 11', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1104, 'Reading and Writing', 'Grade 11', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1105, 'Statistics and Probability', 'Grade 11', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1106, 'Media and Information Literacy', 'Grade 11', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1107, 'Physical Education and Health', 'Grade 11', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1108, 'Practical Research 1', 'Grade 11', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1109, 'Pagbasa at Pagsusuri ng Ibat Ibang Teksto Tungo sa Pananaliksik', 'Grade 11', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1110, 'Basic Calculus', 'Grade 11', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1111, 'General Biology 2', 'Grade 11', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1112, 'General Chemistry 1', 'Grade 11', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1113, 'Reading and Writing', 'Grade 11', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1114, 'Statistics and Probability', 'Grade 11', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1115, 'Media and Information Literacy', 'Grade 11', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1116, 'Physical Education and Health', 'Grade 11', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1117, 'Practical Research 1', 'Grade 11', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1118, 'Contemporary Philippine Arts from the Regions', 'Grade 11', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1119, 'Filipino sa Piling Larang', 'Grade 11', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1120, 'Computer Programming NC II', 'Grade 11', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1121, 'Reading and Writing', 'Grade 11', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1122, 'Statistics and Probability', 'Grade 11', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1123, 'Media and Information Literacy', 'Grade 11', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1124, 'Physical Education and Health', 'Grade 11', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1125, 'Practical Research 1', 'Grade 11', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1126, 'Contemporary Philippine Arts from the Regions', 'Grade 11', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1127, 'Filipino sa Piling Larang', 'Grade 11', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1128, 'Housekeeping NC II', 'Grade 11', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1129, 'Reading and Writing', 'Grade 11', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1130, 'Statistics and Probability', 'Grade 11', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1131, 'Media and Information Literacy', 'Grade 11', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1132, 'Physical Education and Health', 'Grade 11', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1133, 'Practical Research 1', 'Grade 11', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1134, 'Contemporary Philippine Arts from the Regions', 'Grade 11', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1135, 'Filipino sa Piling Larang', 'Grade 11', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1136, 'Cookery NC II', 'Grade 11', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1137, 'Reading and Writing', 'Grade 11', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1138, 'Statistics and Probability', 'Grade 11', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1139, 'Media and Information Literacy', 'Grade 11', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1140, 'Physical Education and Health', 'Grade 11', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1141, 'Practical Research 1', 'Grade 11', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1142, 'Contemporary Philippine Arts from the Regions', 'Grade 11', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1143, 'Pagbasa at Pagsusuri ng Ibat Ibang Teksto Tungo sa Pananaliksik', 'Grade 11', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1144, 'Introduction to World Religions and Beliefs', 'Grade 11', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1145, 'Applied Economics', 'Grade 11', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1146, 'Reading and Writing', 'Grade 11', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1147, 'Statistics and Probability', 'Grade 11', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1148, 'Media and Information Literacy', 'Grade 11', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1149, 'Physical Education and Health', 'Grade 11', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1150, 'Practical Research 1', 'Grade 11', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1151, 'Contemporary Philippine Arts from the Regions', 'Grade 11', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1152, 'Pagbasa at Pagsusuri ng Ibat Ibang Teksto Tungo sa Pananaliksik', 'Grade 11', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1153, 'Philippine Politics and Governance', 'Grade 11', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1154, 'Disciplines and Ideas in the Social Sciences', 'Grade 11', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1155, 'Contemporary Philippine Arts from the Regions', 'Grade 12', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1156, 'Introduction to the Philosophy of the Human Person/Pambungad sa Pilosopiya ng Tao', 'Grade 12', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1157, 'Physical Education and Health', 'Grade 12', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1158, 'Practical Research 2', 'Grade 12', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1159, 'Filipino sa Piling Larang', 'Grade 12', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1160, 'Entrepreneurship', 'Grade 12', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1161, 'Business Math', 'Grade 12', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1162, 'Fundamentals of Accountancy, Business and Management 2', 'Grade 12', 18, 'First Semester', '0000-00-00 00:00:00'),
-(1163, '21st Century Literature from the Philippines and the World', 'Grade 12', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1164, 'Introduction to the Philosophy of the Human Person/Pambungad sa Pilosopiya ng Tao', 'Grade 12', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1165, 'Physical Education and Health', 'Grade 12', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1166, 'Practical Research 2', 'Grade 12', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1167, 'English for Academic and Professional Purposes', 'Grade 12', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1168, 'Empowerment Technologies', 'Grade 12', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1169, 'General Physics 1', 'Grade 12', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1170, 'General Chemistry 2', 'Grade 12', 19, 'First Semester', '0000-00-00 00:00:00'),
-(1171, 'Physical Science', 'Grade 12', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1172, 'Filipino sa Piling Larang', 'Grade 12', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1173, 'Physical Education and Health', 'Grade 12', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1174, 'Practical Research 2', 'Grade 12', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1175, 'Philippine Politics and Governance', 'Grade 12', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1176, 'Empowerment Technologies', 'Grade 12', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1177, 'Organization and Management', 'Grade 12', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1178, 'Elective 1: Creative Writing', 'Grade 12', 17, 'First Semester', '0000-00-00 00:00:00'),
-(1179, 'Physical Science', 'Grade 12', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1180, 'Introduction to the Philosophy of the Human Person/Pambungad sa Pilosopiya ng Tao', 'Grade 12', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1181, 'Physical Education and Health', 'Grade 12', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1182, 'Practical Research 2', 'Grade 12', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1183, 'Entrepreneurship', 'Grade 12', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1184, 'Empowerment Technologies', 'Grade 12', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1185, 'Cookery NC II', 'Grade 12', 27, 'First Semester', '0000-00-00 00:00:00'),
-(1186, 'Physical Science', 'Grade 12', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1187, 'Introduction to the Philosophy of the Human Person/Pambungad sa Pilosopiya ng Tao', 'Grade 12', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1188, 'Physical Education and Health', 'Grade 12', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1189, 'Practical Research 2', 'Grade 12', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1190, 'Entrepreneurship', 'Grade 12', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1191, 'Empowerment Technologies', 'Grade 12', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1192, 'Front Office Services NC II', 'Grade 12', 16, 'First Semester', '0000-00-00 00:00:00'),
-(1193, 'Physical Science', 'Grade 12', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1194, 'Introduction to the Philosophy of the Human Person/Pambungad sa Pilosopiya ng Tao', 'Grade 12', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1195, 'Physical Education and Health', 'Grade 12', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1196, 'Practical Research 2', 'Grade 12', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1197, 'Entrepreneurship', 'Grade 12', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1198, 'Creative Writing', 'Grade 12', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1199, 'Introduction to World Religions and Belief Systems', 'Grade 12', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1200, 'Disciplines and Ideas in the Applied Social Sciences', 'Grade 12', 20, 'First Semester', '0000-00-00 00:00:00'),
-(1201, 'Physical Science', 'Grade 12', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1202, 'Introduction to the Philosophy of the Human Person/Pambungad sa Pilosopiya ng Tao', 'Grade 12', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1203, 'Physical Education and Health', 'Grade 12', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1205, 'Practical Research 2', 'Grade 12', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1206, 'Empowerment Technologies', 'Grade 12', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1207, 'Entrepreneurship', 'Grade 12', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1208, 'Computer Programming NC II', 'Grade 12', 21, 'First Semester', '0000-00-00 00:00:00'),
-(1209, 'Pagbasa at Pagsusuri ng Ibat Ibang Teksto Tungo sa Pananaliksik', 'Grade 12', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1210, 'Physical Education and Health', 'Grade 12', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1211, 'Inquiries, Investigations and Immersion', 'Grade 12', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1212, 'Empowerment Technologies', 'Grade 12', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1213, 'Principles of Marketing', 'Grade 12', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1214, 'Business Ethics and Social Responsibility', 'Grade 12', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1215, 'Business Finance', 'Grade 12', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1216, 'Work Immersion/Research/Career Advocacy/Culminal Activity', 'Grade 12', 18, 'Second Semester', '0000-00-00 00:00:00'),
-(1217, 'Pagbasa at Pagsusuri ng Ibat Ibang Teksto Tungo sa Pananaliksik', 'Grade 12', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1218, 'Physical Education and Health', 'Grade 12', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1219, 'Inquiries, Investigations and Immersion', 'Grade 12', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1220, 'Bread and Pastry Production NC II', 'Grade 12', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1221, 'Food and Beverage Production NC II', 'Grade 12', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1222, 'Work Immersion/Research/Career Advocacy/Culminal Activity', 'Grade 12', 27, 'Second Semester', '0000-00-00 00:00:00'),
-(1223, 'Pagbasa at Pagsusuri ng Ibat Ibang Teksto Tungo sa Pananaliksik', 'Grade 12', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1224, 'Physical Education and Health', 'Grade 12', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1225, 'Inquiries, Investigations and Immersion', 'Grade 12', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1226, 'Tourism Promotion Services NC II', 'Grade 12', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1227, 'Food and Beverage Production NC II', 'Grade 12', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1228, 'Work Immersion/Research/Career Advocacy/Culminal Activity', 'Grade 12', 16, 'Second Semester', '0000-00-00 00:00:00'),
-(1229, 'Pagbasa at Pagsusuri ng Ibat Ibang Teksto Tungo sa Pananaliksik', 'Grade 12', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1230, 'Physical Education and Health', 'Grade 12', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1231, 'Inquiries, Investigations and Immersion', 'Grade 12', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1232, 'Computer Programming NC II', 'Grade 12', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1233, 'Work Immersion/Research/Career Advocacy/Culminal Activity', 'Grade 12', 21, 'Second Semester', '0000-00-00 00:00:00'),
-(1234, 'Contemporary Philippine Arts from the Regions', 'Grade 12', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1235, 'Physical Education and Health', 'Grade 12', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1236, 'Disaster Readiness and Risk Reduction', 'Grade 12', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1237, 'Entrepreneurship', 'Grade 12', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1238, 'Filipino sa Piling Larang', 'Grade 12', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1239, 'Research Project', 'Grade 12', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1240, 'General Physics 2', 'Grade 12', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1241, 'Research/Capstone Project', 'Grade 12', 19, 'Second Semester', '0000-00-00 00:00:00'),
-(1242, 'Empowerment Technologies', 'Grade 12', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1243, 'Filipino sa Piling Larang', 'Grade 12', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1244, 'Physical Education and Health', 'Grade 12', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1245, 'Inquiries, Investigations and Immersion', 'Grade 12', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1246, 'Creative Nonfiction', 'Grade 12', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1247, 'Trends, Networks and Critical Thinking in the 21st Century', 'Grade 12', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1248, 'Community Engagement, Solidarity and Citizenship', 'Grade 12', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1249, 'Work Immersion/Research/Career Advocacy/Culminal Activity', 'Grade 12', 20, 'Second Semester', '0000-00-00 00:00:00'),
-(1250, 'Introduction to the Philosophy of the Human Person/Pambungad sa Pilosopiya ng Tao', 'Grade 12', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1251, 'Entrepreneurship', 'Grade 12', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1252, 'Physical Education and Health', 'Grade 12', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1253, 'Inquiries, Investigations and Immersion', 'Grade 12', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1254, 'Elective 2: Common Engagement', 'Grade 12', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1255, 'Humanities 2: Trend Network and Critical Thinking in 21st Century', 'Grade 12', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1256, 'Disaster Readiness and Risk Reduction, Solidarity and Citizenship', 'Grade 12', 17, 'Second Semester', '0000-00-00 00:00:00'),
-(1257, 'Work Immersion/Research/Career Advocacy/Culminal Activity', 'Grade 12', 17, 'Second Semester', '0000-00-00 00:00:00');
+INSERT INTO `subject` (`subject_id`, `name`, `level`, `strand`, `semester`) VALUES
+(1274, 'Oral Communication', 'Grade 11', '16,17,18,19,20,21,27', 'First Semester'),
+(1275, 'Komunikasyon at Pananaliksik sa Wika at Kulturang Pilipino', 'Grade 11', '16,17,18,19,20,21,27', 'First Semester'),
+(1276, '21st Century Literature from the Philippines and the World', 'Grade 11', '16,17,18,20,21,27', 'First Semester'),
+(1277, 'General Mathematics', 'Grade 11', '16,17,18,19,20,21,27', 'First Semester'),
+(1278, 'Earth and Life Science', 'Grade 11', '16,17,18,19,20,21,27', 'First Semester'),
+(1279, 'Personal Development/Pansariling Kaunlaran', 'Grade 11', '16,17,18,19,20,21,27', 'First Semester'),
+(1280, 'Understanding Culture, Society and Politics', 'Grade 11', '16,17,18,19,20,21,27', 'First Semester'),
+(1281, 'Physical Education and Health', 'Grade 11', '16,17,18,19,20,21,27', 'First Semester'),
+(1282, 'English for Academic and Professional Purposes', 'Grade 11', '16,17,18,20,21,27', 'First Semester'),
+(1283, 'Pre-Calculus', 'Grade 11', '19', 'First Semester'),
+(1284, 'General Biology 1', 'Grade 11', '19', 'First Semester'),
+(1285, 'Reading and Writing', 'Grade 11', '16,17,18,19,20,21,27', 'Second Semester'),
+(1286, 'Contemporary Philippine Arts from the Regions', 'Grade 11', '16,17,20,21,27', 'Second Semester'),
+(1287, 'Statistics and Probability', 'Grade 11', '16,17,18,19,20,21,27', 'Second Semester'),
+(1288, 'Media and Information Literacy', 'Grade 11', '16,17,18,19,20,21,27', 'Second Semester'),
+(1289, 'Physical Education and Health', 'Grade 11', '16,17,18,19,20,21,27', 'Second Semester'),
+(1290, 'Practical Research 1', 'Grade 11', '16,17,18,19,20,21,27', 'Second Semester'),
+(1291, 'Filipino sa Piling Larang', 'Grade 11', '16,21,27', 'Second Semester'),
+(1292, 'Housekeeping NC II', 'Grade 11', '16', 'Second Semester'),
+(1293, 'Pagbasa at Pagsusuri ng Iba\'t Ibang Teksto Tungo sa Pananaliksik', 'Grade 11', '17,19,20', 'Second Semester'),
+(1294, 'Introduction to World Religions and Beliefs', 'Grade 11', '17', 'Second Semester'),
+(1295, 'Applied Economics', 'Grade 11', '17,18', 'Second Semester'),
+(1296, 'Organization and Management', 'Grade 11', '18', 'Second Semester'),
+(1297, 'Fundamentals of Accountancy, Business and Management 1', 'Grade 11', '18', 'Second Semester'),
+(1298, 'Physical Science', 'Grade 11', '18', 'Second Semester'),
+(1299, 'Basic Calculus', 'Grade 11', '19', 'Second Semester'),
+(1300, 'General Biology 2', 'Grade 11', '19', 'Second Semester'),
+(1301, 'General Chemistry 1', 'Grade 11', '19', 'Second Semester'),
+(1302, 'Philippine Politics and Governance', 'Grade 11', '20', 'Second Semester'),
+(1303, 'Disciplines and Ideas in the Social Sciences', 'Grade 11', '20', 'Second Semester'),
+(1304, 'Computer Programming NC II', 'Grade 11', '21', 'Second Semester'),
+(1305, 'Cookery NC II', 'Grade 11', '27', 'Second Semester'),
+(1306, 'Physical Science', 'Grade 12', '16,17,20,21,27', 'First Semester'),
+(1307, 'Introduction to the Philosophy of the Human Person/Pambungad sa Pilosopiya ng Tao', 'Grade 12', '16,18,19,20,21,27', 'First Semester'),
+(1308, 'Physical Education and Health', 'Grade 12', '16,17,18,19,20,21,27', 'First Semester'),
+(1309, 'Practical Research 2', 'Grade 12', '16,17,18,19,20,21,27', 'First Semester'),
+(1310, 'Empowerment Technologies', 'Grade 12', '16,17,19,21,27', 'First Semester'),
+(1311, 'Entrepreneurship', 'Grade 12', '16,18,20,21,27', 'First Semester'),
+(1312, 'Front Office Services NC II', 'Grade 12', '16', 'First Semester'),
+(1313, 'Filipino sa Piling Larang', 'Grade 12', '17,18', 'First Semester'),
+(1314, 'Philippine Politics and Governance', 'Grade 12', '17', 'First Semester'),
+(1315, 'Organization and Management', 'Grade 12', '17', 'First Semester'),
+(1316, 'Elective 1: Creative Writing', 'Grade 12', '17', 'First Semester'),
+(1317, 'Contemporary Philippine Arts from the Regions', 'Grade 12', '18', 'First Semester'),
+(1318, 'Business Math', 'Grade 12', '18', 'First Semester'),
+(1319, 'Fundamentals of Accountancy, Business and Management 2', 'Grade 12', '18', 'First Semester'),
+(1320, '21st Century Literature from the Philippines and the World', 'Grade 12', '19', 'First Semester'),
+(1321, 'English for Academic and Professional Purposes', 'Grade 12', '19', 'First Semester'),
+(1322, 'General Physics 1', 'Grade 12', '19', 'First Semester'),
+(1323, 'General Chemistry 2', 'Grade 12', '19', 'First Semester'),
+(1324, 'Computer Programming NC II', 'Grade 12', '21', 'First Semester'),
+(1325, 'Cookery NC II', 'Grade 12', '27', 'First Semester'),
+(1326, 'Pagbasa at Pagsusuri ng Iba\'t Ibang Teksto Tungo sa Pananaliksik', 'Grade 12', '16,18,21,27', 'Second Semester'),
+(1327, 'Physical Education and Health', 'Grade 12', '16,17,18,19,20,21,27', 'Second Semester'),
+(1328, 'Inquiries, Investigations and Immersion', 'Grade 12', '16,17,18,20,21,27', 'Second Semester'),
+(1329, 'Tourism Promotion Services NC II', 'Grade 12', '16', 'Second Semester'),
+(1330, 'Food and Beverage Production NC II', 'Grade 12', '16,27', 'Second Semester'),
+(1331, 'Work Immersion/Research/Career Advocacy/Culminal Activity', 'Grade 12', '16,17,18,20,21,27', 'Second Semester'),
+(1332, 'Introduction to the Philosophy of the Human Person/Pambungad sa Pilosopiya ng Tao', 'Grade 12', '17', 'Second Semester'),
+(1333, 'Entrepreneurship', 'Grade 12', '17,19', 'Second Semester'),
+(1334, 'Elective 2: Common Engagement', 'Grade 12', '17', 'Second Semester'),
+(1335, 'Humanities 2: Trend Network and Critical Thinking in 21st Century', 'Grade 12', '17', 'Second Semester'),
+(1336, 'Disaster Readiness and Risk Reduction', 'Grade 12', '17,19', 'Second Semester'),
+(1337, 'Empowerment Technologies', 'Grade 12', '18,20', 'Second Semester'),
+(1338, 'Principles of Marketing', 'Grade 12', '18', 'Second Semester'),
+(1339, 'Business Ethics and Social Responsibility', 'Grade 12', '18', 'Second Semester'),
+(1340, 'Business Finance', 'Grade 12', '18', 'Second Semester'),
+(1341, 'Contemporary Philippine Arts from the Regions', 'Grade 12', '19', 'Second Semester'),
+(1342, 'Filipino sa Piling Larang', 'Grade 12', '19,20', 'Second Semester'),
+(1343, 'Research Project', 'Grade 12', '19', 'Second Semester'),
+(1344, 'General Physics 2', 'Grade 12', '19', 'Second Semester'),
+(1345, 'Research/Capstone Project', 'Grade 12', '19', 'Second Semester'),
+(1346, 'Creative Nonfiction', 'Grade 12', '20', 'Second Semester'),
+(1347, 'Trends, Networks and Critical Thinking in the 21st Century', 'Grade 12', '20', 'Second Semester'),
+(1348, 'Community Engagement, Solidarity and Citizenship', 'Grade 12', '20', 'Second Semester'),
+(1349, 'Creative Writing', 'Grade 12', '20', 'First Semester'),
+(1350, 'Introduction to World Religions and Belief Systems', 'Grade 12', '20', 'First Semester'),
+(1351, 'Disciplines and Ideas in the Applied Social Sciences', 'Grade 12', '20', 'First Semester'),
+(1352, 'Computer Programming NC II', 'Grade 12', '21', 'Second Semester'),
+(1353, 'Bread and Pastry Production NC II', 'Grade 12', '27', 'Second Semester');
 
 -- --------------------------------------------------------
 
@@ -528,7 +328,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `lrn_number`, `role`, `fname`, `lname`, `mname`, `gender`, `birthday`, `contact`, `email`, `address`, `password`, `status`, `reg_date`, `picture`, `token`, `token_expiration`) VALUES
 (229, 'N/A', 'admin', 'Khufra', 'Hylos', 'Atlas', 'Male', '1122-12-12', '12323233233', 'admin@gmail.com', 'Tanza, Cavite', '$2y$10$U4000mPsBSymVmvaaPLOQeiLNkm2LP2982rIJJKfsLBMHnBT40UZW', 0, '2024-06-12', '../image/image.png', NULL, NULL),
-(233, '201915079101', 'student', 'Lynett', 'Hoyer', 'Baldacchi', 'Female', '1999-03-13', '09882918067', 'lynetthoyer@gmail.com', '5333 Mendota Terrace', '$2y$10$E3P30jdHRTC5HY6a.hs1D.sr8tWbjGl9OiAFyG6YWOykLz0ycaVKi', 0, '2020-12-25', '../image/image.png', NULL, NULL),
+(233, '201915079101', 'student', 'Lynett', 'Hoyer', '', 'Female', '1999-03-13', '09882918067', 'lynetthoyer@gmail.com', '5333 Mendota Terrace', '$2y$10$E3P30jdHRTC5HY6a.hs1D.sr8tWbjGl9OiAFyG6YWOykLz0ycaVKi', 0, '2020-12-25', '../image/image.png', NULL, NULL),
 (234, '201915079102', 'student', 'Gillie', 'Johnson', 'Cattroll', 'Female', '1995-12-14', '09729552723', 'gilliejohnson@gmail.com', '01247 Moulton Crossing', '$2y$10$kYWVfb4xlolHiLkXPjeRM.7G3OCnsUymnOlJD.elMOQZQfi.7Xm8e', 0, '2023-12-23', '../image/image.png', NULL, NULL),
 (235, '201915079103', 'student', 'Jordana', 'Eliff', 'Cheers', 'Female', '1999-01-30', '09698666904', 'jordanaeliff@gmail.com', '286 Bunting Hill', '$2y$10$C6WsOlCxe6HzlmTuvhE5Vu83mxPNmoYOhaueGyTMR5Rdd14bYqmea', 0, '2022-06-08', '../image/image.png', NULL, NULL),
 (236, '201915079104', 'student', 'Porter', 'McPhilemy', 'Sneyd', 'Male', '1994-11-22', '09841956185', 'portermcphilemy@gmail.com', '4 Mandrake Terrace', '$2y$10$o81uuZe.xDX47/KvH68vy.KiKtgbm4T1xrNRzdVqxiYnbCR/tOj6a', 0, '2023-10-25', '../image/image.png', NULL, NULL),
@@ -587,7 +387,9 @@ INSERT INTO `users` (`id`, `lrn_number`, `role`, `fname`, `lname`, `mname`, `gen
 (289, 'N/A', 'teacher', 'Malina', 'Shawley', 'Trunkfield', 'Female', '1995-10-13', '09693696945', 'malinashawley@gmail.com', '3 Judy Drive', '$2y$10$vMKNSbrGwyG8wNipgv4jHOumkdcrWqLUej2KqFv8EnuQCn5ipL0aS', 0, '2021-05-08', '../image/image.png', NULL, NULL),
 (290, 'N/A', 'teacher', 'Huey', 'Franklyn', 'McCaughey', 'Male', '1995-06-16', '09332040995', 'hueyfranklyn@gmail.com', '900 Mesta Trail', '$2y$10$d5SpQYaHAUziRFDMBxN64u35QwNIs9q0OTmyTtcephsRrg0b2azPG', 0, '2021-09-20', '../image/image.png', NULL, NULL),
 (291, 'N/A', 'teacher', 'Rollie', 'Duce', 'Leetham', 'Male', '1998-08-10', '09186859403', 'rollieduce@gmail.com', '1528 Oakridge Way', '$2y$10$pWlAAD.UlypTJGzLPkj6U..rnVh04qj4Ono72g3hGqBFp.dnWEjVi', 0, '2020-11-20', '../image/image.png', NULL, NULL),
-(292, 'N/A', 'teacher', 'Zebulon', 'Creber', 'Hillyatt', 'Male', '1995-11-06', '09448530468', 'zebuloncreber@gmail.com', '295 Roxbury Way', '$2y$10$trBq9rttiEcIbmBb0ywRquXqnAS0SF0WVW0kVDCeMsv5OE9qriAXi', 0, '2023-02-11', '../image/image.png', NULL, NULL);
+(292, 'N/A', 'teacher', 'Zebulon', 'Creber', 'Espela', 'Male', '1995-11-06', '09448530468', 'zebuloncreber@gmail.com', '295 Roxbury Way', '$2y$10$trBq9rttiEcIbmBb0ywRquXqnAS0SF0WVW0kVDCeMsv5OE9qriAXi', 0, '2023-02-11', '../image/image.png', NULL, NULL),
+(295, '123123123221', 'student', 'Jeshua', 'Bay', 'Espela', 'Male', '1999-12-06', '09284310661', 'jeshuabay@gmail.com', 'Tanza, Cavite', '$2y$10$jQVCYNlIAn1iqDkWjHU8B.tPwNSU2y.UOpMB3z65f5xov0ZuopmSG', 0, '2024-06-14', '../image/image.png', NULL, NULL),
+(305, '555555555555', 'student', 'Roi', 'Badayos', 'Espela', 'Male', '1999-12-06', '09284310661', 'roibadayos@gmail.com', 'Tanza, Cavite', '$2y$10$jh8cMSsXsTp/bNwzCm8nOOaAgbeGKlUUWWZIJSbAQgAGGZUZBRANK', 0, '2024-06-18', '../image/image.png', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -655,43 +457,43 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `class`
 --
 ALTER TABLE `class`
-  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
+  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
 
 --
 -- AUTO_INCREMENT for table `enroll_student`
 --
 ALTER TABLE `enroll_student`
-  MODIFY `enroll_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=711;
+  MODIFY `enroll_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=804;
 
 --
 -- AUTO_INCREMENT for table `grade`
 --
 ALTER TABLE `grade`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=386;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=610;
 
 --
 -- AUTO_INCREMENT for table `school_year`
 --
 ALTER TABLE `school_year`
-  MODIFY `sy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `sy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT for table `strand`
 --
 ALTER TABLE `strand`
-  MODIFY `strand_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `strand_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `subject`
 --
 ALTER TABLE `subject`
-  MODIFY `subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1258;
+  MODIFY `subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1362;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=295;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=306;
 
 --
 -- Constraints for dumped tables
@@ -721,12 +523,6 @@ ALTER TABLE `grade`
   ADD CONSTRAINT `grade_ibfk_3` FOREIGN KEY (`sy`) REFERENCES `school_year` (`sy_id`),
   ADD CONSTRAINT `grade_ibfk_4` FOREIGN KEY (`student`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `grade_ibfk_5` FOREIGN KEY (`class`) REFERENCES `class` (`class_id`);
-
---
--- Constraints for table `subject`
---
-ALTER TABLE `subject`
-  ADD CONSTRAINT `subject_ibfk_1` FOREIGN KEY (`strand`) REFERENCES `strand` (`strand_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

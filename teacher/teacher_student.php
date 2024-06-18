@@ -207,14 +207,6 @@ if (mysqli_num_rows($resultClass) > 0) {
               }
             },
           },
-
-          {
-            extend: 'pdf',
-            className: 'mr-2 rounded rounded-2',
-            exportOptions: {
-              columns: [0, 1, 2, 3, 4]
-            }
-          },
           {
             extend: 'print',
             className: 'mr-2 rounded rounded-2',
@@ -223,7 +215,7 @@ if (mysqli_num_rows($resultClass) > 0) {
             },
             title: '',
             messageTop: function() {
-              return '<h1 class="text-center"><?php echo $finalClass; ?></h1>' + '<h1 class="text-center"><?php echo $finalSy; ?></h1>' + '<h1 class="text-center mb-4"><?php echo $finalAdviser; ?></h1>';
+              return '<img src="../assests/header.png" class="mx-auto d-block">' + '<h1 class="text-center"><?php echo $finalClass; ?></h1>' + '<h1 class="text-center"><?php echo $finalSy; ?></h1>' + '<h1 class="text-center mb-4"><?php echo $finalAdviser; ?></h1>';
             }
           }
         ],
